@@ -1,0 +1,29 @@
+#ifndef HEADERFILES_H
+#define HEADERFILES_H
+
+#define WINDOW_WIDTH        800
+#define WINDOW_HEIGHT       1000
+
+#define TILE_WIDTH_PIXELS   (WINDOW_WIDTH / 50)
+#define TILE_LENGTH_PIXELS  (WINDOW_HEIGHT / 50)
+
+#define HORIZONTAL_TILES    (WINDOW_WIDTH/50)
+#define VERTICAL_TILES      (WINDOW_HEIGHT/50)
+
+enum BeamCollisionType {centipede, mushroom, boundary, nan};
+enum GameTypes {NULL_GAME, centipedeGame};
+
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <limits.h>
+#include <iomanip>
+
+#endif
