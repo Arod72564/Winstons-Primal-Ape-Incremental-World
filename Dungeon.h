@@ -12,6 +12,7 @@ struct DungeonRoom {
     sf::Sprite backgroundSprite;
     std::vector<sf::Texture> textureVec;
     std::vector<sf::Sprite> spriteVec;
+    std::vector<sf::Sprite> clueSpriteVec;
 };
 
 class Dungeon {

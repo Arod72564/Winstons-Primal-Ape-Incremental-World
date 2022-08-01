@@ -27,4 +27,14 @@ enum GameTypes {NULL_GAME, centipedeGame, dungeonGame};
 #include <iomanip>
 #include <list>
 
+template<typename T> T clamp(T arg1, T arg2, T arg3) {
+    if( arg1 < arg2) {
+        return arg2;
+    } else if (arg1 > arg3) {
+        return arg3;
+    } else {
+        return arg1;
+    }
+}
+
 #endif

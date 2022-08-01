@@ -14,7 +14,7 @@ int main() {
     videoMode.height = 800;
     videoMode.width = 800;
     sf::RenderWindow* mainWindow = new sf::RenderWindow(videoMode, "Winstons Primal Ape Incremental World", sf::Style::Titlebar | sf::Style::Close);
-
+    
     // Initialize Menu screen
     MenuScreen* menu = new MenuScreen(mainWindow);
 
