@@ -121,19 +121,17 @@ void GameEngine::initTextures() {
 void GameEngine::initSprites() {
     std:: cout << "Initializing Sprites... ";
 
-    std::srand(std::time(nullptr));
     //Initialize game variables
+    std::srand(std::time(nullptr));
     this->animationCounter = 0;
     this->displayFirstAnimation = true;
     this->isBeamPresent = false;
     this->isCheaterBeamPresent = false;
-    this->beamCollisionType =  BeamCollisionType::nan;
+    this->beamCollisionType = BeamCollisionType::nan;
     this->centipedesKilled = 0;
 
     //Initialze player variables
-    this->menuPtr->is_CheaterBeam_Unlocked = true;
     this->sessionPoints = 0;
-
 
     //Centipedes
     int numCentipedes = -1;
@@ -205,7 +203,7 @@ void GameEngine::update(){
                     break;
                 } 
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1)) { //Cheater beam
-                    if(!isCheaterBeamPresent && menuPtr->is_CheaterBeam_Unlocked){
+                    if(isCheaterBeamPresent == false && menuPtr->is_CheaterBeam_Unlocked == true) {
                         if (this->centipedeVector[0].isMovingDown) {
                             this->cheaterBeam = new Beam(this->beamTexture, this->player1,(this->centipedeVector[0].centipedeSprite.getPosition().x), 700);
                             this->isCheaterBeamPresent = true;

@@ -7,6 +7,7 @@
 #include "Player.cpp"
 #include "Beam.cpp"
 #include "MenuScreen.cpp"
+#include "Dungeon.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -42,6 +43,22 @@ int main() {
                 delete gameEngine;
             }
 
+            if(menu->currentGameType == dungeonGame){ //Dungeon
+                //Initialize Dungeon game driver class
+                Dungeon* dungeon = new Dungeon(menu);
+
+                //Main game loop
+                while(menu->currentGameType == dungeonGame){
+
+                    //Update game data
+                    dungeon->update();
+
+                    //Render game graphics
+                    dungeon->render();
+                }
+
+                delete dungeon;
+            }
 
         }
     }

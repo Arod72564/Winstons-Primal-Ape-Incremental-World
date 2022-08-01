@@ -11,7 +11,7 @@
 #define VERTICAL_TILES      (WINDOW_HEIGHT/50)
 
 enum BeamCollisionType {centipede, mushroom, boundary, nan};
-enum GameTypes {NULL_GAME, centipedeGame};
+enum GameTypes {NULL_GAME, centipedeGame, dungeonGame};
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -25,5 +25,6 @@ enum GameTypes {NULL_GAME, centipedeGame};
 #include <cstdlib>
 #include <limits.h>
 #include <iomanip>
+#include <list>
 
 #endif
