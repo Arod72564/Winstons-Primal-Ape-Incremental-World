@@ -19,6 +19,18 @@ class Dungeon {
     public:
         MenuScreen* menuPtr;
         std::vector<struct DungeonRoom> roomVec;
+        sf::Texture moveTexture1;
+        sf::Texture moveTexture2;
+        sf::Texture ansTexture;
+        sf::Texture puzzleClue;
+        sf::Texture clue1;
+        sf::Texture clue2;
+        sf::Texture clue3;
+        sf::Texture clue4;
+        sf::Texture clue5;
+        sf::Texture clue6;
+        
+
         sf::Event ev;
         int roomCount;
 
@@ -31,7 +43,7 @@ class Dungeon {
         void update();
         void render();
         void displayPuzzlePrompt(sf::Sprite puzzleSprite);
-        void displayAnswerPrompt(sf::Sprite answerSprite, std::string answerString);
+        void displayAnswerPrompt(sf::Sprite answerSprite, std::string answerString, int roomCount);
         
 };
 

@@ -19,6 +19,7 @@ class MenuScreen {
         sf::Font menuFont1;
         sf::Font menuFont2;
         sf::Text centipedeGameText;
+        sf::Text dungeonGameText;
         sf::Text pointsText;
 
         sf::Text upgradeClickerRewardText;

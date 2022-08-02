@@ -1,7 +1,7 @@
 #include "MenuScreen.h"
 
 MenuScreen::MenuScreen(){
-    this->initMenuScreen();
+    this_CheaterBeams->initMenuScreen();
     this->initText();
 }
 
@@ -62,7 +62,7 @@ void MenuScreen::initMenuScreen2(sf::RenderWindow *window){
     //Initialize Unlocks
         //Centipede Game
         bool is_CentipedeGame_Unlocked = false;
-        bool is_CheaterBeam_Unlocked = false;
+        bool is_CheaterBeam_Unlocked = true;
 
 }
 
@@ -130,6 +130,14 @@ void MenuScreen::initText(){
 
         //TEXT
     std::cout << "Initializing Text... ";
+    //Dungeon Game Text
+    this->dungeonGameText.setFont(menuFont2);
+    this->dungeonGameText.setString("Puzzle Dungeon");
+    this->dungeonGameText.setCharacterSize(25);
+    this->dungeonGameText.setFillColor(sf::Color::Red);
+    this->dungeonGameText.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    this->dungeonGameText.setPosition(0, 200);
+
     //Centipede Game Text
     this->centipedeGameText.setFont(menuFont2);
     this->centipedeGameText.setString("Buy Centipede Game: 100");
@@ -260,6 +268,8 @@ void MenuScreen::update(){
                         } else if(is_CentipedeGame_Unlocked == true){
                             this->currentGameType = centipedeGame;
                         }
+                    } else if (this->dungeonGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) {
+                        this->currentGameType = dungeonGame;
                     }
                 break;
             case sf::Event::MouseWheelMoved:
@@ -327,6 +337,8 @@ void MenuScreen::render() {
         this->menuScreen->draw(this->centipedeGameMult_Sprite);
     }
 
+    //Dungeon game
+    this->menuScreen->draw(dungeonGameText);
 
     this->menuScreen->display();
 }
