@@ -7,12 +7,19 @@
 struct DungeonRoom {
     int roomId;
     bool isPuzzleSolved;
+    bool isClue1Hidden;
+    bool isClue2Hidden;
+    bool isClue3Hidden;
+    bool isClue1Opened;
+    bool isClue2Opened;
+    bool isClue3Opened;
     std::string roomAnswer;
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
     std::vector<sf::Texture> textureVec;
     std::vector<sf::Sprite> spriteVec;
     std::vector<sf::Sprite> clueSpriteVec;
+    std::vector<sf::Sprite> hiddenSpotVec;
 };
 
 class Dungeon {
@@ -23,18 +30,16 @@ class Dungeon {
         sf::Texture moveTexture2;
         sf::Texture ansTexture;
         sf::Texture puzzleClue;
+        sf::Texture hiddenSpot;
         sf::Texture clue1;
         sf::Texture clue2;
         sf::Texture clue3;
         sf::Texture clue4;
         sf::Texture clue5;
         sf::Texture clue6;
-        
 
         sf::Event ev;
         int roomCount;
-
-
 
         Dungeon(MenuScreen* menuPtr);
         Dungeon();
