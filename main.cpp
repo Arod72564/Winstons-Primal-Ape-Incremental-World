@@ -18,20 +18,18 @@ int main() {
     // Initialize Menu screen
     MenuScreen* menu = new MenuScreen(mainWindow);
 
-    while(menu->menuScreen->isOpen()){
+    while(menu->menuScreen->isOpen()) {
         
-        if(menu->currentGameType == NULL_GAME) { //MAIN MENU
+        if (menu->currentGameType == NULL_GAME) { //MAIN MENU
             menu->update();
             menu->render();
-                
 
-
-            if(menu->currentGameType == centipedeGame){ //CEMTIPEDE GAME
+            if (menu->currentGameType == centipedeGame) { //CEMTIPEDE GAME
                 //Initialize centipede game driver class
                 GameEngine* gameEngine = new GameEngine(menu);
 
                 //Main game loop
-                while(menu->currentGameType == centipedeGame){
+                while(menu->currentGameType == centipedeGame) {
 
                     //Update game data
                     gameEngine->update();
@@ -43,12 +41,12 @@ int main() {
                 delete gameEngine;
             }
 
-            if(menu->currentGameType == dungeonGame){ //Dungeon
+            if (menu->currentGameType == dungeonGame) { //Dungeon
                 //Initialize Dungeon game driver class
                 Dungeon* dungeon = new Dungeon(menu);
 
                 //Main game loop
-                while(menu->currentGameType == dungeonGame){
+                while(menu->currentGameType == dungeonGame) {
 
                     //Update game data
                     dungeon->update();

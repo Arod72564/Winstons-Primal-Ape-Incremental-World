@@ -1,10 +1,10 @@
 #include "Beam.h"
 
 Beam::Beam(sf::Texture &beamTexture, Player *player1, float x, float y){
-    this->beamSprite.setTexture(beamTexture);
-    this->beamSprite.setOrigin((this->beamSprite.getLocalBounds().width / 2), this->beamSprite.getLocalBounds().height);
-    this->playerPtr = player1;
-    this->beamSprite.setPosition(x,y);
+    beamSprite.setTexture(beamTexture);
+    beamSprite.setOrigin((beamSprite.getLocalBounds().width / 2), beamSprite.getLocalBounds().height);
+    playerPtr = player1;
+    beamSprite.setPosition(x,y);
 }
 
 Beam::~Beam(){
@@ -12,16 +12,16 @@ Beam::~Beam(){
 }
 
 BeamCollisionType Beam::updateMovement(bool &isBeamPresent, std::vector<Mushroom> mushroomVector, std::vector<Centipede> centipedeVector, int &beamCollisionindex) {
-    this->beamSprite.move(0, -0.8);
+    beamSprite.move(0, -0.8);
 
-    if(this->beamSprite.getGlobalBounds().top < 0){ //hits top
+    if(beamSprite.getGlobalBounds().top < 0){ //hits top
         
         isBeamPresent = !(isBeamPresent);
         return BeamCollisionType::boundary;
     }
     
     for(int i = 0; i < centipedeVector.size(); i++){ 
-        if(this->beamSprite.getGlobalBounds().intersects(centipedeVector[i].centipedeSprite.getGlobalBounds())){
+        if(beamSprite.getGlobalBounds().intersects(centipedeVector[i].centipedeSprite.getGlobalBounds())){
             
             //kill appropraite centipede body
             beamCollisionindex = i;
@@ -31,7 +31,7 @@ BeamCollisionType Beam::updateMovement(bool &isBeamPresent, std::vector<Mushroom
     }
 
     for(int i = 0; i < mushroomVector.size(); i++){
-        if(this->beamSprite.getGlobalBounds().intersects(mushroomVector[i].mushroomSprite.getGlobalBounds())){
+        if(beamSprite.getGlobalBounds().intersects(mushroomVector[i].mushroomSprite.getGlobalBounds())){
             
             //damage appropriate mushroom
             beamCollisionindex = i;

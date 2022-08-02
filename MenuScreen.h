@@ -12,10 +12,12 @@ class MenuScreen {
         sf::Texture clickUpgrade1_Texture;
         sf::Texture clickUpgrade2_Texture;
         sf::Texture centipedeGameMult_Texture;
+        sf::Texture muteButtonTexture;
         sf::Sprite clickBoxSprite;
         sf::Sprite clickUpgrade1_Sprite;
         sf::Sprite clickUpgrade2_Sprite;
         sf::Sprite centipedeGameMult_Sprite;
+        sf::Sprite muteButtonSprite;
         sf::Font menuFont1;
         sf::Font menuFont2;
         sf::Text centipedeGameText;
@@ -55,6 +57,8 @@ class MenuScreen {
             //CentipedeGame Unlocks
         bool is_CentipedeGame_Unlocked;
         bool is_CheaterBeam_Unlocked;
+
+        bool is_MenuMusic_Paused;
 
 
 
