@@ -67,6 +67,7 @@ class MenuScreen {
         void update();
         void render();
         bool isWindowOpen();
+        void showShopMenu();
         
 
 };

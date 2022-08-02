@@ -1,7 +1,7 @@
 #include "MenuScreen.h"
 
 MenuScreen::MenuScreen(){
-    this_CheaterBeams->initMenuScreen();
+    this->initMenuScreen();
     this->initText();
 }
 
@@ -347,3 +347,23 @@ bool MenuScreen::isWindowOpen(){
     return this->menuScreen->isOpen();
 }
 
+void MenuScreen::showShopMenu(){
+    bool isInShop = true;
+    while(isInShop){
+        this->menuScreen->clear(sf::Color::Black);
+        while (this->menuScreen->pollEvent(this->event)) {
+            switch(this->event.type){
+                case sf::Event::MouseButtonPressed:
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                        //Click upgrade sprites
+                        //If click exit button
+                            // isInShop = false;
+                    }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }
+}
