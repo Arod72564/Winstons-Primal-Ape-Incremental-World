@@ -39,42 +39,42 @@ void GameEngine::initWindow2(){
 void GameEngine::initTextures() {
     std::cout << "Loading textures... ";
 
-    if(!this->centipedeTexture.loadFromFile("images/winstonpede_right1.png")){
+    if(!this->centipedeTexture.loadFromFile("images/Centipede/winstonpede_right1.png")){
         std::cout << "Failed to load centipede texture 1.\n";
         this->gameWindow->close();
     }
 
-    if(!this->centipedeTexture2.loadFromFile("images/winstonpede_right2.png")){
+    if(!this->centipedeTexture2.loadFromFile("images/Centipede/winstonpede_right2.png")){
         std::cout << "Failed to load centipede textures 2.\n";
         this->gameWindow->close();
     }
 
-    if(!this->mushroomTexture4.loadFromFile("images/Winston4.png")){
+    if(!this->mushroomTexture4.loadFromFile("images/Centipede/Winston4.png")){
         std::cout << "Failed to load mushroom texture 4.\n";
         this->gameWindow->close();
     }
 
-    if(!this->mushroomTexture3.loadFromFile("images/Winston3.png")){
+    if(!this->mushroomTexture3.loadFromFile("images/Centipede/Winston3.png")){
         std::cout << "Failed to load mushroom texture 3.\n";
         this->gameWindow->close();
     }
 
-    if(!this->mushroomTexture2.loadFromFile("images/Winston2.png")){
+    if(!this->mushroomTexture2.loadFromFile("images/Centipede/Winston2.png")){
         std::cout << "Failed to load mushroom texture 2.\n";
         this->gameWindow->close();
     }
 
-    if(!this->mushroomTexture1.loadFromFile("images/Winston1.png")){
+    if(!this->mushroomTexture1.loadFromFile("images/Centipede/Winston1.png")){
         std::cout << "Failed to load mushroom texture 1.\n";
         this->gameWindow->close();
     }
 
-    if(!this->playerTexture.loadFromFile("images/WinstonedPlayer1.png")){
+    if(!this->playerTexture.loadFromFile("images/Centipede/WinstonedPlayer1.png")){
         std::cout << "Failed to load penis warrior texture.\n";
         this->gameWindow->close();
     }
 
-    if(!this->beamTexture.loadFromFile("images/CUMbeam.png")){
+    if(!this->beamTexture.loadFromFile("images/Centipede/CUMbeam.png")){
         std::cout << "Failed to load beam texture.\n";
         this->gameWindow->close();
     }
