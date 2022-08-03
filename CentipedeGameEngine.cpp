@@ -1,15 +1,15 @@
-#include "GameEngine.h"
+#include "CentipedeGameEngine.h"
 
 #define NUM_CENTIPEDE 10
 
 
-GameEngine::GameEngine(){
+CentipedeGameEngine::CentipedeGameEngine(){
     initWindow();
     initTextures();
     initSprites();
 }
 
-GameEngine::GameEngine(MenuScreen *menu){
+CentipedeGameEngine::CentipedeGameEngine(MenuScreen *menu){
     menuPtr = menu;
     gameWindow = menu->menuScreen;
     initWindow2();
@@ -17,26 +17,26 @@ GameEngine::GameEngine(MenuScreen *menu){
     initSprites();
 }
 
-GameEngine::~GameEngine(){
+CentipedeGameEngine::~CentipedeGameEngine(){
     sf::Vector2u tempVec(800,800);
     gameWindow->setSize(tempVec);
     delete player1;
 }
 
-void GameEngine::initWindow(){
+void CentipedeGameEngine::initWindow(){
     videoMode.height = WINDOW_HEIGHT;
     videoMode.width = WINDOW_WIDTH;
     gameWindow = new sf::RenderWindow(videoMode, "Centipede", sf::Style::Titlebar | sf::Style::Close);
     std::cout << "Centipede Game window sucessfully set up.\n";
 }
 
-void GameEngine::initWindow2(){
+void CentipedeGameEngine::initWindow2(){
     sf::Vector2u tempVec(800,800);
     gameWindow->setSize(tempVec);
     std::cout << "Centipede Game window sucessfully set up.\n";
 }
 
-void GameEngine::initTextures() {
+void CentipedeGameEngine::initTextures() {
     std::cout << "Loading textures... ";
 
     if(!centipedeTexture.loadFromFile("images/Centipede/winstonpede_right1.png")){
@@ -118,7 +118,7 @@ void GameEngine::initTextures() {
 
 }
 
-void GameEngine::initSprites() {
+void CentipedeGameEngine::initSprites() {
     std:: cout << "Initializing Sprites... ";
 
     //Initialize game variables
@@ -159,7 +159,7 @@ void GameEngine::initSprites() {
     std::cout << "Sprite intialization completed.\n";
 }
 
-void GameEngine::update(){
+void CentipedeGameEngine::update(){
 
     //Update Player Movement
     sf::Vector2f mousePosition = gameWindow->mapPixelToCoords(sf::Mouse::getPosition(*gameWindow)); // MOUSE POSITION
@@ -339,7 +339,7 @@ void GameEngine::update(){
     }
 }
 
-void GameEngine::render(){
+void CentipedeGameEngine::render(){
     // Clear Screen
     gameWindow->clear(sf::Color::Black);
 
@@ -385,7 +385,7 @@ void GameEngine::render(){
     animationCounter++;
 }
 
-void GameEngine::displayWinScreen(sf::Text &text){
+void CentipedeGameEngine::displayWinScreen(sf::Text &text){
     gameWindow->clear(sf::Color::Black);
     gameWindow->draw(text);
     gameWindow->display();

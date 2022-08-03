@@ -1,25 +1,25 @@
 #include "Mushroom.h"
 
-Mushroom::Mushroom(sf::Texture &mushroomTexture, float x, float y){
+Mushroom::Mushroom(sf::Texture &mushroomTexture, float x, float y) {
     health = 4;
     mushroomSprite.setTexture(mushroomTexture);
     mushroomSprite.setPosition(x,y);
 }
 
-Mushroom::Mushroom(sf::Texture &mushroomTexture, float x, float y, bool t){
+Mushroom::Mushroom(sf::Texture &mushroomTexture, float x, float y, bool t) {
     health = 4;
     mushroomSprite.setTexture(mushroomTexture);
     mushroomSprite.setPosition(x,y);
     mushroomSprite.setOrigin(mushroomSprite.getLocalBounds().width / 2, mushroomSprite.getLocalBounds().height / 2);
 }
 
-Mushroom::~Mushroom(){
+Mushroom::~Mushroom() {
 
 }
 
-void Mushroom::damageMushroom(sf::Texture &mushroomTexture4,sf::Texture &mushroomTexture3,sf::Texture &mushroomTexture2,sf::Texture &mushroomTexture1){
+void Mushroom::damageMushroom(sf::Texture &mushroomTexture4,sf::Texture &mushroomTexture3,sf::Texture &mushroomTexture2,sf::Texture &mushroomTexture1) {
     health--;
-    switch(health){
+    switch(health) {
         case 4:
             mushroomSprite.setTexture(mushroomTexture4);
             break;

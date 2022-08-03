@@ -1,5 +1,5 @@
-#ifndef GAMEENGINE_H
-#define GAMEENGINE_H
+#ifndef CENTIPEDEGAMEENGINE_H
+#define CENTIPEDEGAMEENGINE_H
 
 #include "headerFiles.h"
 #include "Centipede.h"
@@ -8,7 +8,7 @@
 #include "Beam.h"
 #include "MenuScreen.h"
 
-class GameEngine {
+class CentipedeGameEngine {
     private:
         sf::RenderWindow* gameWindow;
         sf::VideoMode videoMode;
@@ -44,13 +44,13 @@ class GameEngine {
         int centipedesKilled;
 
     public:
-        GameEngine();
-        GameEngine(MenuScreen *menu);
+        CentipedeGameEngine();
+        CentipedeGameEngine(MenuScreen *menu);
         void initWindow();
         void initWindow2();
         void initTextures();
         void initSprites();
-        virtual ~GameEngine();
+        virtual ~CentipedeGameEngine();
         void update();
         void render();
         void displayWinScreen(sf::Text &text);

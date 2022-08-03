@@ -1,13 +1,13 @@
 //g++ -c main.cpp -I"C:/SFML-2.5.1/include"
 //g++ main.o -o main -L"C:\SFML-2.5.1\lib" -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
-#include "GameEngine.cpp"
+#include "CentipedeGameEngine.cpp"
 #include "Centipede.cpp"
 #include "Mushroom.cpp"
 #include "Player.cpp"
 #include "Beam.cpp"
 #include "MenuScreen.cpp"
-#include "Dungeon.cpp"
+#include "DungeonGameEngine.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -26,36 +26,36 @@ int main() {
 
             if (menu->currentGameType == centipedeGame) { //CEMTIPEDE GAME
                 //Initialize centipede game driver class
-                GameEngine* gameEngine = new GameEngine(menu);
+                CentipedeGameEngine* centipedeGameEngine = new CentipedeGameEngine(menu);
 
                 //Main game loop
                 while(menu->currentGameType == centipedeGame) {
 
                     //Update game data
-                    gameEngine->update();
+                    centipedeGameEngine->update();
 
                     //Render game graphics
-                    gameEngine->render();
+                    centipedeGameEngine->render();
                 }
 
-                delete gameEngine;
+                delete centipedeGameEngine;
             }
 
-            if (menu->currentGameType == dungeonGame) { //Dungeon
-                //Initialize Dungeon game driver class
-                Dungeon* dungeon = new Dungeon(menu);
+            if (menu->currentGameType == dungeonGame) { //DungeonGameEngine
+                //Initialize DungeonGameEngine game driver class
+                DungeonGameEngine* dungeonGameEngine = new DungeonGameEngine(menu);
 
                 //Main game loop
                 while(menu->currentGameType == dungeonGame) {
 
                     //Update game data
-                    dungeon->update();
+                    dungeongameengine->update();
 
                     //Render game graphics
-                    dungeon->render();
+                    dungeongameengine->render();
                 }
 
-                delete dungeon;
+                delete dungeonGameEngine;
             }
 
         }

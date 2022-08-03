@@ -7,7 +7,7 @@ Centipede::Centipede() {
 Centipede::Centipede(sf::Texture &centipedeTexture, float x, float y) {
     centipedeSprite.setTexture(centipedeTexture);
     centipedeSprite.setPosition(x,y);
-    centipedeSprite.setOrigin((centipedeSprite.getGlobalBounds().width / 2), (centipedeSprite.getGlobalBounds().height / 2));
+    centipedeSprite.setOrigin( (centipedeSprite.getGlobalBounds().width / 2), (centipedeSprite.getGlobalBounds().height / 2));
     isMovingRight = true;
     isMovingDown = false;
     downDoggie = 0;
@@ -52,7 +52,7 @@ void Centipede::updateMovement(std::vector<Mushroom> mushroomVector, std::vector
             moveDown();
             isMovingDown = true;
 
-        } else if ((centipedeSprite.getPosition().x + (centipedeSprite.getGlobalBounds().width/2)) > WINDOW_WIDTH) { //collision with right of game window
+        } else if ( (centipedeSprite.getPosition().x + (centipedeSprite.getGlobalBounds().width/2)) > WINDOW_WIDTH) { //collision with right of game window
             centipedeSprite.setPosition(WINDOW_WIDTH - centipedeSprite.getGlobalBounds().width/2, centipedeSprite.getPosition().y);
             rotate(90);
             moveDown();
@@ -62,7 +62,7 @@ void Centipede::updateMovement(std::vector<Mushroom> mushroomVector, std::vector
         } else if (centipedeSprite.getPosition().y < 0) { //collision with top of game window
             centipedeSprite.setPosition(centipedeSprite.getPosition().x, 0);
 
-        } else if ((centipedeSprite.getPosition().y + centipedeSprite.getGlobalBounds().height) > gameWindow->getSize().y) { //collision with bottom of game window
+        } else if ( (centipedeSprite.getPosition().y + centipedeSprite.getGlobalBounds().height) > gameWindow->getSize().y) { //collision with bottom of game window
             centipedeSprite.setPosition(centipedeSprite.getPosition().x, 25);
         } else {
 

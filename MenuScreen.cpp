@@ -155,7 +155,7 @@ void MenuScreen::initText() {
     centipedeGameText.setCharacterSize(30);
     centipedeGameText.setFillColor(sf::Color::Blue);
     centipedeGameText.setStyle(sf::Text::Bold);
-    centipedeGameText.setPosition((menuScreen->getSize().x / 2) - (centipedeGameText.getLocalBounds().width / 2), 0);
+    centipedeGameText.setPosition( (menuScreen->getSize().x / 2) - (centipedeGameText.getLocalBounds().width / 2), 0);
 
     // Player Points Text
     pointsText.setFont(menuFont2);
@@ -259,14 +259,14 @@ void MenuScreen::update() {
                     } else if (upgradeClickerMultiplierText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || clickUpgrade2_Sprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //ClickerMult
                         if (playerPoints >= clickerCostMultiplier) { 
                             playerPoints -= clickerCostMultiplier;
-                            clickerRewardMultiplier += double((rand() % 10) + 1) / 100;
+                            clickerRewardMultiplier += double( (rand() % 10) + 1) / 100;
                             clickerCostMultiplier = clickerCostMultiplier * clickerUpgradePriceScaling;
                         }
 
                     } else if (centipedeMultiplierCostText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || centipedeGameMult_Sprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //CentipedeGame Mult
                         if (playerPoints >= centipedeGameMultCost) { 
                             playerPoints -= centipedeGameMultCost;
-                            centipedeGameMultiplier += double((rand() % 50) + 26) / 100;
+                            centipedeGameMultiplier += double( (rand() % 50) + 26) / 100;
                             centipedeGameMultCost = centipedeGameMultCost * clickerUpgradePriceScaling;
                         }
 
@@ -282,7 +282,7 @@ void MenuScreen::update() {
                     } else if (dungeonGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //DungeonGame Prompt
                         currentGameType = dungeonGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) {
-                        if(is_MenuMusic_Paused){
+                        if (is_MenuMusic_Paused) {
                             menuMusic.play();
                         } else {
                             menuMusic.pause();

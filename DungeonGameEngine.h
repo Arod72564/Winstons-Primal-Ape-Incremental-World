@@ -1,5 +1,5 @@
-#ifndef DUNGEON_H
-#define DUNGEON_H
+#ifndef DUNGEONGAMEENGINE_H
+#define DUNGEONGAMEENGINE_H
 
 #include "HeaderFiles.h"
 #include "MenuScreen.h"
@@ -22,7 +22,7 @@ struct DungeonRoom {
     std::vector<sf::Sprite> hiddenSpotVec;
 };
 
-class Dungeon {
+class DungeonGameEngine {
     public:
         MenuScreen* menuPtr;
         std::vector<struct DungeonRoom> roomVec;
@@ -41,9 +41,9 @@ class Dungeon {
         sf::Event ev;
         int roomCount;
 
-        Dungeon(MenuScreen* menuPtr);
-        Dungeon();
-        virtual ~Dungeon();
+        DungeonGameEngine(MenuScreen* menuPtr);
+        DungeonGameEngine();
+        virtual ~DungeonGameEngine();
         void initRooms();
         void update();
         void render();
