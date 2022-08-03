@@ -16,8 +16,8 @@ DungeonGameEngine::~DungeonGameEngine() {
 
 void DungeonGameEngine::initRooms() {
     /**
-     * WHEN YOU CREATE A NEW ROOM YOu NEED TO RESIZE THE roomVec IN THE CONSTRUCTOR TO THE APPROPRIATE
-     * SIZE OR TEXTURES WILL NOT POINT TO CORRECT PLACE IN MEMORY
+     * WHEN YOU CREATE A NEW ROOM YOU NEED TO RESIZE THE roomVec IN THE CONSTRUCTOR TO THE APPROPRIATE
+     * SIZE OR TEXTURES WILL NOT POINT TO CORRECT PLACE IN MEMORY WHEN THE VECTOR AUTOMATICALLY RESIZES
      * 
     */
 
@@ -56,7 +56,6 @@ void DungeonGameEngine::initRooms() {
     roomVec[0].isClue2Opened = false;
     roomVec[0].isClue3Opened = false;
 
-
         //Background
     if (!roomVec[0].backgroundTexture.loadFromFile("images/Dungeon/Room0/Room_0.png")) {
         std::cout << "Room 0 background failed to load.\n";
@@ -64,79 +63,70 @@ void DungeonGameEngine::initRooms() {
     }
     roomVec[0].backgroundSprite.setTexture(roomVec[0].backgroundTexture);
     roomVec[0].backgroundSprite.setPosition(0,0);
-
-        //Puzzle
+        //Puzzle displayed
     if (!roomVec[0].textureVec[0].loadFromFile("images/Dungeon/Room0/Puzzle0.png")) {
         std::cout << "R0.0 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[0].spriteVec[0].setTexture(roomVec[0].textureVec[0]);
     roomVec[0].spriteVec[0].setPosition(0, 0);
-
-        //Clue1
+        //Clue1 displayed
     if (!roomVec[0].textureVec[1].loadFromFile("images/Dungeon/Room0/Puzzle0_clue1.png")) {
         std::cout << "R0.1 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[0].spriteVec[1].setTexture(roomVec[0].textureVec[1]);
     roomVec[0].spriteVec[1].setPosition(0, 0);
-
-        //Clue2
+        //Clue2 displayed
     if (!roomVec[0].textureVec[2].loadFromFile("images/Dungeon/Room0/Puzzle0_clue2.png")) {
         std::cout << "R0.2 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[0].spriteVec[2].setTexture(roomVec[0].textureVec[2]);
     roomVec[0].spriteVec[2].setPosition(0, 0);
-
-        //Clue3
+        //Clue3 displayed
     if (!roomVec[0].textureVec[3].loadFromFile("images/Dungeon/Room0/Puzzle0_clue3.png")) {
         std::cout << "R0.3 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[0].spriteVec[3].setTexture(roomVec[0].textureVec[3]);
     roomVec[0].spriteVec[3].setPosition(0, 0);
-
         //Forward
     roomVec[0].spriteVec[4].setTexture(moveTexture1);
     roomVec[0].spriteVec[4].setPosition(380, 390); 
-
         //Back
     roomVec[0].spriteVec[5].setTexture(moveTexture2);
     roomVec[0].spriteVec[5].setPosition(-100, -100); 
-
         //Answer Prompt
     roomVec[0].spriteVec[6].setTexture(ansTexture);
     roomVec[0].spriteVec[6].setPosition(0, 0); 
-
-        //ClueVector
+        //Clue1
     roomVec[0].clueSpriteVec[0].setTexture(clue1);
     roomVec[0].clueSpriteVec[0].setPosition(50, 500);
     roomVec[0].hiddenSpotVec[0].setTexture(hiddenSpot);
     roomVec[0].hiddenSpotVec[0].setPosition(50, 500);
     roomVec[0].hiddenSpotVec[0].setColor(sf::Color::Transparent);
-
+        //Clue2
     roomVec[0].clueSpriteVec[1].setTexture(clue2);
     roomVec[0].clueSpriteVec[1].setPosition(165, 300);
     roomVec[0].hiddenSpotVec[1].setTexture(hiddenSpot);
     roomVec[0].hiddenSpotVec[1].setPosition(165, 300);
     roomVec[0].hiddenSpotVec[1].setColor(sf::Color::Transparent);
-
+        //Clue3
     roomVec[0].clueSpriteVec[2].setTexture(clue3);
     roomVec[0].clueSpriteVec[2].setPosition(400, 610);
     roomVec[0].hiddenSpotVec[2].setTexture(hiddenSpot);
     roomVec[0].hiddenSpotVec[2].setPosition(400, 610);
     roomVec[0].hiddenSpotVec[2].setColor(sf::Color::Transparent);
-
+        //Unlocked Clue1
     roomVec[0].clueSpriteVec[3].setTexture(clue4);
     roomVec[0].clueSpriteVec[3].setPosition(200, menuPtr->menuScreen->getSize().y - roomVec[0].clueSpriteVec[3].getGlobalBounds().height - 20);
-
+        //Unlocked Clue2
     roomVec[0].clueSpriteVec[4].setTexture(clue5);
-    roomVec[0].clueSpriteVec[4].setPosition(400, menuPtr->menuScreen->getSize().y - roomVec[0].clueSpriteVec[4].getGlobalBounds().height - 20); 
-
+    roomVec[0].clueSpriteVec[4].setPosition(400, menuPtr->menuScreen->getSize().y - roomVec[0].clueSpriteVec[4].getGlobalBounds().height - 20);
+        //Unlocked Clue3
     roomVec[0].clueSpriteVec[5].setTexture(clue6);
     roomVec[0].clueSpriteVec[5].setPosition(600, menuPtr->menuScreen->getSize().y - roomVec[0].clueSpriteVec[5].getGlobalBounds().height - 20); 
-
         //Puzzle sprite
     roomVec[0].clueSpriteVec[6].setTexture(puzzleClue);
     roomVec[0].clueSpriteVec[6].setPosition(580, 630); 
@@ -166,7 +156,6 @@ void DungeonGameEngine::initRooms() {
     }
     roomVec[1].backgroundSprite.setTexture(roomVec[1].backgroundTexture);
     roomVec[1].backgroundSprite.setPosition(0,0);
-
         //Puzzle
     if (!roomVec[1].textureVec[0].loadFromFile("images/Dungeon/Room1/Puzzle1.png")) {
         std::cout << "R1.0 Texture failed to load.\n";
@@ -174,77 +163,70 @@ void DungeonGameEngine::initRooms() {
     }
     roomVec[1].spriteVec[0].setTexture(roomVec[1].textureVec[0]);
     roomVec[1].spriteVec[0].setPosition(0, 0);
-
-        //Clue1
+        //Clue1 displayed
     if (!roomVec[1].textureVec[1].loadFromFile("images/Dungeon/Room1/Puzzle1_clue1.png")) {
         std::cout << "R1.1 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[1].spriteVec[1].setTexture(roomVec[1].textureVec[1]);
     roomVec[1].spriteVec[1].setPosition(0, 0);
-
-        //Clue2
+        //Clue2 displayed
     if (!roomVec[1].textureVec[2].loadFromFile("images/Dungeon/Room1/Puzzle1_clue2.png")) {
         std::cout << "R1.2 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[1].spriteVec[2].setTexture(roomVec[1].textureVec[2]);
     roomVec[1].spriteVec[2].setPosition(0, 0);
-
-        //Clue3
+        //Clue3 displayed
     if (!roomVec[1].textureVec[3].loadFromFile("images/Dungeon/Room1/Puzzle1_clue3.png")) {
         std::cout << "R1.3 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[1].spriteVec[3].setTexture(roomVec[1].textureVec[3]);
     roomVec[1].spriteVec[3].setPosition(0, 0);
-
         //Forward
     roomVec[1].spriteVec[4].setTexture(moveTexture1);
-    roomVec[1].spriteVec[4].setPosition(0, 0); 
-
+    roomVec[1].spriteVec[4].setPosition(650, 320); 
         //Back
     roomVec[1].spriteVec[5].setTexture(moveTexture2);
-    roomVec[1].spriteVec[5].setPosition(200, 0); 
-
+    roomVec[1].spriteVec[5].setPosition(20 + roomVec[1].spriteVec[5].getGlobalBounds().width, 700);
+    roomVec[1].spriteVec[5].setRotation(180);
         //Answer Prompt
     roomVec[1].spriteVec[6].setTexture(ansTexture);
     roomVec[1].spriteVec[6].setPosition(0, 0); 
-
-        //ClueVector
+        //Clue1
     roomVec[1].clueSpriteVec[0].setTexture(clue1);
-    roomVec[1].clueSpriteVec[0].setPosition(0, 100);
+    roomVec[1].clueSpriteVec[0].setPosition(620, 580);
     roomVec[1].hiddenSpotVec[0].setTexture(hiddenSpot);
-    roomVec[1].hiddenSpotVec[0].setPosition(0, 100);
+    roomVec[1].hiddenSpotVec[0].setPosition(620, 580);
     roomVec[1].hiddenSpotVec[0].setColor(sf::Color::Transparent);
-
+        //Clue2
     roomVec[1].clueSpriteVec[1].setTexture(clue2);
-    roomVec[1].clueSpriteVec[1].setPosition(0, 200); 
+    roomVec[1].clueSpriteVec[1].setPosition(130, 520); 
     roomVec[1].hiddenSpotVec[1].setTexture(hiddenSpot);
-    roomVec[1].hiddenSpotVec[1].setPosition(0, 200);
+    roomVec[1].hiddenSpotVec[1].setPosition(130, 520);
     roomVec[1].hiddenSpotVec[1].setColor(sf::Color::Transparent);
-
+        //Clue3
     roomVec[1].clueSpriteVec[2].setTexture(clue3);
-    roomVec[1].clueSpriteVec[2].setPosition(0, 300);
+    roomVec[1].clueSpriteVec[2].setPosition(395, 155);
     roomVec[1].hiddenSpotVec[2].setTexture(hiddenSpot);
-    roomVec[1].hiddenSpotVec[2].setPosition(0, 300);
+    roomVec[1].hiddenSpotVec[2].setPosition(395, 155);
     roomVec[1].hiddenSpotVec[2].setColor(sf::Color::Transparent);
-
+        //Unlocked Clue1
     roomVec[1].clueSpriteVec[3].setTexture(clue4);
-    roomVec[1].clueSpriteVec[3].setPosition(0, 400); 
-
+    roomVec[1].clueSpriteVec[3].setPosition(200, menuPtr->menuScreen->getSize().y - roomVec[1].clueSpriteVec[3].getGlobalBounds().height - 20); 
+        //Unlocked Clue1
     roomVec[1].clueSpriteVec[4].setTexture(clue5);
-    roomVec[1].clueSpriteVec[4].setPosition(0, 500); 
-
+    roomVec[1].clueSpriteVec[4].setPosition(400, menuPtr->menuScreen->getSize().y - roomVec[1].clueSpriteVec[4].getGlobalBounds().height - 20); 
+        //Unlocked Clue1
     roomVec[1].clueSpriteVec[5].setTexture(clue6);
-    roomVec[1].clueSpriteVec[5].setPosition(0, 600); 
-
+    roomVec[1].clueSpriteVec[5].setPosition(600, menuPtr->menuScreen->getSize().y - roomVec[1].clueSpriteVec[5].getGlobalBounds().height - 20); 
         //Puzzle sprite
     roomVec[1].clueSpriteVec[6].setTexture(puzzleClue);
-    roomVec[1].clueSpriteVec[6].setPosition(0, 700);
+    roomVec[1].clueSpriteVec[6].setPosition(570, 90);
 
 
-    //Second Room
+    /*Second Room*/
     DungeonRoom room_2;
     roomVec.push_back(room_2);
     roomVec[2].spriteVec.resize(7);
@@ -268,7 +250,6 @@ void DungeonGameEngine::initRooms() {
     }
     roomVec[2].backgroundSprite.setTexture(roomVec[2].backgroundTexture);
     roomVec[2].backgroundSprite.setPosition(0,0);
-
         //Puzzle
     if (!roomVec[2].textureVec[0].loadFromFile("images/Dungeon/Room2/Puzzle2.png")) {
         std::cout << "R2.0 Texture failed to load.\n";
@@ -276,74 +257,71 @@ void DungeonGameEngine::initRooms() {
     }
     roomVec[2].spriteVec[0].setTexture(roomVec[2].textureVec[0]);
     roomVec[2].spriteVec[0].setPosition(0, 0);
-
-        //Clue1
+        //Clue1 displayed
     if (!roomVec[2].textureVec[1].loadFromFile("images/Dungeon/Room2/Puzzle2_clue1.png")) {
         std::cout << "R2.1 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[2].spriteVec[1].setTexture(roomVec[2].textureVec[1]);
     roomVec[2].spriteVec[1].setPosition(0, 0);
-
-        //Clue2
+        //Clue2 displayed
     if (!roomVec[2].textureVec[2].loadFromFile("images/Dungeon/Room2/Puzzle2_clue2.png")) {
         std::cout << "R2.2 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[2].spriteVec[2].setTexture(roomVec[2].textureVec[2]);
     roomVec[2].spriteVec[2].setPosition(0, 0);
-
-        //Clue3
+        //Clue3 displayed
     if (!roomVec[2].textureVec[3].loadFromFile("images/Dungeon/Room2/Puzzle2_clue3.png")) {
         std::cout << "R2.3 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
     roomVec[2].spriteVec[3].setTexture(roomVec[2].textureVec[3]);
-    roomVec[2].spriteVec[3].setPosition(0, 0);
-
+    roomVec[2].spriteVec[3].setOrigin(roomVec[2].spriteVec[3].getGlobalBounds().width / 2, roomVec[2].spriteVec[3].getGlobalBounds().height / 2);
+    roomVec[2].spriteVec[3].setPosition(400, 400);
         //Forward
     roomVec[2].spriteVec[4].setTexture(moveTexture1);
-    roomVec[2].spriteVec[4].setPosition(0, 0); 
-
+    roomVec[2].spriteVec[4].setOrigin(roomVec[2].spriteVec[4].getGlobalBounds().width / 2, roomVec[2].spriteVec[4].getGlobalBounds().height / 2);
+    roomVec[2].spriteVec[4].setPosition(125, 390);
+    roomVec[2].spriteVec[4].setRotation(-90);
         //Back
     roomVec[2].spriteVec[5].setTexture(moveTexture2);
-    roomVec[2].spriteVec[5].setPosition(200, 0); 
-
+    roomVec[2].spriteVec[5].setPosition(20 + roomVec[2].spriteVec[5].getGlobalBounds().width, 700);
+    roomVec[2].spriteVec[5].setRotation(180);
         //Answer Prompt
     roomVec[2].spriteVec[6].setTexture(ansTexture);
     roomVec[2].spriteVec[6].setPosition(0, 0); 
-
-        //ClueVector
+        //Clue1
     roomVec[2].clueSpriteVec[0].setTexture(clue1);
-    roomVec[2].clueSpriteVec[0].setPosition(0, 100);
+    roomVec[2].clueSpriteVec[0].setPosition(660, 135);
     roomVec[2].hiddenSpotVec[0].setTexture(hiddenSpot);
-    roomVec[2].hiddenSpotVec[0].setPosition(0, 100);
+    roomVec[2].hiddenSpotVec[0].setPosition(660, 135);
     roomVec[2].hiddenSpotVec[0].setColor(sf::Color::Transparent);
-
+        //Clue2
     roomVec[2].clueSpriteVec[1].setTexture(clue2);
-    roomVec[2].clueSpriteVec[1].setPosition(0, 200); 
+    roomVec[2].clueSpriteVec[1].setPosition(350, 120); 
     roomVec[2].hiddenSpotVec[1].setTexture(hiddenSpot);
-    roomVec[2].hiddenSpotVec[1].setPosition(0, 200);
+    roomVec[2].hiddenSpotVec[1].setPosition(350, 120);
     roomVec[2].hiddenSpotVec[1].setColor(sf::Color::Transparent);
-
+        //Clue3
     roomVec[2].clueSpriteVec[2].setTexture(clue3);
-    roomVec[2].clueSpriteVec[2].setPosition(0, 300);
+    roomVec[2].clueSpriteVec[2].setPosition(250, 375);
     roomVec[2].hiddenSpotVec[2].setTexture(hiddenSpot);
-    roomVec[2].hiddenSpotVec[2].setPosition(0, 300);
+    roomVec[2].hiddenSpotVec[2].setPosition(250, 375);
     roomVec[2].hiddenSpotVec[2].setColor(sf::Color::Transparent);
-
+        //Unlcoked Clue1
     roomVec[2].clueSpriteVec[3].setTexture(clue4);
-    roomVec[2].clueSpriteVec[3].setPosition(0, 400); 
-
+    roomVec[2].clueSpriteVec[3].setPosition(200, menuPtr->menuScreen->getSize().y - roomVec[2].clueSpriteVec[3].getGlobalBounds().height - 20); 
+        //Unlocked Clue2
     roomVec[2].clueSpriteVec[4].setTexture(clue5);
-    roomVec[2].clueSpriteVec[4].setPosition(0, 500); 
-
+    roomVec[2].clueSpriteVec[4].setPosition(400, menuPtr->menuScreen->getSize().y - roomVec[2].clueSpriteVec[4].getGlobalBounds().height - 20); 
+        //Unlocked Clue3
     roomVec[2].clueSpriteVec[5].setTexture(clue6);
-    roomVec[2].clueSpriteVec[5].setPosition(0, 600); 
-
+    roomVec[2].clueSpriteVec[5].setPosition(245, 350);
+    roomVec[2].clueSpriteVec[5].setColor(sf::Color::Transparent);
         //Puzzle sprite
     roomVec[2].clueSpriteVec[6].setTexture(puzzleClue);
-    roomVec[2].clueSpriteVec[6].setPosition(0, 700); 
+    roomVec[2].clueSpriteVec[6].setPosition(545, 725); 
 
     std::cout << "\tRooms initialized.\n";
 }
@@ -353,8 +331,8 @@ void DungeonGameEngine::update() {
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
     //std::cout << "(" << mousePosition.x << " , " << mousePosition.y << ")\n";
 
-    while (menuPtr->menuScreen->pollEvent(ev)) {
-        switch(ev.type) {
+    while (menuPtr->menuScreen->pollEvent(menuPtr->event)) {
+        switch(menuPtr->event.type) {
             case sf::Event::Closed:
                 menuPtr->currentGameType = NULL_GAME;
                 break;
@@ -367,16 +345,12 @@ void DungeonGameEngine::update() {
                         menuPtr->menuMusic.pause();
                     }
                     menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
-                } else if (roomVec[roomCount].hiddenSpotVec[0].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Hidden && roomVec[roomCount].isClue2Hidden && roomVec[roomCount].isClue3Hidden) {
+                } else if (roomVec[roomCount].hiddenSpotVec[0].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Hidden  && roomVec[roomCount].isClue2Hidden  && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 1
                     roomVec[roomCount].isClue1Hidden = false;
-                } else if (roomVec[roomCount].hiddenSpotVec[1].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && roomVec[roomCount].isClue2Hidden && roomVec[roomCount].isClue3Hidden) {
+                } else if (roomVec[roomCount].hiddenSpotVec[1].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && roomVec[roomCount].isClue2Hidden  && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 2
                     roomVec[roomCount].isClue2Hidden = false;
-                } else if (roomVec[roomCount].hiddenSpotVec[2].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && !roomVec[roomCount].isClue2Hidden && roomVec[roomCount].isClue3Hidden) {
+                } else if (roomVec[roomCount].hiddenSpotVec[2].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && !roomVec[roomCount].isClue2Hidden && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 3
                     roomVec[roomCount].isClue3Hidden = false;
-                } else if (roomVec[roomCount].clueSpriteVec[6].getGlobalBounds().contains(mousePosition) ) { //Puzzle
-                    //Display Puzzle
-                
-                    displayPuzzlePrompt( roomVec[roomCount].spriteVec[0] );
                 } else if (roomVec[roomCount].clueSpriteVec[0].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && !roomVec[roomCount].isClue1Opened) { //Clue 1
                     //Display Clue 1
                     roomVec[roomCount].isClue1Opened = true;
@@ -389,6 +363,18 @@ void DungeonGameEngine::update() {
                     //Display Clue 3
                     roomVec[roomCount].isClue3Opened = true;
                     displayPuzzlePrompt(roomVec[roomCount].spriteVec[3]);
+                } else if (roomVec[roomCount].clueSpriteVec[3].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Opened) { //Clue 1 unlocked
+                                    //Display Clue 1
+                                    displayPuzzlePrompt( roomVec[roomCount].spriteVec[1]);
+                } else if (roomVec[roomCount].clueSpriteVec[4].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue2Opened) { //Clue 2 unlocked
+                    //Display Clue 2
+                    displayPuzzlePrompt(roomVec[roomCount].spriteVec[2]);
+                } else if (roomVec[roomCount].clueSpriteVec[5].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue3Opened) { //Clue 3 unlocked
+                    //Display Clue 3
+                    displayPuzzlePrompt(roomVec[roomCount].spriteVec[3]);
+                } else if (roomVec[roomCount].clueSpriteVec[6].getGlobalBounds().contains(mousePosition) ) { //Puzzle
+                    //Display Puzzle
+                    displayPuzzlePrompt( roomVec[roomCount].spriteVec[0] );
                 } else if (roomVec[roomCount].spriteVec[4].getGlobalBounds().contains(mousePosition)) { //Forward arrow
                     //Move forward a room
                     if (roomVec[roomCount].isPuzzleSolved) {
@@ -400,17 +386,9 @@ void DungeonGameEngine::update() {
                 } else if (roomVec[roomCount].spriteVec[5].getGlobalBounds().contains(mousePosition)) { //Back arrow
                     //Move backwards a room
                     roomCount = clamp(roomCount-1, 0, int( roomVec.size() - 1 ));
-                } else if (roomVec[roomCount].clueSpriteVec[3].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Opened) { //Clue 1 unlocked
-                    //Display Clue 1
-                    displayPuzzlePrompt( roomVec[roomCount].spriteVec[1]);
-                } else if (roomVec[roomCount].clueSpriteVec[4].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue2Opened) { //Clue 2 unlocked
-                    //Display Clue 2
-                    displayPuzzlePrompt(roomVec[roomCount].spriteVec[2]);
-                } else if (roomVec[roomCount].clueSpriteVec[5].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue3Opened) { //Clue 3 unlocked
-                    //Display Clue 3
-                    displayPuzzlePrompt(roomVec[roomCount].spriteVec[3]);
-                }
+                } 
                 break;
+
             default:
                 break;
         };

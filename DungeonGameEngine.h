@@ -17,8 +17,8 @@ struct DungeonRoom {
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
     std::vector<sf::Texture> textureVec;
-    std::vector<sf::Sprite> spriteVec;
-    std::vector<sf::Sprite> clueSpriteVec;
+    std::vector<sf::Sprite> spriteVec; //display screens, move, and answer sprites
+    std::vector<sf::Sprite> clueSpriteVec; //clickable clues
     std::vector<sf::Sprite> hiddenSpotVec;
 };
 
@@ -38,7 +38,6 @@ class DungeonGameEngine {
         sf::Texture clue5;
         sf::Texture clue6;
 
-        sf::Event ev;
         int roomCount;
 
         DungeonGameEngine(MenuScreen* menuPtr);
