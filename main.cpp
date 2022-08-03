@@ -49,10 +49,10 @@ int main() {
                 while(menu->currentGameType == dungeonGame) {
 
                     //Update game data
-                    dungeongameengine->update();
+                    dungeonGameEngine->update();
 
                     //Render game graphics
-                    dungeongameengine->render();
+                    dungeonGameEngine->render();
                 }
 
                 delete dungeonGameEngine;

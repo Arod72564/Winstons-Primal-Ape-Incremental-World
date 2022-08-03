@@ -6,3 +6,5 @@
 
 #ignore all exe files
 *.exe
+
+.vscode

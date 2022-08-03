@@ -24,17 +24,17 @@ void DungeonGameEngine::initRooms() {
     std:: cout << "Initializing rooms...";
 
     //Textures used in each level
-    if (!moveTexture1.loadFromFile("images/DungeonGameEngine/MoveLocked.png")) menuPtr->menuScreen->close();
-    if (!moveTexture2.loadFromFile("images/DungeonGameEngine/Move.png")) menuPtr->menuScreen->close();
-    if (!ansTexture.loadFromFile("images/DungeonGameEngine/answerPrompt.png")) menuPtr->menuScreen->close();
-    if (!puzzleClue.loadFromFile("images/DungeonGameEngine/PuzzleClue.png")) menuPtr->menuScreen->close();
-    if (!clue1.loadFromFile("images/DungeonGameEngine/Clue1.png")) menuPtr->menuScreen->close();
-    if (!clue2.loadFromFile("images/DungeonGameEngine/Clue2.png")) menuPtr->menuScreen->close();
-    if (!clue3.loadFromFile("images/DungeonGameEngine/Clue3.png")) menuPtr->menuScreen->close();
-    if (!clue4.loadFromFile("images/DungeonGameEngine/Clue1_Unlocked.png")) menuPtr->menuScreen->close();
-    if (!clue5.loadFromFile("images/DungeonGameEngine/Clue2_Unlocked.png")) menuPtr->menuScreen->close();
-    if (!clue6.loadFromFile("images/DungeonGameEngine/Clue3_Unlocked.png")) menuPtr->menuScreen->close();
-    if (!hiddenSpot.loadFromFile("images/DungeonGameEngine/HiddenSpot.png")) menuPtr->menuScreen->close();
+    if (!moveTexture1.loadFromFile("images/Dungeon/MoveLocked.png")) menuPtr->menuScreen->close();
+    if (!moveTexture2.loadFromFile("images/Dungeon/Move.png")) menuPtr->menuScreen->close();
+    if (!ansTexture.loadFromFile("images/Dungeon/answerPrompt.png")) menuPtr->menuScreen->close();
+    if (!puzzleClue.loadFromFile("images/Dungeon/PuzzleClue.png")) menuPtr->menuScreen->close();
+    if (!clue1.loadFromFile("images/Dungeon/Clue1.png")) menuPtr->menuScreen->close();
+    if (!clue2.loadFromFile("images/Dungeon/Clue2.png")) menuPtr->menuScreen->close();
+    if (!clue3.loadFromFile("images/Dungeon/Clue3.png")) menuPtr->menuScreen->close();
+    if (!clue4.loadFromFile("images/Dungeon/Clue1_Unlocked.png")) menuPtr->menuScreen->close();
+    if (!clue5.loadFromFile("images/Dungeon/Clue2_Unlocked.png")) menuPtr->menuScreen->close();
+    if (!clue6.loadFromFile("images/Dungeon/Clue3_Unlocked.png")) menuPtr->menuScreen->close();
+    if (!hiddenSpot.loadFromFile("images/Dungeon/HiddenSpot.png")) menuPtr->menuScreen->close();
 
     //Variable used as index to current room
     roomCount = 0;
@@ -58,7 +58,7 @@ void DungeonGameEngine::initRooms() {
 
 
         //Background
-    if (!roomVec[0].backgroundTexture.loadFromFile("images/DungeonGameEngine/Room0/Room_0.png")) {
+    if (!roomVec[0].backgroundTexture.loadFromFile("images/Dungeon/Room0/Room_0.png")) {
         std::cout << "Room 0 background failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -66,7 +66,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[0].backgroundSprite.setPosition(0,0);
 
         //Puzzle
-    if (!roomVec[0].textureVec[0].loadFromFile("images/DungeonGameEngine/Room0/Puzzle0.png")) {
+    if (!roomVec[0].textureVec[0].loadFromFile("images/Dungeon/Room0/Puzzle0.png")) {
         std::cout << "R0.0 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -74,7 +74,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[0].spriteVec[0].setPosition(0, 0);
 
         //Clue1
-    if (!roomVec[0].textureVec[1].loadFromFile("images/DungeonGameEngine/Room0/Puzzle0_clue1.png")) {
+    if (!roomVec[0].textureVec[1].loadFromFile("images/Dungeon/Room0/Puzzle0_clue1.png")) {
         std::cout << "R0.1 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -82,7 +82,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[0].spriteVec[1].setPosition(0, 0);
 
         //Clue2
-    if (!roomVec[0].textureVec[2].loadFromFile("images/DungeonGameEngine/Room0/Puzzle0_clue2.png")) {
+    if (!roomVec[0].textureVec[2].loadFromFile("images/Dungeon/Room0/Puzzle0_clue2.png")) {
         std::cout << "R0.2 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -90,7 +90,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[0].spriteVec[2].setPosition(0, 0);
 
         //Clue3
-    if (!roomVec[0].textureVec[3].loadFromFile("images/DungeonGameEngine/Room0/Puzzle0_clue3.png")) {
+    if (!roomVec[0].textureVec[3].loadFromFile("images/Dungeon/Room0/Puzzle0_clue3.png")) {
         std::cout << "R0.3 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -160,7 +160,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[1].isClue3Opened = false;
 
         //Background
-    if (!roomVec[1].backgroundTexture.loadFromFile("images/DungeonGameEngine/Room1/Room_1.png")) {
+    if (!roomVec[1].backgroundTexture.loadFromFile("images/Dungeon/Room1/Room_1.png")) {
         std::cout << "Room 1 background failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -168,7 +168,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[1].backgroundSprite.setPosition(0,0);
 
         //Puzzle
-    if (!roomVec[1].textureVec[0].loadFromFile("images/DungeonGameEngine/Room1/Puzzle1.png")) {
+    if (!roomVec[1].textureVec[0].loadFromFile("images/Dungeon/Room1/Puzzle1.png")) {
         std::cout << "R1.0 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -176,7 +176,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[1].spriteVec[0].setPosition(0, 0);
 
         //Clue1
-    if (!roomVec[1].textureVec[1].loadFromFile("images/DungeonGameEngine/Room1/Puzzle1_clue1.png")) {
+    if (!roomVec[1].textureVec[1].loadFromFile("images/Dungeon/Room1/Puzzle1_clue1.png")) {
         std::cout << "R1.1 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -184,7 +184,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[1].spriteVec[1].setPosition(0, 0);
 
         //Clue2
-    if (!roomVec[1].textureVec[2].loadFromFile("images/DungeonGameEngine/Room1/Puzzle1_clue2.png")) {
+    if (!roomVec[1].textureVec[2].loadFromFile("images/Dungeon/Room1/Puzzle1_clue2.png")) {
         std::cout << "R1.2 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -192,7 +192,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[1].spriteVec[2].setPosition(0, 0);
 
         //Clue3
-    if (!roomVec[1].textureVec[3].loadFromFile("images/DungeonGameEngine/Room1/Puzzle1_clue3.png")) {
+    if (!roomVec[1].textureVec[3].loadFromFile("images/Dungeon/Room1/Puzzle1_clue3.png")) {
         std::cout << "R1.3 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -262,7 +262,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[2].isClue3Opened = false;
 
         //Background
-    if (!roomVec[2].backgroundTexture.loadFromFile("images/DungeonGameEngine/Room2/Room_2.png")) {
+    if (!roomVec[2].backgroundTexture.loadFromFile("images/Dungeon/Room2/Room_2.png")) {
         std::cout << "Room 2 background failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -270,7 +270,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[2].backgroundSprite.setPosition(0,0);
 
         //Puzzle
-    if (!roomVec[2].textureVec[0].loadFromFile("images/DungeonGameEngine/Room2/Puzzle2.png")) {
+    if (!roomVec[2].textureVec[0].loadFromFile("images/Dungeon/Room2/Puzzle2.png")) {
         std::cout << "R2.0 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -278,7 +278,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[2].spriteVec[0].setPosition(0, 0);
 
         //Clue1
-    if (!roomVec[2].textureVec[1].loadFromFile("images/DungeonGameEngine/Room2/Puzzle2_clue1.png")) {
+    if (!roomVec[2].textureVec[1].loadFromFile("images/Dungeon/Room2/Puzzle2_clue1.png")) {
         std::cout << "R2.1 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -286,7 +286,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[2].spriteVec[1].setPosition(0, 0);
 
         //Clue2
-    if (!roomVec[2].textureVec[2].loadFromFile("images/DungeonGameEngine/Room2/Puzzle2_clue2.png")) {
+    if (!roomVec[2].textureVec[2].loadFromFile("images/Dungeon/Room2/Puzzle2_clue2.png")) {
         std::cout << "R2.2 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
@@ -294,7 +294,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[2].spriteVec[2].setPosition(0, 0);
 
         //Clue3
-    if (!roomVec[2].textureVec[3].loadFromFile("images/DungeonGameEngine/Room2/Puzzle2_clue3.png")) {
+    if (!roomVec[2].textureVec[3].loadFromFile("images/Dungeon/Room2/Puzzle2_clue3.png")) {
         std::cout << "R2.3 Texture failed to load.\n";
         menuPtr->menuScreen->close();
     }
