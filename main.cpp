@@ -24,7 +24,7 @@ int main() {
             menu->update();
             menu->render();
 
-            if (menu->currentGameType == centipedeGame) { //CEMTIPEDE GAME
+            if (menu->currentGameType == centipedeGame) { //CENTIPEDE GAME
                 //Initialize centipede game driver class
                 CentipedeGameEngine* centipedeGameEngine = new CentipedeGameEngine(menu);
 
@@ -41,7 +41,7 @@ int main() {
                 delete centipedeGameEngine;
             }
 
-            if (menu->currentGameType == dungeonGame) { //DungeonGameEngine
+            if (menu->currentGameType == dungeonGame) { //DUNGEON PUZZLE GAME
                 //Initialize DungeonGameEngine game driver class
                 DungeonGameEngine* dungeonGameEngine = new DungeonGameEngine(menu);
 
