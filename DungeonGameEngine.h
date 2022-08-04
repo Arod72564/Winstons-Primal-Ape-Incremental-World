@@ -31,23 +31,26 @@ class DungeonGameEngine {
         sf::Texture ansTexture;
         sf::Texture puzzleClue;
         sf::Texture hiddenSpot;
+        sf::Texture rulesTexture;
+        sf::Texture rulesPromptTexture;
         sf::Texture clue1;
         sf::Texture clue2;
         sf::Texture clue3;
         sf::Texture clue4;
         sf::Texture clue5;
         sf::Texture clue6;
+        sf::Sprite rulesSprite;
+        sf::Sprite rulesPromptSprite;
 
         int roomCount;
 
         DungeonGameEngine(MenuScreen* menuPtr);
-        DungeonGameEngine();
         virtual ~DungeonGameEngine();
         void initRooms();
         void update();
         void render();
         void displayPuzzlePrompt(sf::Sprite puzzleSprite);
-        void displayAnswerPrompt(sf::Sprite answerSprite, std::string answerString, int roomCount);
+        void displayAnswerPrompt(sf::Sprite answerSprite, int roomCount, std::string ans);
         
 };
 

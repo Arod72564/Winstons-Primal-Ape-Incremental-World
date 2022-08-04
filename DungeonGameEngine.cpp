@@ -1,9 +1,5 @@
 #include "DungeonGameEngine.h"    
 
-DungeonGameEngine::DungeonGameEngine() {
-
-}
-
 DungeonGameEngine::DungeonGameEngine(MenuScreen* menu) {
     menuPtr = menu;
     roomVec.resize(3);
@@ -17,7 +13,7 @@ DungeonGameEngine::~DungeonGameEngine() {
 void DungeonGameEngine::initRooms() {
     /**
      * WHEN YOU CREATE A NEW ROOM YOU NEED TO RESIZE THE roomVec IN THE CONSTRUCTOR TO THE APPROPRIATE
-     * SIZE OR TEXTURES WILL NOT POINT TO CORRECT PLACE IN MEMORY WHEN THE VECTOR AUTOMATICALLY RESIZES
+     * SIZE OR TEXTURES WILL NOT POINT TO CORRECT PLACE IN MEMORY WHEN THE VECTOR AUTOMATICALLY RESIZ
      * 
     */
 
@@ -35,9 +31,17 @@ void DungeonGameEngine::initRooms() {
     if (!clue5.loadFromFile("images/Dungeon/Clue2_Unlocked.png")) menuPtr->menuScreen->close();
     if (!clue6.loadFromFile("images/Dungeon/Clue3_Unlocked.png")) menuPtr->menuScreen->close();
     if (!hiddenSpot.loadFromFile("images/Dungeon/HiddenSpot.png")) menuPtr->menuScreen->close();
+    if (!rulesTexture.loadFromFile("images/Dungeon/Rules.png")) menuPtr->menuScreen->close();
+    if (!rulesPromptTexture.loadFromFile("images/Dungeon/RulesPrompt.png")) menuPtr->menuScreen->close();
 
     //Variable used as index to current room
     roomCount = 0;
+
+    //Rules
+    rulesSprite.setTexture(rulesTexture);
+    rulesSprite.setPosition(menuPtr->menuScreen->getSize().x - rulesSprite.getGlobalBounds().width , 0);
+    rulesPromptSprite.setTexture(rulesPromptTexture);
+    rulesPromptSprite.setPosition(0,0);
 
     //Front door
     DungeonRoom room_0;
@@ -234,7 +238,7 @@ void DungeonGameEngine::initRooms() {
     roomVec[2].clueSpriteVec.resize(7);
     roomVec[2].hiddenSpotVec.resize(6);
     roomVec[2].roomId = 2;
-    roomVec[2].roomAnswer = "hows your dotter";
+    roomVec[2].roomAnswer = "howsyourdotter";
     roomVec[2].isPuzzleSolved = false;
     roomVec[2].isClue1Hidden = true;
     roomVec[2].isClue2Hidden = true;
@@ -346,10 +350,13 @@ void DungeonGameEngine::update() {
                     }
                     menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
                 } else if (roomVec[roomCount].hiddenSpotVec[0].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Hidden  && roomVec[roomCount].isClue2Hidden  && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 1
+                    //Reveal Clue 1
                     roomVec[roomCount].isClue1Hidden = false;
                 } else if (roomVec[roomCount].hiddenSpotVec[1].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && roomVec[roomCount].isClue2Hidden  && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 2
+                    //Reveal Clue 2
                     roomVec[roomCount].isClue2Hidden = false;
                 } else if (roomVec[roomCount].hiddenSpotVec[2].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && !roomVec[roomCount].isClue2Hidden && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 3
+                    //Reveal Clue 3
                     roomVec[roomCount].isClue3Hidden = false;
                 } else if (roomVec[roomCount].clueSpriteVec[0].getGlobalBounds().contains(mousePosition) && !roomVec[roomCount].isClue1Hidden && !roomVec[roomCount].isClue1Opened) { //Clue 1
                     //Display Clue 1
@@ -364,8 +371,8 @@ void DungeonGameEngine::update() {
                     roomVec[roomCount].isClue3Opened = true;
                     displayPuzzlePrompt(roomVec[roomCount].spriteVec[3]);
                 } else if (roomVec[roomCount].clueSpriteVec[3].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Opened) { //Clue 1 unlocked
-                                    //Display Clue 1
-                                    displayPuzzlePrompt( roomVec[roomCount].spriteVec[1]);
+                    //Display Clue 1
+                    displayPuzzlePrompt( roomVec[roomCount].spriteVec[1]);
                 } else if (roomVec[roomCount].clueSpriteVec[4].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue2Opened) { //Clue 2 unlocked
                     //Display Clue 2
                     displayPuzzlePrompt(roomVec[roomCount].spriteVec[2]);
@@ -381,12 +388,18 @@ void DungeonGameEngine::update() {
                         roomCount = clamp(roomCount+1, 0, int( roomVec.size() - 1 ));
                     } else {
                         std::cout << "You cannot move forward without solving the puzzle first.\n";
-                        displayAnswerPrompt(roomVec[roomCount].spriteVec[6], roomVec[roomCount].roomAnswer, roomCount);
+                        std::string answer = "";
+                        std::cout << "Type your answer and press enter: ";
+                        std::cin >> answer;
+                        displayAnswerPrompt(roomVec[roomCount].spriteVec[6], roomCount, answer);
                     }
                 } else if (roomVec[roomCount].spriteVec[5].getGlobalBounds().contains(mousePosition)) { //Back arrow
                     //Move backwards a room
                     roomCount = clamp(roomCount-1, 0, int( roomVec.size() - 1 ));
-                } 
+                } else if (rulesSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*(menuPtr->menuScreen))))) {
+                    //Display Rules
+                    displayPuzzlePrompt( rulesPromptSprite );
+                }
                 break;
 
             default:
@@ -441,6 +454,9 @@ void DungeonGameEngine::render() {
     //Mute Button Last
     menuPtr->menuScreen->draw(menuPtr->muteButtonSprite);
 
+    //Rules Button Sprite
+    menuPtr->menuScreen->draw(rulesSprite);
+
     menuPtr->menuScreen->display();
 }
 
@@ -451,19 +467,16 @@ void DungeonGameEngine::displayPuzzlePrompt(sf::Sprite puzzleSprite) {
     }
 }
 
-void DungeonGameEngine::displayAnswerPrompt(sf::Sprite answerSprite, std::string answerString, int roomCount) {
-    std::string answer = ""; 
+void DungeonGameEngine::displayAnswerPrompt(sf::Sprite answerSprite, int roomCount, std::string ans) {
+    
 
     menuPtr->menuScreen->draw(answerSprite);
     menuPtr->menuScreen->display();
-    std::cout << "Type your answer and press enter: ";
-    std::cin >> answer;
-    if (answerString.compare(answer) == 0) {
+
+    if (roomVec[roomCount].roomAnswer.compare(ans) == 0) {
         std::cout << "\nCorrect Answer.\n";
         roomVec[roomCount].isPuzzleSolved = true;
-
     } else {
         std::cout << "\nIncorrect Answer.\n";
     }
-
 }
