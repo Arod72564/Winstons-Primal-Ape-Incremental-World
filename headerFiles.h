@@ -26,6 +26,7 @@ enum GameTypes {NULL_GAME, centipedeGame, dungeonGame};
 #include <limits.h>
 #include <iomanip>
 #include <list>
+#include <cmath>
 
 template<typename T> T clamp(T arg1, T arg2, T arg3) {
     if( arg1 < arg2) {
