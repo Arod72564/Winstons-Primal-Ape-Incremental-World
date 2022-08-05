@@ -127,7 +127,7 @@ void CentipedeGameEngine::initSprites() {
     displayFirstAnimation = true;
     isBeamPresent = false;
     isCheaterBeamPresent = false;
-    beamCollisionType = BeamCollisionType::nan;
+    beamCollisionType = BeamCollisionType::nan_;
     centipedesKilled = 0;
 
     //Initialze player variables

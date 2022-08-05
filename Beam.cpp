@@ -40,5 +40,5 @@ BeamCollisionType Beam::updateMovement(bool &isBeamPresent, std::vector<Mushroom
         }
     }
 
-    return BeamCollisionType::nan;
+    return BeamCollisionType::nan_;
 }
