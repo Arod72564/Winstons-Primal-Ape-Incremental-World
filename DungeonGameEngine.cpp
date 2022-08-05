@@ -349,6 +349,9 @@ void DungeonGameEngine::update() {
                         menuPtr->menuMusic.pause();
                     }
                     menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
+                } else if (rulesSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*(menuPtr->menuScreen))))) { //Rules
+                    //Display Rules
+                    displayPuzzlePrompt( rulesPromptSprite );
                 } else if (roomVec[roomCount].hiddenSpotVec[0].getGlobalBounds().contains(mousePosition) && roomVec[roomCount].isClue1Hidden  && roomVec[roomCount].isClue2Hidden  && roomVec[roomCount].isClue3Hidden) { //Hidden Spot 1
                     //Reveal Clue 1
                     roomVec[roomCount].isClue1Hidden = false;
@@ -396,9 +399,6 @@ void DungeonGameEngine::update() {
                 } else if (roomVec[roomCount].spriteVec[5].getGlobalBounds().contains(mousePosition)) { //Back arrow
                     //Move backwards a room
                     roomCount = clamp(roomCount-1, 0, int( roomVec.size() - 1 ));
-                } else if (rulesSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*(menuPtr->menuScreen))))) {
-                    //Display Rules
-                    displayPuzzlePrompt( rulesPromptSprite );
                 }
                 break;
 
@@ -461,15 +461,30 @@ void DungeonGameEngine::render() {
 }
 
 void DungeonGameEngine::displayPuzzlePrompt(sf::Sprite puzzleSprite) {
+    bool isPromptShowing = true;
     menuPtr->menuScreen->draw(puzzleSprite);
     menuPtr->menuScreen->display();
-    while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+    while (isPromptShowing) {
+        while (menuPtr->menuScreen->pollEvent(menuPtr->event)) {
+            switch (menuPtr->event.type) {
+                case sf::Event::KeyPressed:
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+                        isPromptShowing = false;
+                    }
+                    break;
+
+                case sf::Event::Closed:
+                    isPromptShowing = false;
+                    
+                default:
+                    break;
+            }
+        }
     }
 }
 
 void DungeonGameEngine::displayAnswerPrompt(sf::Sprite answerSprite, int roomCount, std::string ans) {
     
-
     menuPtr->menuScreen->draw(answerSprite);
     menuPtr->menuScreen->display();
 
