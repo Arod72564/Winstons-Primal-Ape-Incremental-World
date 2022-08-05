@@ -8,6 +8,7 @@
 #include "Beam.cpp"
 #include "MenuScreen.cpp"
 #include "DungeonGameEngine.cpp"
+#include "ArcheryGameEngine.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -57,6 +58,24 @@ int main() {
 
                 delete dungeonGameEngine;
             }
+
+            if (menu->currentGameType == archeryGame) { //ARCHERY GAME
+                //Initialize ArcheryGameEngine game driver class
+                ArcheryGameEngine* archeryGameEngine = new ArcheryGameEngine(menu);
+
+                //Main game loop
+                while(menu->currentGameType == archeryGame) {
+
+                    //Update game data
+                    archeryGameEngine->update();
+
+                    //Render game graphics
+                    archeryGameEngine->render();
+                }
+
+                delete archeryGameEngine;
+            }
+
 
         }
     }

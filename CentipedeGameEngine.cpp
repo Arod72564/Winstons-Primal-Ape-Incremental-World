@@ -129,6 +129,7 @@ void CentipedeGameEngine::initSprites() {
     isCheaterBeamPresent = false;
     beamCollisionType = BeamCollisionType::nan_;
     centipedesKilled = 0;
+    isPaused = false;
 
     //Initialze player variables
     sessionPoints = 0;
@@ -198,6 +199,7 @@ void CentipedeGameEngine::update(){
                         isBeamPresent = true;
                     }
                 } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) { //Pause
+                    isPaused = true;
                     menuPtr->menuMusic.pause();
                     gameWindow->clear(sf::Color::Black);
                     gameWindow->draw(pauseText);
@@ -207,8 +209,20 @@ void CentipedeGameEngine::update(){
                     pauseMusic.setPitch(1);
                     pauseMusic.setLoop(true);
                     pauseMusic.play();
-                    while(!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    
+                    while (isPaused == true) {
+                        while (gameWindow->pollEvent(event)) {
+                            switch (event.type) {
+                                case sf::Event::MouseButtonPressed:
+                                    isPaused = false;
+                                    break;
+                                
+                                default:
+                                    break;
+                            }
+                        }
                     }
+
                     pauseMusic.pause();
 
                     if (!menuPtr->is_MenuMusic_Paused) {

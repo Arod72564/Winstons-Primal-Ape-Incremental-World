@@ -289,7 +289,9 @@ void MenuScreen::update() {
                         }
                     } else if (dungeonGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //DungeonGame Prompt
                         currentGameType = dungeonGame;
-                    } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) {
+                    } else if (ArcheryGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
+                        currentGameType = archeryGame;
+                    } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
                         if (is_MenuMusic_Paused) {
                             menuMusic.play();
                         } else {

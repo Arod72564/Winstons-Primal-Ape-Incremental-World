@@ -37,6 +37,7 @@ class CentipedeGameEngine {
         bool displayFirstAnimation;
         bool isBeamPresent;
         bool isCheaterBeamPresent;
+        bool isPaused;
         long long int animationCounter;
         long double sessionPoints;
         int beamCollisionIndex;
