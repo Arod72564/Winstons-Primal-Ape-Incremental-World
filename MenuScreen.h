@@ -20,8 +20,11 @@ class MenuScreen {
         sf::Sprite muteButtonSprite;
         sf::Font menuFont1;
         sf::Font menuFont2;
+
         sf::Text centipedeGameText;
         sf::Text dungeonGameText;
+        sf::Text ArcheryGameText;
+
         sf::Text pointsText;
 
         sf::Text upgradeClickerRewardText;

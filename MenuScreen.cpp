@@ -149,6 +149,14 @@ void MenuScreen::initText() {
     dungeonGameText.setStyle(sf::Text::Bold | sf::Text::Underlined);
     dungeonGameText.setPosition(0, 200);
 
+    //Archery Game Text
+    ArcheryGameText.setFont(menuFont2);
+    ArcheryGameText.setString("Archery Game");
+    ArcheryGameText.setCharacterSize(25);
+    ArcheryGameText.setFillColor(sf::Color::Red);
+    ArcheryGameText.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    ArcheryGameText.setPosition(dungeonGameText.getPosition().x, dungeonGameText.getPosition().y + ArcheryGameText.getGlobalBounds().height);
+
     //Centipede Game Text
     centipedeGameText.setFont(menuFont2);
     centipedeGameText.setString("Buy Centipede Game: 100");

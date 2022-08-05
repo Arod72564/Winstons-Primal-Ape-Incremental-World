@@ -2,7 +2,7 @@
 
 ArcheryGameEngine::ArcheryGameEngine(MenuScreen* menu){
     menuPtr = menu;
-    sf::View gameView(sf::Vector2f(0,0) , sf::Vector2f(menu->menuScreen->getSize().x,menu->menuScreen->getSize().y));
+    gameView = new sf::View(sf::Vector2f(0,0) , sf::Vector2f(menu->menuScreen->getSize().x,menu->menuScreen->getSize().y));
 }
 
 ArcheryGameEngine::~ArcheryGameEngine(){
@@ -47,9 +47,29 @@ void ArcheryGameEngine::initGame(){
 }
 
 void ArcheryGameEngine::update(){
+    
+    sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
+    while (menuPtr->menuScreen->pollEvent(ev)) {
+        switch (ev.type) {
+
+            case sf::Event::EventType::Closed:
+                menuPtr->currentGameType = NULL_GAME;
+                break;
+
+            case sf::Event::MouseButtonReleased:
+                break;
+
+            case sf::Event::MouseButtonPressed:
+                break;
+
+        }
+    }
 }
 
 void ArcheryGameEngine::render(){
+
+    menuPtr->menuScreen->setView(*gameView);
+    menuPtr->menuScreen->display();
 
 }

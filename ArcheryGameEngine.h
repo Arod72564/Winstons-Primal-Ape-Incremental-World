@@ -24,6 +24,8 @@ class ArcheryGameEngine {
         sf::Sprite platform1;
         sf::Sprite platform2;
         sf::Sprite platform3;
+        sf::View* gameView;
+        sf::Event ev;
 
         float degRotation;
         float x_offset;
