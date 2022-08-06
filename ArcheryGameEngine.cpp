@@ -1,5 +1,24 @@
 #include "ArcheryGameEngine.h"
 
+Arrow::Arrow(sf::Texture &texture) { this->arrowSprite.setTexture(texture); }
+
+BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, std::complex<double> velocity, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer) {
+    arrowSprite.move( (velocity.real() > ArcheryGameEngine::MAX_ARROW_POWER) ? ArcheryGameEngine::MAX_ARROW_POWER : velocity.real(), velocity.imag() + grav);
+    arrowSprite.setRotation(std::arg(velocity)); // Might need to change the origin of the arrow to (0,0) here
+
+    if (arrowSprite.getGlobalBounds().height > archer.archerSprite.getGlobalBounds().height) { // Hits bottom/floor/ground
+        isArrowPresent = !isArrowPresent;
+        return BeamCollisionType::boundary;
+    } else if (arrowSprite.getGlobalBounds().intersects(plat1.getGlobalBounds()) || arrowSprite.getGlobalBounds().intersects(plat2.getGlobalBounds()) || arrowSprite.getGlobalBounds().intersects(plat3.getGlobalBounds())) {
+        isArrowPresent = !isArrowPresent;
+        return BeamCollisionType::mushroom;
+    } else if (arrowSprite.getGlobalBounds().intersects(archer.archerSprite.getGlobalBounds())) {
+        isArrowPresent = !isArrowPresent;
+        return BeamCollisionType::centipede;
+    }
+    return BeamCollisionType::nan_;
+}
+
 ArcheryGameEngine::ArcheryGameEngine(MenuScreen* menu){
     menuPtr = menu;
     gameView = new sf::View(sf::Vector2f(0,0) , sf::Vector2f(menu->menuScreen->getSize().x,menu->menuScreen->getSize().y));
@@ -30,6 +49,11 @@ void ArcheryGameEngine::initGame(){
     }
     player2.archerSprite.setTexture(player2.archerTexture);
 
+    //Arrows
+    // arrow1 = new Arrow();
+    if (!arrowTexture.loadFromFile("images/Archery/ArrowTexture.png")) { // Need to add this image
+        menuPtr->menuScreen->close();
+    }
     //Platforms
     if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
         menuPtr->menuScreen->close();
@@ -38,16 +62,16 @@ void ArcheryGameEngine::initGame(){
     platform1.setTexture(platformTexture);
 
     platform2.setTexture(platformTexture);
-    
+
     platform3.setTexture(platformTexture);
 
-        
+
 
 
 }
 
 void ArcheryGameEngine::update(){
-    
+
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
     while (menuPtr->menuScreen->pollEvent(ev)) {
@@ -58,9 +82,32 @@ void ArcheryGameEngine::update(){
                 break;
 
             case sf::Event::MouseButtonReleased:
+                // Maybe we have an isArrowMoving boolean here to let the computer know that we have released the arrow.
                 break;
 
             case sf::Event::MouseButtonPressed:
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    // Playing around with click and drag type archery game
+                    sf::Vector2i initial_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
+                    sf::Vector2i final_pos;
+                    if (!is_arrow_present) {
+                        // arrow1 = new Arrow();
+                        while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                            final_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
+                            arrow1->arrow_velocity.real(final_pos.x - initial_pos.x);
+                            arrow1->arrow_velocity.imag(final_pos.y - initial_pos.y);
+                            /*
+                            temp_arrow.arrow_power = sqrt( pow(final_pos.y - initial_pos.y,2) + pow(final_pos.x - intial_pos.x, 2) ) % MAX_ARROW_POWER; // Determine arrow power from dragging of mouse after click
+                            if ( abs(final_pos.x - initial_pos.x) > EPSILON ) { // I.e., if you are NOT dividing by 0; this might be extraneous but who knows
+                                temp_arrow.arrow_rads = atan2( (final_pos.y - initial_pos.y) / (final_pos.x - intial_pos.x) )
+                            } else {
+                                temp_arrow.arrow_rads = ( (final_pos.y > initial_pos.y) ? -1 * M_PI_2 : M_PI_2 );
+                            }
+                            */
+                        }
+                        is_arrow_present = true;
+                    }
+                }
                 break;
 
         }
