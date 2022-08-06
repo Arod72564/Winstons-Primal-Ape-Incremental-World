@@ -1,19 +1,19 @@
 #include "ArcheryGameEngine.h"
 
-Arrow::Arrow(Arrow arrow) { this->arrowTexture.setTexture(arrow.arrowTexture); }
+Arrow::Arrow(sf::Texture &texture) { this->arrowSprite.setTexture(texture); }
 
-BeamCollisionType Arrow::updateMovement(std::complex<double> velocity, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer) {
-    arrowSprite.move( (velocity.real() > MAX_ARROW_POWER) ? MAX_ARROW_POWER : velocity.real(), velocity.imag() + g);
-    arrowSprite.setRotation(velocity.arg()); // Might need to change the origin of the arrow to (0,0) here
+BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, std::complex<double> velocity, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer) {
+    arrowSprite.move( (velocity.real() > ArcheryGameEngine::MAX_ARROW_POWER) ? ArcheryGameEngine::MAX_ARROW_POWER : velocity.real(), velocity.imag() + grav);
+    arrowSprite.setRotation(std::arg(velocity)); // Might need to change the origin of the arrow to (0,0) here
 
     if (arrowSprite.getGlobalBounds().height > archer.archerSprite.getGlobalBounds().height) { // Hits bottom/floor/ground
-        isBeamPresent = !isBeamPresent;
+        isArrowPresent = !isArrowPresent;
         return BeamCollisionType::boundary;
     } else if (arrowSprite.getGlobalBounds().intersects(plat1.getGlobalBounds()) || arrowSprite.getGlobalBounds().intersects(plat2.getGlobalBounds()) || arrowSprite.getGlobalBounds().intersects(plat3.getGlobalBounds())) {
-        isBeamPresent = !isBeamPresent;
+        isArrowPresent = !isArrowPresent;
         return BeamCollisionType::mushroom;
     } else if (arrowSprite.getGlobalBounds().intersects(archer.archerSprite.getGlobalBounds())) {
-        isBeamPresent = !isBeamPresent;
+        isArrowPresent = !isArrowPresent;
         return BeamCollisionType::centipede;
     }
     return BeamCollisionType::nan_;
@@ -50,8 +50,8 @@ void ArcheryGameEngine::initGame(){
     player2.archerSprite.setTexture(player2.archerTexture);
 
     //Arrows
-    Arrow temp_arrow;
-    if (!temp_arrow.arrowTexture.loadFromFile("images/Archery/ArrowTexture.png")) { // Need to add this image
+    // arrow1 = new Arrow();
+    if (!arrowTexture.loadFromFile("images/Archery/ArrowTexture.png")) { // Need to add this image
         menuPtr->menuScreen->close();
     }
     //Platforms
@@ -88,14 +88,14 @@ void ArcheryGameEngine::update(){
             case sf::Event::MouseButtonPressed:
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     // Playing around with click and drag type archery game
-                    sf::Vector2i initial_pos = sf::Mouse::getPosition(menuPtr->menuScreen);
+                    sf::Vector2i initial_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
                     sf::Vector2i final_pos;
                     if (!is_arrow_present) {
-                        arrow1 = new Arrow(temp_arrow);  // Currently setting texture using the temp_arrow
+                        // arrow1 = new Arrow();
                         while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                            final_pos = sf::Mouse::getPosition(menuPtr->menuScreen);
-                            arrow1.arrow_velocity.real(final_pos.x - initial_pos.x);
-                            arrow1.arrow_velocity.imag(final_pos.y - initial_pos.y);
+                            final_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
+                            arrow1->arrow_velocity.real(final_pos.x - initial_pos.x);
+                            arrow1->arrow_velocity.imag(final_pos.y - initial_pos.y);
                             /*
                             temp_arrow.arrow_power = sqrt( pow(final_pos.y - initial_pos.y,2) + pow(final_pos.x - intial_pos.x, 2) ) % MAX_ARROW_POWER; // Determine arrow power from dragging of mouse after click
                             if ( abs(final_pos.x - initial_pos.x) > EPSILON ) { // I.e., if you are NOT dividing by 0; this might be extraneous but who knows

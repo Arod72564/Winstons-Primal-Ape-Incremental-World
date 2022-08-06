@@ -10,17 +10,17 @@ struct Archer {
 };
 
 struct Arrow {
-    static const double EPSILON = 1e-7;
-    sf::Texture arrowTexture;
+    static constexpr double EPSILON = 1e-7;
+    // sf::Texture arrowTexture;
     sf::Sprite arrowSprite;
 
     // Click and drag physics
     std::complex<double> arrow_velocity;
 
-    Arrow(Arrow arrow);
+    Arrow(sf::Texture &texture);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
-    BeamCollisionType updateMovement(std::complex<double> velocity, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer);
+    BeamCollisionType updateMovement(bool &isArrowPresent, std::complex<double> velocity, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer);
 };
 
 class ArcheryGameEngine {
@@ -28,6 +28,7 @@ class ArcheryGameEngine {
         MenuScreen* menuPtr;
         Archer archer1, archer2;
         Arrow *arrow1;
+        sf::Texture arrowTexture;
         sf::Texture platformTexture;
         sf::Texture backgroundTexture;
         sf::Sprite backgroundSprite;
@@ -37,7 +38,7 @@ class ArcheryGameEngine {
         sf::View* gameView;
         sf::Event ev;
 
-        const int MAX_ARROW_POWER = 10; // Maximum velocity in pixels.
+        static const int MAX_ARROW_POWER = 10; // Maximum velocity in pixels.
 
         float degRotation;
         float x_offset;
