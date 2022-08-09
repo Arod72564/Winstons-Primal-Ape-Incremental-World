@@ -86,7 +86,7 @@ void MenuScreen::initText() {
         std::cout << "Error loading clicker mult texture.\n";
         menuScreen->close();
     }
-    
+
     if (!centipedeGameMult_Texture.loadFromFile("images/MenuScreen/CentipedeGameMult.png")) {
         std::cout << "Error loading centipede mult texture.\n";
         menuScreen->close();
@@ -225,7 +225,7 @@ void MenuScreen::initText() {
     centipedeMultiplierCostText.setStyle(sf::Text::Bold);
     centipedeMultiplierCostText.setOrigin(centipedeMultiplierCostText.getLocalBounds().width / 2, centipedeMultiplierCostText.getLocalBounds().height / 2);
     centipedeMultiplierCostText.setPosition(centipedeGameMult_Sprite.getPosition().x, centipedeGameMult_Sprite.getPosition().y + centipedeGameMult_Sprite.getGlobalBounds().height);
-    
+
     std::cout << "Text Sucessfully Initialized.\n";
 
         //MUSIC
@@ -258,21 +258,21 @@ void MenuScreen::update() {
                         playerPoints += clickerReward * clickerRewardMultiplier;
 
                     } else if (upgradeClickerRewardText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || clickUpgrade1_Sprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //ClickerReward
-                        if (playerPoints >= clickerCostReward) { 
+                        if (playerPoints >= clickerCostReward) {
                             playerPoints -= clickerCostReward;
                             clickerReward++;
                             clickerCostReward = clickerCostReward * clickerUpgradePriceScaling;
                         }
 
                     } else if (upgradeClickerMultiplierText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || clickUpgrade2_Sprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //ClickerMult
-                        if (playerPoints >= clickerCostMultiplier) { 
+                        if (playerPoints >= clickerCostMultiplier) {
                             playerPoints -= clickerCostMultiplier;
                             clickerRewardMultiplier += double( (rand() % 10) + 1) / 100;
                             clickerCostMultiplier = clickerCostMultiplier * clickerUpgradePriceScaling;
                         }
 
                     } else if (centipedeMultiplierCostText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || centipedeGameMult_Sprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //CentipedeGame Mult
-                        if (playerPoints >= centipedeGameMultCost) { 
+                        if (playerPoints >= centipedeGameMultCost) {
                             playerPoints -= centipedeGameMultCost;
                             centipedeGameMultiplier += double( (rand() % 50) + 26) / 100;
                             centipedeGameMultCost = centipedeGameMultCost * clickerUpgradePriceScaling;
@@ -370,6 +370,12 @@ void MenuScreen::render() {
     //Dungeon game
     menuScreen->draw(dungeonGameText);
 
+
+    // Archery Game
+    menuScreen->draw(ArcheryGameText);
+
+
+    // Display menu screen
     menuScreen->display();
 }
 
@@ -390,7 +396,7 @@ void MenuScreen::showShopMenu() {
                             // isInShop = false;
                     }
                     break;
-                    
+
                 default:
                     break;
             }
