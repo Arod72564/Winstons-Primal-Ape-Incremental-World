@@ -25,7 +25,7 @@ ArcheryGameEngine::ArcheryGameEngine(MenuScreen* menu){
 }
 
 ArcheryGameEngine::~ArcheryGameEngine(){
-
+    delete gameView;
 }
 
 void ArcheryGameEngine::initGame(){
