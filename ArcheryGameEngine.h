@@ -20,7 +20,7 @@ struct Arrow {
     Arrow(sf::Texture &texture);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
-    BeamCollisionType updateMovement(bool &isArrowPresent, std::complex<double> velocity, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer);
+    BeamCollisionType updateMovement(bool &isArrowPresent, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer);
 };
 
 class ArcheryGameEngine {

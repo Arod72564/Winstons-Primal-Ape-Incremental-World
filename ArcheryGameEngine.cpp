@@ -2,9 +2,10 @@
 
 Arrow::Arrow(sf::Texture &texture) { this->arrowSprite.setTexture(texture); }
 
-BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, std::complex<double> velocity, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer) {
-    arrowSprite.move( (velocity.real() > ArcheryGameEngine::MAX_ARROW_POWER) ? ArcheryGameEngine::MAX_ARROW_POWER : velocity.real(), velocity.imag() + grav);
-    arrowSprite.setRotation(std::arg(velocity)); // Might need to change the origin of the arrow to (0,0) here
+BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, const double grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer) {
+    arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
+    arrowSprite.setRotation(std::arg(arrow_velocity)); // Might need to change the origin of the arrow to (0,0) here
+    arrow_velocity -= std::complex<double>(0.0, grav);
 
     if (arrowSprite.getGlobalBounds().height > archer.archerSprite.getGlobalBounds().height) { // Hits bottom/floor/ground
         isArrowPresent = !isArrowPresent;
@@ -94,8 +95,8 @@ void ArcheryGameEngine::update(){
                         // arrow1 = new Arrow();
                         while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                             final_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
-                            arrow1->arrow_velocity.real(final_pos.x - initial_pos.x);
-                            arrow1->arrow_velocity.imag(final_pos.y - initial_pos.y);
+                            arrow1->arrow_velocity.real(initial_pos.x - final_pos.x);
+                            arrow1->arrow_velocity.imag(initial_pos.y - final_pos.y);
                             /*
                             temp_arrow.arrow_power = sqrt( pow(final_pos.y - initial_pos.y,2) + pow(final_pos.x - intial_pos.x, 2) ) % MAX_ARROW_POWER; // Determine arrow power from dragging of mouse after click
                             if ( abs(final_pos.x - initial_pos.x) > EPSILON ) { // I.e., if you are NOT dividing by 0; this might be extraneous but who knows
@@ -104,6 +105,9 @@ void ArcheryGameEngine::update(){
                                 temp_arrow.arrow_rads = ( (final_pos.y > initial_pos.y) ? -1 * M_PI_2 : M_PI_2 );
                             }
                             */
+                        }
+                        if (std::sqrt(std::norm(arrow1->arrow_velocity) > MAX_ARROW_POWER)) {
+                            arrow1->arrow_velocity *= 1 / std::sqrt(std::norm(arrow1->arrow_velocity)) * MAX_ARROW_POWER;
                         }
                         is_arrow_present = true;
                     }
