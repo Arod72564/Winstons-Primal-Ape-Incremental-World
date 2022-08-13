@@ -17,7 +17,7 @@ struct Arrow {
     // Click and drag physics
     std::complex<float> arrow_velocity;
 
-    Arrow(sf::Texture &texture);
+    // Arrow(sf::Texture &texture);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
     BeamCollisionType updateMovement(bool &isArrowPresent, const float grav, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer archer);
@@ -43,6 +43,7 @@ class ArcheryGameEngine {
         sf::Vertex line[2]; // Drawing line for mouse click hold and drag
 
         static const int MAX_ARROW_POWER = 10; // Maximum velocity in pixels.
+        static const int LINE_LENGTH = 250;
 
         float degRotation;
         float x_offset;
