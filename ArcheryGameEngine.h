@@ -50,9 +50,9 @@ class ArcheryGameEngine {
         float y_offset;
 
         float v;
-        float g = -0.01;
+        float g = 0.01;
 
-        bool is_mouse_first_pressed = true;
+        bool is_mouse_first_pressed = false;
         //bool is_mouse_released;
         bool is_arrow_present = false;
 

@@ -85,10 +85,10 @@ void ArcheryGameEngine::update(){
 
             case sf::Event::MouseButtonReleased:
                 // Maybe we have an isArrowMoving boolean here to let the computer know that we have released the arrow.
-                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
+                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
                     // stuff
-                    is_arrow_present = false;
                     std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
+                    is_mouse_first_pressed = false;
                 }
                 break;
 
@@ -96,8 +96,10 @@ void ArcheryGameEngine::update(){
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     // Playing around with click and drag type archery game
                     initial_mouse_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
+                    // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
                     line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y ) );
                     line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y ) );
+                    is_mouse_first_pressed = true;
                 }
                 break;
 
@@ -113,8 +115,6 @@ void ArcheryGameEngine::update(){
                     }
                     arrow1->arrow_velocity = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
                 }
-
-
         }
     }
 }
