@@ -105,12 +105,12 @@ void ArcheryGameEngine::update(){
                     std::complex<double> temp_complex(initial_mouse_pos.x - ev.mouseMove.x, initial_mouse_pos.y - ev.mouseMove.y); // Makes a vector at the origin the same size of the vector correpsonding to intial mouse & mouse movement
                     arrow1->arrow_velocity.real( std::real(temp_complex) );
                     arrow1->arrow_velocity.imag( std::imag(temp_complex) );
-                    if (std::sqrt(std::norm(arrow1->arrow_velocity) > MAX_ARROW_POWER)) { // Resizing the velocity vector to be of size MAX_ARROW_POWER if it's too big
-                        arrow1->arrow_velocity *= 1 / std::sqrt(std::norm(arrow1->arrow_velocity)) * MAX_ARROW_POWER;
+                    if (std::abs(arrow1->arrow_velocity) > MAX_ARROW_POWER) { // Resizing the velocity vector to be of size MAX_ARROW_POWER if it's too big
+                        arrow1->arrow_velocity *= 1 / std::abs(arrow1->arrow_velocity) * MAX_ARROW_POWER;
                     }
 
-                    if ( std::sqrt( std::norm( temp_complex ) ) > LINE_LENGTH ) {
-                        temp_complex *= 1 / std::sqrt(std::norm(temp_complex)) * LINE_LENGTH;
+                    if ( std::abs( temp_complex )  > LINE_LENGTH ) {
+                        temp_complex *= 1 / std::abs(temp_complex) * LINE_LENGTH;
                         line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x - std::real(temp_complex), initial_mouse_pos.y - std::imag(temp_complex) ) );
                     } else {
                         line[1] = sf::Vertex( sf::Vector2f( ev.mouseMove.x, ev.mouseMove.y ) );
