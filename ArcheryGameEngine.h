@@ -7,6 +7,12 @@
 struct Archer {
     sf::Texture archerTexture;
     sf::Sprite archerSprite;
+
+    sf::Texture archerArmTexture;
+    sf::Sprite archerArmSprite;
+
+    sf::Texture archerTorsoTexture;
+    sf::Sprite archerTorsoSprite;
 };
 
 struct Arrow {
@@ -28,7 +34,7 @@ class ArcheryGameEngine {
         MenuScreen* menuPtr;
         Archer archer1, archer2;
         Arrow *arrow1;
-        BeamCollisionType collisionType;
+        BeamCollisionType collisionType = nan_;
         sf::Texture arrowTexture;
         sf::Texture platformTexture;
         sf::Texture backgroundTexture;
@@ -58,6 +64,7 @@ class ArcheryGameEngine {
         bool is_mouse_first_pressed = false;
         //bool is_mouse_released;
         bool is_arrow_present = false;
+        bool drawline;
 
         ArcheryGameEngine(MenuScreen* menu);
         virtual ~ArcheryGameEngine();
