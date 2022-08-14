@@ -15,12 +15,13 @@ int main() {
     videoMode.height = 800;
     videoMode.width = 800;
     sf::RenderWindow* mainWindow = new sf::RenderWindow(videoMode, "Winstons Primal Ape Incremental World", sf::Style::Titlebar | sf::Style::Close);
+    mainWindow->setFramerateLimit(120);
 
     // Initialize Menu screen
     MenuScreen* menu = new MenuScreen(mainWindow);
 
     while(menu->menuScreen->isOpen()) {
-        
+
         if (menu->currentGameType == NULL_GAME) { //MAIN MENU
             menu->update();
             menu->render();
