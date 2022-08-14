@@ -89,11 +89,12 @@ void ArcheryGameEngine::update(){
                     // stuff
                     std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
                     is_mouse_first_pressed = false;
+                    std::cout << "Arrow is released.\n";
                 }
                 break;
 
             case sf::Event::MouseButtonPressed:
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed) {
                     // Playing around with click and drag type archery game
                     initial_mouse_pos = sf::Mouse::getPosition(*menuPtr->menuScreen);
                     // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
@@ -104,17 +105,7 @@ void ArcheryGameEngine::update(){
                 break;
 
             case sf::Event::MouseMoved:
-                if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    std::complex<double> temp_complex(initial_mouse_pos.x - ev.mouseMove.x, initial_mouse_pos.y - ev.mouseMove.y); // Makes a vector at the origin the same size of the vector correpsonding to intial mouse & mouse movement
-
-                    if ( std::abs( temp_complex )  > LINE_LENGTH ) { // Resizing the drawn line to LINE_LENGTH if it's too big
-                        temp_complex *= 1 / std::abs(temp_complex) * LINE_LENGTH;
-                        line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x - std::real(temp_complex), initial_mouse_pos.y - std::imag(temp_complex)) );
-                    } else {
-                        line[1] = sf::Vertex( sf::Vector2f( ev.mouseMove.x, ev.mouseMove.y ) );
-                    }
-                    arrow1->arrow_velocity = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
-                }
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) { calculateLine(arrow1); }
         }
     }
 }
@@ -127,4 +118,16 @@ void ArcheryGameEngine::render(){
 
     menuPtr->menuScreen->display();
 
+}
+
+void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
+    std::complex<double> temp_complex(initial_mouse_pos.x - ev.mouseMove.x, initial_mouse_pos.y - ev.mouseMove.y); // Makes a vector at the origin the same size of the vector correpsonding to intial mouse & mouse movement
+
+    if ( std::abs( temp_complex )  > LINE_LENGTH ) { // Resizing the drawn line to LINE_LENGTH if it's too big
+        temp_complex *= 1 / std::abs(temp_complex) * LINE_LENGTH;
+        line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x - std::real(temp_complex), initial_mouse_pos.y - std::imag(temp_complex)) );
+    } else {
+        line[1] = sf::Vertex( sf::Vector2f( ev.mouseMove.x, ev.mouseMove.y ) );
+    }
+    arrow->arrow_velocity = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
 }

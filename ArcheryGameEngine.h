@@ -58,6 +58,9 @@ class ArcheryGameEngine {
 
         ArcheryGameEngine(MenuScreen* menu);
         virtual ~ArcheryGameEngine();
+
+        void calculateLine(Arrow* const arrow);
+
         void initGame();
         void update();
         void render();
