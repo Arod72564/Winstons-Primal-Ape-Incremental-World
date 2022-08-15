@@ -102,7 +102,7 @@ void ArcheryGameEngine::initGame(){
 
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
-    
+
 
 
 
@@ -113,10 +113,10 @@ void ArcheryGameEngine::update(){
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
     if (turn_counter == 2) {
-        drag += std::complex<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 201 - 100) / 100.f * 0.005f );
+        drag += std::polar<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 101) / 100.f * M_PI_2 );
         wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
-        std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
+        // std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
         turn_counter = (turn_counter + 1) % 3;
     }
 
@@ -139,10 +139,10 @@ void ArcheryGameEngine::update(){
             } else {
                 pan(archer2.archerSprite);
             }
+            v = std::complex<float>(0.f,0.f);
             is_panning = true;
             //gameView->setCenter( menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2 );
         }
-
     } else if (is_panning) {
         if(pan_counter < 100) {
             gameView->move(std::real(panSpeed), std::imag(panSpeed));
@@ -150,7 +150,6 @@ void ArcheryGameEngine::update(){
         } else {
             is_panning = false;
         }
-
     } else if (!is_player_turn) {
         // std::cout << "Making enemy arrow\n";
         arrow1 = new Arrow( arrowTexture, archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y, std::polar( float((rand() % 101) / 100.f * MAX_ARROW_POWER), float((rand() % 26 + 50) / 100.f * 2.f * M_PI) ) );
@@ -159,9 +158,11 @@ void ArcheryGameEngine::update(){
         // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
         is_arrow_present = true;
         turn_counter = (turn_counter + 1) % 3;
-        std::cout << turn_counter << std::endl;
-    } else {
+        // std::cout << turn_counter << std::endl;
+    }
+     // else {
         while (menuPtr->menuScreen->pollEvent(ev)) {
+            is_a_turn = is_arrow_present || is_panning;
             switch (ev.type) {
 
                 case sf::Event::EventType::Closed:
@@ -172,7 +173,7 @@ void ArcheryGameEngine::update(){
                 case sf::Event::MouseButtonReleased:
                     // std::cout << "Mouse button released\n";
                     // Maybe we have an isArrowMoving boolean here to let the computer know that we have released the arrow.
-                    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_arrow_present) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
+                    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
                         arrow1 = new Arrow(arrowTexture, archer1.archerArmSprite.getPosition().x, archer1.archerArmSprite.getPosition().y, v);
                         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
                         arrow1->arrowSprite.setScale(0.07, 0.04);
@@ -184,7 +185,7 @@ void ArcheryGameEngine::update(){
                     break;
 
                 case sf::Event::MouseButtonPressed:
-                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_arrow_present) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_a_turn) {
                         // Playing around with click and drag type archery game
                         initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
@@ -197,13 +198,16 @@ void ArcheryGameEngine::update(){
                     break;
 
                 case sf::Event::MouseMoved:
-                    final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
-                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) { calculateLine(arrow1); }
-                    archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
-                    //std::cout << ev.mouseMove.x << ", " << ev.mouseMove.y<< std::endl;
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
+                        final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
+                        calculateLine(arrow1);
+                        archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
+                        std::cout << ev.mouseMove.x << ", " << ev.mouseMove.y<< std::endl;
+                    }
+
             }
         }
-    }
+    // }
 
 
 
@@ -251,7 +255,7 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
 
 void ArcheryGameEngine::pan(sf::Sprite target) {
     pan_counter = 0;
-    
+
     panSpeed = std::complex<float> (target.getPosition().x - gameView->getCenter().x, target.getPosition().y - gameView->getCenter().y);
 
     panSpeed /= 100.f;

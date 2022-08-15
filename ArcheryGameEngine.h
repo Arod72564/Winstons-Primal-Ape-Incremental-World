@@ -73,6 +73,7 @@ class ArcheryGameEngine {
         bool drawline;
         bool is_player_turn = true;
         bool is_panning;
+        bool is_a_turn = is_arrow_present || is_panning;
 
         ArcheryGameEngine(MenuScreen* menu);
         virtual ~ArcheryGameEngine();
