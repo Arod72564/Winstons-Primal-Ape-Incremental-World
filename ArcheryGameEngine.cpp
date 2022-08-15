@@ -206,7 +206,14 @@ void ArcheryGameEngine::update(){
                         line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
                         is_mouse_first_pressed = true;
                         drawline = true;
-                    }
+                    } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && menuPtr->muteButtonSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
+                        if(menuPtr->is_MenuMusic_Paused){
+                            menuPtr->menuMusic.play();
+                        } else {
+                            menuPtr->menuMusic.pause();
+                        }
+                        menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
+                        }
                     break;
 
                 case sf::Event::MouseMoved:
