@@ -223,7 +223,6 @@ void ArcheryGameEngine::update(){
                     final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
                     calculateLine(arrow1);
                     archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
-                    std::cout << ev.mouseMove.x << ", " << ev.mouseMove.y<< std::endl;
                 }
             }
         }
@@ -276,7 +275,7 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
     float temp = (std::abs( temp_complex ) / LINE_LENGTH) * 100;
     arrowPower.setString(std::to_string(temp));
     arrowPower.setPosition(line[1].position.x, line[1].position.y + 20);
-    arrowDeg.setString(std::to_string(std::arg(std::conj(v))));
+    arrowDeg.setString(std::to_string(std::arg(std::conj(v))) * 180 / M_PI);
     v = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
 }
 
