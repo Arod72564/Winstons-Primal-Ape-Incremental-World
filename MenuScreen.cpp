@@ -83,6 +83,22 @@ void MenuScreen::initText() {
         std::cout << "Error loading mute button texture.\n";
         menuScreen->close();
     }
+
+    if (!backgroundTexture1.loadFromFile("images/MenuScreen/background1.png")) {
+        std::cout << "Error loading background texture.\n";
+        menuScreen->close();
+    }
+
+    if (!backgroundTexture2.loadFromFile("images/MenuScreen/background2.png")) {
+        std::cout << "Error loading background texture.\n";
+        menuScreen->close();
+    }
+
+    if (!backgroundTexture3.loadFromFile("images/MenuScreen/background3.png")) {
+        std::cout << "Error loading background texture.\n";
+        menuScreen->close();
+    }
+
     std::cout << "Textures Sucessfully Initialized.\n";
 
         //SPRITES
@@ -112,6 +128,9 @@ void MenuScreen::initText() {
     muteButtonSprite.setTexture(muteButtonTexture);
     muteButtonSprite.setPosition(menuScreen->getSize().x - muteButtonSprite.getGlobalBounds().width, menuScreen->getSize().y - muteButtonSprite.getGlobalBounds().height);
     std::cout << "Sprites Sucessfully Initialized.\n";
+
+    //Background
+    backgroundSprite.setTexture(backgroundTexture1);
 
         //FONTS
     std::cout << "Initializing Fonts... ";
@@ -221,7 +240,7 @@ void MenuScreen::initText() {
         std::cout << "Error loading menu music.\n";
         menuScreen->close();
     }
-    menuMusic.setVolume(100);
+    menuMusic.setVolume(musicVolume);
     menuMusic.setPitch(1);
     menuMusic.setLoop(true);
     menuMusic.play();
@@ -279,6 +298,14 @@ void MenuScreen::update() {
                     } else if (ArcheryGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
                         currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
+                        
+                        // currentGameType = musicMenu;
+                        
+                        // while (currentGameType == musicMenu) {
+
+                        // }
+
+                        
                         if (is_MenuMusic_Paused) {
                             menuMusic.play();
                         } else {
@@ -328,10 +355,22 @@ void MenuScreen::update() {
     centipedeMultiplierCostText.setString("Upgrade Centipede Multiplier: " + os.str());
     std::stringstream().swap(os);
     }
+
+    //set background texture
+    counter = (1+counter) % 120;
+    if (counter == 39) {
+        backgroundSprite.setTexture(backgroundTexture2);
+    } else if (counter == 79 ) {
+        backgroundSprite.setTexture(backgroundTexture3);
+    } else if (counter == 119) {
+        backgroundSprite.setTexture(backgroundTexture1);
+    }
 }
 
 void MenuScreen::render() {
     menuScreen->clear(sf::Color::Black);
+
+    menuScreen->draw(backgroundSprite);
 
     menuScreen->draw(pointsText);
     menuScreen->draw(clickUpgrade1_Sprite);

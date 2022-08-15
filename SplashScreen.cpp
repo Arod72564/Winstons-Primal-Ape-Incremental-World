@@ -15,8 +15,15 @@ void SplashScreen::initScreen(){
         window->close();
     }
 
+    if (!buffer.loadFromFile("Music/SplashScreen.wav")) {
+        window->close();
+    }
+
      splashScreenSprite.setTexture(splashScreenTexture);
      splashScreenSprite.setPosition(0,0);
+
+     sound.setBuffer(buffer);
+     sound.play();
 }
 
 void SplashScreen::update(){
@@ -25,6 +32,11 @@ void SplashScreen::update(){
             case sf::Event::MouseButtonPressed:
             case sf::Event::KeyPressed:
                 is_splash_displayed = false;
+                break;
+            case sf::Event::Closed:
+                window->close();
+            default:
+                break;
         };
     }
 

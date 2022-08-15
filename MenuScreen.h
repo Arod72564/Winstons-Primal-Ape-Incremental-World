@@ -13,6 +13,10 @@ class MenuScreen {
         sf::Texture clickUpgrade2_Texture;
         sf::Texture centipedeGameMult_Texture;
         sf::Texture muteButtonTexture;
+        sf::Texture backgroundTexture1;
+        sf::Texture backgroundTexture2;
+        sf::Texture backgroundTexture3;
+        sf::Sprite backgroundSprite;
         sf::Sprite clickBoxSprite;
         sf::Sprite clickUpgrade1_Sprite;
         sf::Sprite clickUpgrade2_Sprite;
@@ -41,6 +45,9 @@ class MenuScreen {
         sf::Sound unlockSound;
         sf::Event event;
         GameTypes currentGameType;
+
+        int counter = 0;
+        int musicVolume = 100;
 
         //Player Points
         long double playerPoints;

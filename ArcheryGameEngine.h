@@ -43,6 +43,9 @@ class ArcheryGameEngine {
         sf::Sprite platform2;
         sf::Sprite platform3;
         sf::Sprite wind_indicator;
+        sf::Text arrowPower;
+        sf::Text arrowDeg;
+        sf::Font textFont;
         sf::View* gameView;
         sf::Event ev;
         sf::Clock clock;

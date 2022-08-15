@@ -11,12 +11,14 @@
 #define VERTICAL_TILES      (WINDOW_HEIGHT/50)
 
 #define CENTIPEDE_SPEED 2
-#define BEAM_SPEED 8
+#define BEAM_SPEED 12
+
+#define _USE_MATH_DEFINES
 
 #define _USE_MATH_DEFINES
 
 enum BeamCollisionType {centipede, mushroom, boundary, nan_};
-enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame};
+enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame, musicMenu};
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>

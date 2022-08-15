@@ -10,6 +10,8 @@ class SplashScreen {
         sf::Sprite splashScreenSprite;
         sf::RenderWindow* window;
         sf::Event ev;
+        sf::SoundBuffer buffer;
+        sf::Sound sound;
         bool is_splash_displayed;
 
         SplashScreen(sf::RenderWindow* mainWindow);
