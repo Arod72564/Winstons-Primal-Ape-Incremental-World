@@ -102,7 +102,7 @@ void ArcheryGameEngine::initGame(){
 
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
-    
+
 
 
 
@@ -113,11 +113,12 @@ void ArcheryGameEngine::update(){
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
     if (turn_counter == 2) {
-        drag += std::complex<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 201 - 100) / 100.f * 0.005f );
+        // std::cout << std::arg(drag) * 180 / M_PI << "->";
+        drag += std::polar<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 101) / 100.f * 2 * M_PI );
         wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
-        std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
         turn_counter = (turn_counter + 1) % 3;
+        // std::cout << std::arg(drag) * 180 / M_PI << std::endl;
     }
 
 
@@ -159,7 +160,6 @@ void ArcheryGameEngine::update(){
         // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
         is_arrow_present = true;
         turn_counter = (turn_counter + 1) % 3;
-        std::cout << turn_counter << std::endl;
     } else {
         while (menuPtr->menuScreen->pollEvent(ev)) {
             switch (ev.type) {
@@ -187,7 +187,7 @@ void ArcheryGameEngine::update(){
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_arrow_present) {
                         // Playing around with click and drag type archery game
                         initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
-
+                        v = std::complex<float>(0.f,0.f);
                         // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
                         line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
                         line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
@@ -251,7 +251,7 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
 
 void ArcheryGameEngine::pan(sf::Sprite target) {
     pan_counter = 0;
-    
+
     panSpeed = std::complex<float> (target.getPosition().x - gameView->getCenter().x, target.getPosition().y - gameView->getCenter().y);
 
     panSpeed /= 100.f;
