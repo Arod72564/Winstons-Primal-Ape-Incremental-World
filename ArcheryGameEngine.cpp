@@ -171,60 +171,60 @@ void ArcheryGameEngine::update(){
         turn_counter = (turn_counter + 1) % 3;
     }
 
-        while (menuPtr->menuScreen->pollEvent(ev)) {
-            is_a_turn = is_arrow_present || is_panning;
-            switch (ev.type) {
+    while (menuPtr->menuScreen->pollEvent(ev)) {
+        is_a_turn = is_arrow_present || is_panning;
+        switch (ev.type) {
 
-                case sf::Event::EventType::Closed:
-                    gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
-                    menuPtr->currentGameType = NULL_GAME;
-                    break;
+            case sf::Event::EventType::Closed:
+                gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
+                menuPtr->currentGameType = NULL_GAME;
+                break;
 
-                case sf::Event::MouseButtonReleased:
-                    // std::cout << "Mouse button released\n";
-                    // Maybe we have an isArrowMoving boolean here to let the computer know that we have released the arrow.
-                    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
-                        arrow1 = new Arrow(arrowTexture, archer1.archerArmSprite.getPosition().x, archer1.archerArmSprite.getPosition().y, v);
-                        arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
-                        arrow1->arrowSprite.setScale(0.07, 0.04);
-                        // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
-                        is_mouse_first_pressed = false;
-                        is_arrow_present = true;
-                        drawline = false;
+            case sf::Event::MouseButtonReleased:
+                // std::cout << "Mouse button released\n";
+                // Maybe we have an isArrowMoving boolean here to let the computer know that we have released the arrow.
+                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
+                    arrow1 = new Arrow(arrowTexture, archer1.archerArmSprite.getPosition().x, archer1.archerArmSprite.getPosition().y, v);
+                    arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
+                    arrow1->arrowSprite.setScale(0.07, 0.04);
+                    // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
+                    is_mouse_first_pressed = false;
+                    is_arrow_present = true;
+                    drawline = false;
+                }
+                break;
+
+            case sf::Event::MouseButtonPressed:
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_a_turn) {
+                    // Playing around with click and drag type archery game
+                    initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
+                    v = std::complex<float>(0.f,0.f);
+                    // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
+                    float temp = std::arg(v) * 180 / M_PI;
+                    arrowDeg.setString(std::to_string(temp));
+                    arrowDeg.setPosition(initial_mouse_pos.x, initial_mouse_pos.y - 20);
+
+                    line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
+                    line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
+                    is_mouse_first_pressed = true;
+                    drawline = true;
+                } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && menuPtr->muteButtonSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
+                    if(menuPtr->is_MenuMusic_Paused){
+                        menuPtr->menuMusic.play();
+                    } else {
+                        menuPtr->menuMusic.pause();
                     }
-                    break;
-
-                case sf::Event::MouseButtonPressed:
-                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_a_turn) {
-                        // Playing around with click and drag type archery game
-                        initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
-                        v = std::complex<float>(0.f,0.f);
-                        // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
-                        float temp = std::arg(v) * 180 / M_PI;
-                        arrowDeg.setString(std::to_string(temp));
-                        arrowDeg.setPosition(initial_mouse_pos.x, initial_mouse_pos.y - 20);
-
-                        line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
-                        line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
-                        is_mouse_first_pressed = true;
-                        drawline = true;
-                    } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && menuPtr->muteButtonSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
-                        if(menuPtr->is_MenuMusic_Paused){
-                            menuPtr->menuMusic.play();
-                        } else {
-                            menuPtr->menuMusic.pause();
-                        }
-                        menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
-                        }
-                    break;
-
-                case sf::Event::MouseMoved:
-                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
-                        final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
-                        calculateLine(arrow1);
-                        archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
-                        std::cout << ev.mouseMove.x << ", " << ev.mouseMove.y<< std::endl;
+                    menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
                     }
+                break;
+
+            case sf::Event::MouseMoved:
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
+                    final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
+                    calculateLine(arrow1);
+                    archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
+                    std::cout << ev.mouseMove.x << ", " << ev.mouseMove.y<< std::endl;
+                }
             }
         }
     // }
@@ -276,7 +276,7 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
     float temp = (std::abs( temp_complex ) / LINE_LENGTH) * 100;
     arrowPower.setString(std::to_string(temp));
     arrowPower.setPosition(line[1].position.x, line[1].position.y + 20);
-    
+
     v = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
 }
 
