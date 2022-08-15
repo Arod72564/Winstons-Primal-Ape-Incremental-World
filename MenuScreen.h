@@ -63,20 +63,14 @@ class MenuScreen {
 
         bool is_MenuMusic_Paused;
 
-
-
-        MenuScreen();
         MenuScreen(sf::RenderWindow *window);
         virtual ~MenuScreen();
-        void initMenuScreen();
-        void initMenuScreen2(sf::RenderWindow *window);
+        void initMenuScreen(sf::RenderWindow *window);
         void initText();
         void update();
         void render();
         bool isWindowOpen();
         void showShopMenu();
-        
-
 };
 
 #endif

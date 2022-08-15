@@ -9,6 +9,7 @@
 #include "MenuScreen.cpp"
 #include "DungeonGameEngine.cpp"
 #include "ArcheryGameEngine.cpp"
+#include "SplashScreen.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -16,6 +17,15 @@ int main() {
     videoMode.width = 800;
     sf::RenderWindow* mainWindow = new sf::RenderWindow(videoMode, "Winstons Primal Ape Incremental World", sf::Style::Titlebar | sf::Style::Close);
     mainWindow->setFramerateLimit(120);
+
+    //Initialize spalsh screen
+    SplashScreen* splashScreen = new SplashScreen(mainWindow);
+    while (splashScreen->is_splash_displayed) {
+        splashScreen->update();
+        splashScreen->render();
+    }
+    delete splashScreen;
+    
 
     // Initialize Menu screen
     MenuScreen* menu = new MenuScreen(mainWindow);

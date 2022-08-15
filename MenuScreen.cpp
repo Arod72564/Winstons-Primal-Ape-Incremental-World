@@ -1,14 +1,9 @@
 #include "MenuScreen.h"
 
-MenuScreen::MenuScreen() {
-    initMenuScreen();
-    initText();
-}
-
 MenuScreen::MenuScreen(sf::RenderWindow *window) {
     menuScreen = nullptr;
 
-    initMenuScreen2(window);
+    initMenuScreen(window);
     initText();
 }
 
@@ -17,16 +12,8 @@ MenuScreen::~MenuScreen() {
     delete menuScreen;
 }
 
-void MenuScreen::initMenuScreen() {
-    videoMode.height = 800;
-    videoMode.width = 800;
-    menuScreen = new sf::RenderWindow(videoMode, "Centipede", sf::Style::Titlebar | sf::Style::Close);
-    std::cout << "Menu Screen sucessfully set up.\n";
-    currentGameType = NULL_GAME;
-    playerPoints = 0;
-}
 
-void MenuScreen::initMenuScreen2(sf::RenderWindow *window) {
+void MenuScreen::initMenuScreen(sf::RenderWindow *window) {
     std::cout << "Initializing menu screen... ";
 
     menuScreen = window;
