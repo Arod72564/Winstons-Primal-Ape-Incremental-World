@@ -42,6 +42,15 @@ void ArcheryGameEngine::initGame(){
     drag = std::polar<float>( ((rand() % 201) / 10000.f), ((rand() % 101) / 100.f) * 2 * M_PI );
     // drag = std::polar<float>(0.02, M_PI);
 
+    //Text
+    if (!textFont.loadFromFile("fonts/ARLRDBD.TTF")) {
+
+    }
+    arrowDeg.setFont(textFont);
+    arrowDeg.setScale(0.5f, 0.5f);
+    arrowPower.setFont(textFont);
+    arrowPower.setScale(0.5f, 0.5f);
+
     //Background
     if (!backgroundTexture.loadFromFile("images/Archery/Background.png")) {
         menuPtr->menuScreen->close();
@@ -189,6 +198,10 @@ void ArcheryGameEngine::update(){
                         initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
                         v = std::complex<float>(0.f,0.f);
                         // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
+                        float temp = std::arg(v) * 180 / M_PI;
+                        arrowDeg.setString(std::to_string(temp));
+                        arrowDeg.setPosition(initial_mouse_pos.x, initial_mouse_pos.y - 20);
+
                         line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
                         line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
                         is_mouse_first_pressed = true;
@@ -200,6 +213,7 @@ void ArcheryGameEngine::update(){
                     final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) { calculateLine(arrow1); }
                     archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
+                    arrowDeg.setString(std::to_string(std::arg(std::conj(v))*180 / M_PI));
                     //std::cout << ev.mouseMove.x << ", " << ev.mouseMove.y<< std::endl;
             }
         }
@@ -223,6 +237,8 @@ void ArcheryGameEngine::render(){
 
     if (drawline) {
         menuPtr->menuScreen->draw(line, 2, sf::Lines);
+        menuPtr->menuScreen->draw(arrowPower);
+        menuPtr->menuScreen->draw(arrowDeg);
     }
 
     menuPtr->menuScreen->draw(archer1.archerArmSprite);
@@ -246,6 +262,11 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
     } else {
         line[1] = sf::Vertex( sf::Vector2f( final_mouse_pos.x, final_mouse_pos.y) );
     }
+
+    float temp = (std::abs( temp_complex ) / LINE_LENGTH) * 100;
+    arrowPower.setString(std::to_string(temp));
+    arrowPower.setPosition(line[1].position.x, line[1].position.y + 20);
+    
     v = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
 }
 
