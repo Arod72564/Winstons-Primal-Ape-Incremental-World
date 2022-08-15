@@ -109,7 +109,6 @@ void ArcheryGameEngine::initGame(){
     wind_indicator.setTexture(arrowTexture);
     wind_indicator.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().height / 2);
     wind_indicator.setScale(0.1, 0.1);
-    wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
     wind_indicator.setPosition(archer1.archerTorsoSprite.getPosition().x - 300, archer1.archerTorsoSprite.getPosition().y - 300);
 
     compass = sf::CircleShape(wind_indicator.getGlobalBounds().width / 2, 30);
