@@ -45,20 +45,24 @@ class ArcheryGameEngine {
         sf::Sprite wind_indicator;
         sf::View* gameView;
         sf::Event ev;
+        sf::Clock clock;
+        sf::Time time;
 
-        sf::Vector2i initial_mouse_pos; // Calculating arrow power and angle
-        sf::Vector2i final_mouse_pos; // Calculating arrow power and angle
+        sf::Vector2f initial_mouse_pos; // Calculating arrow power and angle
+        sf::Vector2f final_mouse_pos; // Calculating arrow power and angle
         sf::Vertex line[2]; // Drawing line for mouse click hold and drag
 
         const double MAX_ARROW_POWER = 10.0; // Maximum velocity in pixels.
         const double LINE_LENGTH = 250.0;
         const int PLAYER_DIST = 650;
         int turn_counter = 0;
+        int pan_counter;
 
         float degRotation;
         float x_offset;
         float y_offset;
 
+        std::complex<float> panSpeed;
         std::complex<float> v;
         std::complex<float> drag = std::complex<float>(0.f, 0.f);
         float g = 0.05;
@@ -68,6 +72,7 @@ class ArcheryGameEngine {
         bool is_arrow_present = false;
         bool drawline;
         bool is_player_turn = true;
+        bool is_panning;
 
         ArcheryGameEngine(MenuScreen* menu);
         virtual ~ArcheryGameEngine();
@@ -77,6 +82,7 @@ class ArcheryGameEngine {
         void initGame();
         void update();
         void render();
+        void pan(sf::Sprite target);
 };
 
 #endif
