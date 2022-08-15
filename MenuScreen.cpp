@@ -299,19 +299,16 @@ void MenuScreen::update() {
                         currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
                         
-                        // currentGameType = musicMenu;
+                        currentGameType = music;
                         
-                        // while (currentGameType == musicMenu) {
+                        
 
+                        // if (is_MenuMusic_Paused) {
+                        //     menuMusic.play();
+                        // } else {
+                        //     menuMusic.pause();
                         // }
-
-                        
-                        if (is_MenuMusic_Paused) {
-                            menuMusic.play();
-                        } else {
-                            menuMusic.pause();
-                        }
-                        is_MenuMusic_Paused = !(is_MenuMusic_Paused);
+                        // is_MenuMusic_Paused = !(is_MenuMusic_Paused);
                     }
                 break;
             case sf::Event::MouseWheelMoved:

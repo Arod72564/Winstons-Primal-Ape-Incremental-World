@@ -9,8 +9,8 @@ class MusicMenu {
 
         MenuScreen* menuPtr;
         sf::Texture bg1;
-        sf::Texture bg1;
-        sf::Texture bg1;
+        sf::Texture bg2;
+        sf::Texture bg3;
         sf::Texture fader;
         sf::Texture faderKnob;
         sf::Texture seekButton;
@@ -20,12 +20,18 @@ class MusicMenu {
         sf::Sprite faderKnobSprite;
         sf::Sprite seekForward;
         sf::Sprite seekBackward;
+        sf::Sprite muteSprite;
 
         sf::Font font;
         sf::Text currentMusicName;
+        sf::Text musicVolText;
+
+        sf::Event ev;
+
+        bool is_volume_changing;
 
 
-        MusicMenu(MenuScreen menu);
+        MusicMenu(MenuScreen* menu);
         virtual ~MusicMenu();
         void initMenu();
         void update();

@@ -10,6 +10,7 @@
 #include "DungeonGameEngine.cpp"
 #include "ArcheryGameEngine.cpp"
 #include "SplashScreen.cpp"
+#include "MusicMenu.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -93,7 +94,16 @@ int main() {
                 delete archeryGameEngine;
             }
 
+            if (menu->currentGameType == music) {
+                MusicMenu* musicMenu = new MusicMenu(menu);
 
+                while (menu->currentGameType == music) {
+                    musicMenu->update();
+                    musicMenu->render();
+                }
+
+                delete musicMenu;
+            }
         }
     }
 
