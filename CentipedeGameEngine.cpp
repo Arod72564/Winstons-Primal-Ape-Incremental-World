@@ -237,7 +237,7 @@ void CentipedeGameEngine::update(){
                             cheaterBeam = new Beam(beamTexture, player1,(centipedeVector[0].centipedeSprite.getPosition().x), 700);
                             isCheaterBeamPresent = true;
                         } else if (centipedeVector[0].isMovingRight) {
-                            int xPlayer = (centipedeVector[0].centipedeSprite.getPosition().x) + ((0.1/0.8) * (700 - centipedeVector[0].centipedeSprite.getPosition().y));
+                            int xPlayer = (centipedeVector[0].centipedeSprite.getPosition().x) + ((CENTIPEDE_SPEED/BEAM_SPEED) * (700 - centipedeVector[0].centipedeSprite.getPosition().y));
                             if(xPlayer < 0){
                                 cheaterBeam = new Beam(beamTexture, player1, xPlayer * -1, 700);
                                 isCheaterBeamPresent = true;
@@ -249,7 +249,7 @@ void CentipedeGameEngine::update(){
                                 isCheaterBeamPresent = true;
                             }
                         } else {
-                            cheaterBeam = new Beam(beamTexture, player1, (centipedeVector[0].centipedeSprite.getPosition().x) - ((0.1/0.8) * (700 - centipedeVector[0].centipedeSprite.getPosition().y)), 700);
+                            cheaterBeam = new Beam(beamTexture, player1, (centipedeVector[0].centipedeSprite.getPosition().x) - ((CENTIPEDE_SPEED/BEAM_SPEED) * (700 - centipedeVector[0].centipedeSprite.getPosition().y)), 700);
                             isCheaterBeamPresent = true;
                         }
                     }

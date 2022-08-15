@@ -12,7 +12,7 @@ Beam::~Beam() {
 }
 
 BeamCollisionType Beam::updateMovement(bool &isBeamPresent, std::vector<Mushroom> mushroomVector, std::vector<Centipede> centipedeVector, int &beamCollisionindex) {
-    beamSprite.move(0, -0.8);
+    beamSprite.move(0, BEAM_SPEED * -1);
 
     if (beamSprite.getGlobalBounds().top < 0) { //hits top
         

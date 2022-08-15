@@ -24,15 +24,15 @@ void Centipede::updateMovement(std::vector<Mushroom> mushroomVector, std::vector
     if (isMovingDown) {
         if (downDoggie < 50) {
 
-            centipedeSprite.move(0, 0.1);
+            centipedeSprite.move(0, CENTIPEDE_SPEED);
 
             for (int i = 0; i < mushroomVector.size(); i++) { //stop downward movement if another collision is triggered
                 if (centipedeSprite.getGlobalBounds().intersects(mushroomVector[i].mushroomSprite.getGlobalBounds())) {
-                    centipedeSprite.move(0, -0.1);
+                    centipedeSprite.move(0, -CENTIPEDE_SPEED);
                     downDoggie = 51;
                 }
             }
-            downDoggie += 0.1;
+            downDoggie += 1;
 
         } else {
             isMovingDown = false;
@@ -68,7 +68,12 @@ void Centipede::updateMovement(std::vector<Mushroom> mushroomVector, std::vector
 
             for (int i = 0; i < mushroomVector.size(); i++) { //mushroom collision
                 if (centipedeSprite.getGlobalBounds().intersects(mushroomVector[i].mushroomSprite.getGlobalBounds())) {
-                    if (isMovingRight) {
+                    if (isMovingDown) {
+                        isMovingDown = false;
+                        downDoggie = 0.0;
+                        rotate(90);
+                        isMovingRight = !(isMovingRight);     
+                    } else if (isMovingRight) {
                         centipedeSprite.setPosition(mushroomVector[i].mushroomSprite.getGlobalBounds().left-25.1, centipedeSprite.getPosition().y);
                         rotate(90);
                         moveDown();
@@ -87,14 +92,14 @@ void Centipede::updateMovement(std::vector<Mushroom> mushroomVector, std::vector
 
 void Centipede::move() {
     if (isMovingRight) {
-        centipedeSprite.move(0.1,0);
+        centipedeSprite.move(CENTIPEDE_SPEED,0);
     } else {
-        centipedeSprite.move(-0.1,0);
+        centipedeSprite.move(CENTIPEDE_SPEED * -1,0);
     }  
 }
 
 void Centipede::moveDown() {
-    centipedeSprite.move(0, 0.1);
+    centipedeSprite.move(0, 1);
 }
 
 void Centipede::rotate(float x) {

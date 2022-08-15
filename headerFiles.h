@@ -10,6 +10,9 @@
 #define HORIZONTAL_TILES    (WINDOW_WIDTH/50)
 #define VERTICAL_TILES      (WINDOW_HEIGHT/50)
 
+#define CENTIPEDE_SPEED 2
+#define BEAM_SPEED 8
+
 enum BeamCollisionType {centipede, mushroom, boundary, nan_};
 enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame};
 
