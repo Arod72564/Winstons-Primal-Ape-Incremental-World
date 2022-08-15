@@ -48,8 +48,9 @@ class ArcheryGameEngine {
         sf::Font textFont;
         sf::View* gameView;
         sf::Event ev;
-        sf::Clock clock;
-        sf::Time time;
+        sf::CircleShape compass;
+        // sf::Clock clock;
+        // sf::Time time;
 
         sf::Vector2f initial_mouse_pos; // Calculating arrow power and angle
         sf::Vector2f final_mouse_pos; // Calculating arrow power and angle
@@ -60,6 +61,7 @@ class ArcheryGameEngine {
         const int PLAYER_DIST = 2000;
         int turn_counter = 0;
         int pan_counter;
+        int platform3_move = 5;
 
         float degRotation;
         float x_offset;
