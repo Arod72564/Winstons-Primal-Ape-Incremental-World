@@ -100,14 +100,23 @@ void ArcheryGameEngine::initGame(){
     platform2.setPosition(archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y + 0.9 * archer2.archerSprite.getGlobalBounds().height);
 
     platform3.setTexture(platformTexture);
-    platform3.setPosition(400,400);
+    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2, 400);
+    platform3.setRotation(-90);
+    platform3.setScale(2.5, 1);
+    // platform3.setPosition(archer1.archerTorsoSprite.getPosition().x, 400);  // For testing
 
-    //Wind Indicator
+    //Wind Indicator and Compass
     wind_indicator.setTexture(arrowTexture);
-    wind_indicator.setScale(0.1, 0.1);
     wind_indicator.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().height / 2);
+    wind_indicator.setScale(0.1, 0.1);
     wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
     wind_indicator.setPosition(archer1.archerTorsoSprite.getPosition().x - 300, archer1.archerTorsoSprite.getPosition().y - 300);
+
+    compass = sf::CircleShape(wind_indicator.getGlobalBounds().width / 2, 30);
+    compass.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().width / 2);
+    compass.setPosition(wind_indicator.getPosition());
+    compass.setFillColor(sf::Color::Transparent);
+    compass.setOutlineThickness(1.f);
 
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
@@ -121,15 +130,26 @@ void ArcheryGameEngine::update(){
 
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
-    if (turn_counter == 2) {
-        drag += std::polar<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 101) / 100.f * M_PI_2 );
-        wind_indicator.setScale(0.1, 0.1);
+    if (platform3.getPosition().y < 0 - backgroundSprite.getGlobalBounds().height / 4 || platform3.getPosition().y + platform3.getGlobalBounds().height > backgroundSprite.getGlobalBounds().height / 4 + WINDOW_HEIGHT) {
+        platform3_move *= -1;
+    }
+    platform3.move(0, platform3_move);
+
+    if (turn_counter == 0) {
+        if (rand() % 2 == 0) {
+            drag += std::polar<float>( (rand() % 101) / 100.f * 0.005f, (rand() % 11) / 180.f * M_PI );
+        } else {
+            drag -= std::polar<float>( (rand() % 101) / 100.f * 0.005f, (rand() % 11) / 180.f * M_PI );
+        }
+        // drag *= std::polar<float>(1.f, 1.f * M_PI / 180.f);
+        // wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
         // std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
 
-        turn_counter = (turn_counter + 1) % 3;
+        // turn_counter = (turn_counter + 1) % 3;
         // std::cout << std::arg(drag) * 180 / M_PI << std::endl;
     }
+    turn_counter = (turn_counter + 1) % 10;
 
 
     if (is_arrow_present) {
@@ -168,7 +188,7 @@ void ArcheryGameEngine::update(){
         arrow1->arrowSprite.setScale(0.07, 0.04);
         // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
         is_arrow_present = true;
-        turn_counter = (turn_counter + 1) % 3;
+        // turn_counter = (turn_counter + 1) % 3;
     }
 
     while (menuPtr->menuScreen->pollEvent(ev)) {
@@ -257,6 +277,8 @@ void ArcheryGameEngine::render(){
     if (is_arrow_present) {
         menuPtr->menuScreen->draw(arrow1->arrowSprite);
     }
+
+    menuPtr->menuScreen->draw(compass);
 
     menuPtr->menuScreen->display();
 
