@@ -23,6 +23,12 @@ int main() {
     while (splashScreen->is_splash_displayed) {
         splashScreen->update();
         splashScreen->render();
+        
+        if (!mainWindow->isOpen()) {
+            delete splashScreen;
+            delete mainWindow;
+            return 0;
+        }
     }
     delete splashScreen;
     
