@@ -65,6 +65,7 @@ class ArcheryGameEngine {
         //bool is_mouse_released;
         bool is_arrow_present = false;
         bool drawline;
+        bool is_player_turn = true;
 
         ArcheryGameEngine(MenuScreen* menu);
         virtual ~ArcheryGameEngine();
