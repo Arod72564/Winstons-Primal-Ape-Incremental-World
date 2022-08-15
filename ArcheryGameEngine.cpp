@@ -113,10 +113,12 @@ void ArcheryGameEngine::update(){
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
     if (turn_counter == 2) {
-        drag += std::complex<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 201 - 100) / 100.f * 0.005f );
+        // std::cout << std::arg(drag) * 180 / M_PI << "->";
+        drag += std::polar<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 101) / 100.f * 2 * M_PI );
         wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
         turn_counter = (turn_counter + 1) % 3;
+        // std::cout << std::arg(drag) * 180 / M_PI << std::endl;
     }
 
 
@@ -185,7 +187,7 @@ void ArcheryGameEngine::update(){
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_arrow_present) {
                         // Playing around with click and drag type archery game
                         initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
-
+                        v = std::complex<float>(0.f,0.f);
                         // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
                         line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
                         line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
