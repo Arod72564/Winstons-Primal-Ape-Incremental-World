@@ -54,7 +54,7 @@ class ArcheryGameEngine {
 
         const double MAX_ARROW_POWER = 10.0; // Maximum velocity in pixels.
         const double LINE_LENGTH = 250.0;
-        const int PLAYER_DIST = 650;
+        const int PLAYER_DIST = 2000;
         int turn_counter = 0;
         int pan_counter;
 

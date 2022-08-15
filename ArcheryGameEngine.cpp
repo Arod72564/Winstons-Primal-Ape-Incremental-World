@@ -61,13 +61,11 @@ void ArcheryGameEngine::initGame(){
         menuPtr->menuScreen->close();
     }
 
-    archer1.archerSprite.setTexture(archer1.archerTexture);
     archer1.archerArmSprite.setTexture(archer1.archerArmTexture);
     archer1.archerTorsoSprite.setTexture(archer1.archerTorsoTexture);
-    archer1.archerTorsoSprite.setPosition(50, 700);
+    archer1.archerTorsoSprite.setPosition(-1000, 700);
     archer1.archerArmSprite.setOrigin(archer1.archerArmSprite.getGlobalBounds().width / 2, archer1.archerArmSprite.getGlobalBounds().height / 2);
     archer1.archerArmSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + (archer1.archerTorsoSprite.getGlobalBounds().width / 2), archer1.archerTorsoSprite.getPosition().y + (archer1.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
-    //archer1.archerSprite.setPosition(50, 700);
 
     // Archer player2;
     if (!archer2.archerTexture.loadFromFile("images/Archery/PlayerLeft.png")) {
@@ -80,11 +78,6 @@ void ArcheryGameEngine::initGame(){
     if (!arrowTexture.loadFromFile("images/Archery/temp_arrow.png")) { // Need to add this image
         menuPtr->menuScreen->close();
     }
-    wind_indicator.setTexture(arrowTexture);
-    wind_indicator.setScale(0.1, 0.1);
-    wind_indicator.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().height / 2);
-    wind_indicator.setPosition(wind_indicator.getGlobalBounds().width, wind_indicator.getGlobalBounds().width);
-    wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
 
     //Platforms
     if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
@@ -92,16 +85,26 @@ void ArcheryGameEngine::initGame(){
     }
 
     platform1.setTexture(platformTexture);
-    platform1.setPosition(archer1.archerTorsoSprite.getPosition().x, archer1.archerTorsoSprite.getPosition().y + 0.9 * archer1.archerTorsoSprite.getGlobalBounds().height);
+    platform1.setPosition(archer1.archerTorsoSprite.getPosition().x - 40, archer1.archerTorsoSprite.getPosition().y + 0.9 * archer1.archerTorsoSprite.getGlobalBounds().height);
 
     platform2.setTexture(platformTexture);
     platform2.setPosition(archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y + 0.9 * archer2.archerSprite.getGlobalBounds().height);
 
     platform3.setTexture(platformTexture);
+    platform3.setPosition(400,400);
+
+    //Wind Indicator
+    wind_indicator.setTexture(arrowTexture);
+    wind_indicator.setScale(0.1, 0.1);
+    wind_indicator.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().height / 2);
+    wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
+    wind_indicator.setPosition(archer1.archerTorsoSprite.getPosition().x - 300, archer1.archerTorsoSprite.getPosition().y - 300);
 
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
     
+
+
 
 }
 
@@ -216,16 +219,14 @@ void ArcheryGameEngine::render(){
     menuPtr->menuScreen->draw(wind_indicator);
     menuPtr->menuScreen->draw(platform1);
     menuPtr->menuScreen->draw(platform2);
+    menuPtr->menuScreen->draw(platform3);
 
     if (drawline) {
         menuPtr->menuScreen->draw(line, 2, sf::Lines);
     }
 
-    //menuPtr->menuScreen->draw(archer1.archerSprite);
-
     menuPtr->menuScreen->draw(archer1.archerArmSprite);
     menuPtr->menuScreen->draw(archer1.archerTorsoSprite);
-
     menuPtr->menuScreen->draw(archer2.archerSprite);
 
     if (is_arrow_present) {
