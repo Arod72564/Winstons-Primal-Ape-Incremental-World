@@ -276,7 +276,7 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
     float temp = (std::abs( temp_complex ) / LINE_LENGTH) * 100;
     arrowPower.setString(std::to_string(temp));
     arrowPower.setPosition(line[1].position.x, line[1].position.y + 20);
-
+    arrowDeg.setString(std::to_string(std::arg(std::conj(v))));
     v = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
 }
 
