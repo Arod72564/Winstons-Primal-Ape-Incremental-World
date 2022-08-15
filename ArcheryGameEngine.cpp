@@ -6,7 +6,7 @@ Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocit
     arrow_velocity = velocity;
 }
 
-BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, const std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer enemy) {
+BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer enemy) {
     arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
     arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI); // Might need to change the origin of the arrow to (0,0) here
     arrow_velocity += std::complex<float>(std::real(drag), std::imag(drag) + grav);
@@ -37,6 +37,9 @@ ArcheryGameEngine::~ArcheryGameEngine(){
 void ArcheryGameEngine::initGame(){
     // Initializing RNG
     std::srand(std::time(nullptr));
+
+    drag = std::polar<float>( ((rand() % 201) / 10000.f), ((rand() % 101) / 100.f) * 2 * M_PI );
+    // drag = std::polar<float>(0.02, M_PI);
 
     //Background
     if (!backgroundTexture.loadFromFile("images/Archery/Background.png")) {
@@ -75,6 +78,11 @@ void ArcheryGameEngine::initGame(){
     if (!arrowTexture.loadFromFile("images/Archery/temp_arrow.png")) { // Need to add this image
         menuPtr->menuScreen->close();
     }
+    wind_indicator.setTexture(arrowTexture);
+    wind_indicator.setScale(0.1, 0.1);
+    wind_indicator.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().height / 2);
+    wind_indicator.setPosition(wind_indicator.getGlobalBounds().width, wind_indicator.getGlobalBounds().width);
+    wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
 
     //Platforms
     if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
@@ -98,6 +106,15 @@ void ArcheryGameEngine::update(){
 
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
+    if (turn_counter == 2) {
+        drag += std::complex<float>( (rand() % 201 - 100) / 100.f * 0.005f, (rand() % 201 - 100) / 100.f * 0.005f );
+        wind_indicator.setScale(0.1, 0.1);
+        wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
+        std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
+        turn_counter = (turn_counter + 1) % 3;
+    }
+
+
     if (is_arrow_present) {
         if (is_player_turn) {
             collisionType = arrow1->updateMovement(is_arrow_present, drag, g, backgroundSprite, platform1, platform2, platform3, archer2);
@@ -112,12 +129,14 @@ void ArcheryGameEngine::update(){
         }
 
     } else if (!is_player_turn) {
-        std::cout << "Making enemy arrow\n";
+        // std::cout << "Making enemy arrow\n";
         arrow1 = new Arrow( arrowTexture, archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y, std::polar( float((rand() % 101) / 100.f * MAX_ARROW_POWER), float((rand() % 26 + 50) / 100.f * 2.f * M_PI) ) );
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
-        std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
+        // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
         is_arrow_present = true;
+        turn_counter = (turn_counter + 1) % 3;
+        std::cout << turn_counter << std::endl;
     } else {
         while (menuPtr->menuScreen->pollEvent(ev)) {
             switch (ev.type) {
@@ -127,7 +146,7 @@ void ArcheryGameEngine::update(){
                     break;
 
                 case sf::Event::MouseButtonReleased:
-                    std::cout << "Mouse button released\n";
+                    // std::cout << "Mouse button released\n";
                     // Maybe we have an isArrowMoving boolean here to let the computer know that we have released the arrow.
                     if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_arrow_present) { // Works when the bow is drawn; i.e., when LMB is STILL being pressed
                         arrow1 = new Arrow(arrowTexture, archer1.archerArmSprite.getPosition().x, archer1.archerArmSprite.getPosition().y, v);
@@ -171,6 +190,7 @@ void ArcheryGameEngine::render(){
     menuPtr->menuScreen->setView(*gameView);
     menuPtr->menuScreen->clear(sf::Color::White);
     menuPtr->menuScreen->draw(backgroundSprite);
+    menuPtr->menuScreen->draw(wind_indicator);
     menuPtr->menuScreen->draw(platform1);
     menuPtr->menuScreen->draw(platform2);
 
