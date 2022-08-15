@@ -240,7 +240,7 @@ void MenuScreen::initText() {
         std::cout << "Error loading menu music.\n";
         menuScreen->close();
     }
-    menuMusic.setVolume(100);
+    menuMusic.setVolume(musicVolume);
     menuMusic.setPitch(1);
     menuMusic.setLoop(true);
     menuMusic.play();
@@ -298,6 +298,14 @@ void MenuScreen::update() {
                     } else if (ArcheryGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
                         currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
+                        
+                        // currentGameType = musicMenu;
+                        
+                        // while (currentGameType == musicMenu) {
+
+                        // }
+
+                        
                         if (is_MenuMusic_Paused) {
                             menuMusic.play();
                         } else {
