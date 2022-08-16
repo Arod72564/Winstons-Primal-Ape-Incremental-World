@@ -101,7 +101,7 @@ void ArcheryGameEngine::initGame(){
     platform2.setPosition(archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y + 0.9 * archer2.archerSprite.getGlobalBounds().height);
 
     platform3.setTexture(platformTexture);
-    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2, 400);
+    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2 + (rand() % 200 - 100), 400);
     platform3.setRotation(-90);
     platform3.setScale(2.5, 1);
     // platform3.setPosition(archer1.archerTorsoSprite.getPosition().x, 400);  // For testing
@@ -130,6 +130,9 @@ void ArcheryGameEngine::update(){
 
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
+    wind_indicator.setPosition(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(100, 100)));
+    compass.setPosition(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(100, 100)));
+
     if (platform3.getPosition().y < 0 - backgroundSprite.getGlobalBounds().height / 4 || platform3.getPosition().y + platform3.getGlobalBounds().height > backgroundSprite.getGlobalBounds().height / 4 + WINDOW_HEIGHT) {
         platform3_move *= -1;
     }
@@ -143,6 +146,8 @@ void ArcheryGameEngine::update(){
         // wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
         std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
+
+        if (std::abs(drag) < 1e-5) drag *= 1 / std::abs(drag) * 0.002;
         // std::cout << norm_dist(generator) << std::endl;
 
         // turn_counter = (turn_counter + 1) % 3;
