@@ -47,7 +47,7 @@ class MenuScreen {
         GameTypes currentGameType;
 
         int counter = 0;
-        int musicVolume = 100;
+        float musicVolume = 100.0f;
 
         //Player Points
         long double playerPoints;

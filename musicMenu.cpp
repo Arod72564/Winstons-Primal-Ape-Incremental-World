@@ -1,6 +1,7 @@
 #include "MusicMenu.h"
 
 MusicMenu::MusicMenu(MenuScreen* menu){
+    initVol = menu->musicVolume;
     initMenu();
     menuPtr = menu;
 
@@ -49,7 +50,8 @@ void MusicMenu::initMenu(){
 
     faderKnobSprite.setTexture(faderKnob);
     faderKnobSprite.setOrigin(faderKnobSprite.getGlobalBounds().width / 2, faderKnobSprite.getGlobalBounds().height / 2);
-    faderKnobSprite.setPosition(faderSprite.getPosition().x + faderSprite.getGlobalBounds().width / 2, faderSprite.getGlobalBounds().height - (menuPtr->musicVolume * 3));
+    faderKnobSprite.setPosition(faderSprite.getPosition().x + faderSprite.getGlobalBounds().width / 2,  (-3.0f * initVol) + 500.0f);
+
 
     //muteSprite.setTexture(menuPtr->muteButtonTexture);
     //muteSprite.setPosition((6 * menuPtr->menuScreen->getSize().x) / 8, (1 * menuPtr->menuScreen->getSize().y) / 2);
@@ -64,6 +66,7 @@ void MusicMenu::update(){
             case sf::Event::Closed:
                 menuPtr->currentGameType = NULL_GAME;
                 break;
+
             case sf::Event::MouseButtonPressed:
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && faderSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
                     is_volume_changing = true;
@@ -91,13 +94,21 @@ void MusicMenu::update(){
                     menuPtr->menuMusic.setVolume(menuPtr->musicVolume);
 
                     musicVolText.setPosition(faderKnobSprite.getPosition().x, faderKnobSprite.getPosition().y - 20);
-                    musicVolText.setString(std::to_string(menuPtr->musicVolume));
+
+                    std::stringstream os;
+                    os << std::fixed << std::setprecision(0) << menuPtr->musicVolume;
+                    musicVolText.setString(os.str());
+
+                    
                 }
+                break;
+
             default:
                 break;
         };
     }
-
+    
+    //std::cout << faderKnobSprite.getPosition().x << ", " << faderKnobSprite.getPosition().y << std::endl;
 }
 
 void MusicMenu::render(){

@@ -298,17 +298,7 @@ void MenuScreen::update() {
                     } else if (ArcheryGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
                         currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
-                        
                         currentGameType = music;
-                        
-                        
-
-                        // if (is_MenuMusic_Paused) {
-                        //     menuMusic.play();
-                        // } else {
-                        //     menuMusic.pause();
-                        // }
-                        // is_MenuMusic_Paused = !(is_MenuMusic_Paused);
                     }
                 break;
             case sf::Event::MouseWheelMoved:
@@ -354,12 +344,12 @@ void MenuScreen::update() {
     }
 
     //set background texture
-    counter = (1+counter) % 120;
-    if (counter == 39) {
+    counter = (1+counter) % 60;
+    if (counter == 19) {
         backgroundSprite.setTexture(backgroundTexture2);
-    } else if (counter == 79 ) {
+    } else if (counter == 39 ) {
         backgroundSprite.setTexture(backgroundTexture3);
-    } else if (counter == 119) {
+    } else if (counter == 59) {
         backgroundSprite.setTexture(backgroundTexture1);
     }
 }

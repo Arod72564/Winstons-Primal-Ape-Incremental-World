@@ -28,7 +28,8 @@ class MusicMenu {
 
         sf::Event ev;
 
-        bool is_volume_changing;
+        float initVol;
+        bool is_volume_changing = false;
 
 
         MusicMenu(MenuScreen* menu);
