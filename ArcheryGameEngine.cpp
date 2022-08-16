@@ -38,9 +38,9 @@ ArcheryGameEngine::~ArcheryGameEngine(){
 void ArcheryGameEngine::initGame(){
     // Initializing RNG
     std::srand(std::time(nullptr));
-    norm_dist = std::normal_distribution<float>(1.f, 0.5f);
+    norm_dist = std::normal_distribution<float>(1.f, 0.1f);
 
-    drag = std::polar<float>( ((rand() % 201) / 10000.f), ((rand() % 101) / 100.f) * 2 * M_PI );
+    drag = std::polar<float>( ((rand() % 301 + 200) / 10000.f), ((rand() % 101) / 100.f) * 2 * M_PI );
     // drag = std::polar<float>(0.02, M_PI);
 
     //Text
@@ -143,6 +143,7 @@ void ArcheryGameEngine::update(){
         // wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
         std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
+        // std::cout << norm_dist(generator) << std::endl;
 
         // turn_counter = (turn_counter + 1) % 3;
         // std::cout << std::arg(drag) * 180 / M_PI << std::endl;
