@@ -33,6 +33,7 @@ enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame, music};
 #include <list>
 #include <cmath>
 #include <complex>
+#include <random>
 
 template<typename T> T clamp(T arg1, T arg2, T arg3) {
     if( arg1 < arg2) {

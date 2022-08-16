@@ -59,10 +59,12 @@ class ArcheryGameEngine {
         const double MAX_ARROW_POWER = 10.0; // Maximum velocity in pixels.
         const double LINE_LENGTH = 250.0;
         const int PLAYER_DIST = 2000;
+        const int WIND_CHANGE_FREQ = 20;
         int turn_counter = 0;
         int pan_counter;
         int platform3_move = 5;
 
+        float wind_deg_increment;
         float degRotation;
         float x_offset;
         float y_offset;
@@ -71,6 +73,10 @@ class ArcheryGameEngine {
         std::complex<float> v;
         std::complex<float> drag = std::complex<float>(0.f, 0.f);
         float g = 0.05;
+
+        // Random number generator for wind
+        std::normal_distribution<float> norm_dist;
+        std::default_random_engine generator;
 
         bool is_mouse_first_pressed = false;
         //bool is_mouse_released;
