@@ -2,8 +2,9 @@
 
 MusicMenu::MusicMenu(MenuScreen* menu){
     initVol = menu->musicVolume;
-    initMenu();
     menuPtr = menu;
+    initMenu();
+    
 
 }
 
@@ -11,13 +12,7 @@ MusicMenu::~MusicMenu(){
 }
 
 void MusicMenu::initMenu(){
-    //Text
-    if (!font.loadFromFile("fonts/ARLRDBD.TTF")) {
-        menuPtr->menuScreen->close();
-    }
 
-    currentMusicName.setFont(font);
-    musicVolText.setFont(font);
 
     //Textures
     if (!bg1.loadFromFile("images/MusicMenu/bg1.png")) {
@@ -40,6 +35,22 @@ void MusicMenu::initMenu(){
         menuPtr->menuScreen->close();
     }
 
+    if (!seekButton.loadFromFile("images/MusicMenu/seekForward.png")) {
+        menuPtr->menuScreen->close();
+    }
+
+    if (!radio.loadFromFile("images/MusicMenu/Radio.png")) {
+        menuPtr->menuScreen->close();
+    }
+
+    if (!radioScreen.loadFromFile("images/MusicMenu/RadioScreen.png")) {
+        menuPtr->menuScreen->close();
+    }
+
+    if (!mute.loadFromFile("images/MusicMenu/Mute.png")) {
+        menuPtr->menuScreen->close();
+    }
+
     //Sprites
 
     bgSprite.setTexture(bg1);
@@ -52,10 +63,44 @@ void MusicMenu::initMenu(){
     faderKnobSprite.setOrigin(faderKnobSprite.getGlobalBounds().width / 2, faderKnobSprite.getGlobalBounds().height / 2);
     faderKnobSprite.setPosition(faderSprite.getPosition().x + faderSprite.getGlobalBounds().width / 2,  (-3.0f * initVol) + 500.0f);
 
+    radioSprite.setTexture(radio);
+    radioSprite.setPosition(200, 200);
+    radioSprite.setScale(.7,.7);
+
+    seekBackward.setTexture(seekButton);
+    seekBackward.setOrigin(seekBackward.getGlobalBounds().width / 2, seekBackward.getGlobalBounds().height / 2);
+    seekBackward.setPosition( .15 * radioSprite.getGlobalBounds().width + radioSprite.getPosition().x , radioSprite.getPosition().y + radioSprite.getGlobalBounds().height + 30);
+    seekBackward.setScale(.2,.2);
+    seekBackward.rotate(180);
+
+    seekForward.setTexture(seekButton);
+    seekForward.setOrigin(seekForward.getGlobalBounds().width / 2, seekForward.getGlobalBounds().height / 2);
+    seekForward.setPosition(.85 * radioSprite.getGlobalBounds().width + radioSprite.getPosition().x , radioSprite.getPosition().y + radioSprite.getGlobalBounds().height + 30);
+    seekForward.setScale(.2,.2);
+
+    muteButtonSprite.setTexture(mute);
+    muteButtonSprite.setOrigin(muteButtonSprite.getGlobalBounds().width / 2, muteButtonSprite.getGlobalBounds().height / 2);
+    muteButtonSprite.setPosition(.5 * radioSprite.getGlobalBounds().width + radioSprite.getPosition().x , radioSprite.getPosition().y + radioSprite.getGlobalBounds().height + 30);
+
+    radioScreenSprite.setTexture(radioScreen);
+    radioScreenSprite.setPosition(200, 200);
+    radioScreenSprite.setScale(.7,.7);
 
     //muteSprite.setTexture(menuPtr->muteButtonTexture);
     //muteSprite.setPosition((6 * menuPtr->menuScreen->getSize().x) / 8, (1 * menuPtr->menuScreen->getSize().y) / 2);
 
+    //Text
+    if (!font.loadFromFile("fonts/ARLRDBD.TTF")) {
+        menuPtr->menuScreen->close();
+    }
+
+    currentMusicName.setFont(font);
+    currentMusicName.setOrigin(currentMusicName.getGlobalBounds().width / 2, currentMusicName.getGlobalBounds().height / 2);
+    currentMusicName.setPosition((.1 * radioSprite.getGlobalBounds().width) + radioSprite.getPosition().x, radioSprite.getPosition().y + (radioSprite.getGlobalBounds().height / 2));
+    currentMusicName.setScale(.65, .65);
+    currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+
+    musicVolText.setFont(font);
 }
 
 void MusicMenu::update(){
@@ -68,17 +113,42 @@ void MusicMenu::update(){
                 break;
 
             case sf::Event::MouseButtonPressed:
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && faderSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
-                    is_volume_changing = true;
-                } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && muteSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
-                    menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
-                    if(menuPtr->is_MenuMusic_Paused) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    if (faderSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //Click on fader knob
+                        is_volume_changing = true;
+                    } else if (muteButtonSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //Click on pause
+                        
+                        if(menuPtr->is_MenuMusic_Paused) {
+                            menuPtr->menuMusic.play();
+                        } else {
+                            menuPtr->menuMusic.pause();
+                        }
+                        menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
+                    } else if (seekBackward.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
+                        menuPtr->menuMusic.stop();
+                        menuPtr->currentMusicIndex--;
+
+                        menuPtr->menuMusic.openFromFile(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+                        currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+
+                        menuPtr->menuMusic.setVolume(menuPtr->musicVolume);
                         menuPtr->menuMusic.play();
-                    } else {
-                        menuPtr->menuMusic.pause();
+                        menuPtr->is_MenuMusic_Paused = false;
+
+
+                    } else if (seekForward.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
+                        menuPtr->menuMusic.stop();
+                        menuPtr->currentMusicIndex++;
+
+                        menuPtr->menuMusic.openFromFile(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+                        currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+
+                        menuPtr->menuMusic.setVolume(menuPtr->musicVolume);
+                        menuPtr->menuMusic.play();
+                        menuPtr->is_MenuMusic_Paused = false;
                     }
-                    
                 }
+
                 break;
 
             case sf::Event::MouseButtonReleased:
@@ -96,7 +166,7 @@ void MusicMenu::update(){
                     musicVolText.setPosition(faderKnobSprite.getPosition().x, faderKnobSprite.getPosition().y - 20);
 
                     std::stringstream os;
-                    os << std::fixed << std::setprecision(0) << menuPtr->musicVolume;
+                    os << std::fixed << std::setprecision(0) << abs(menuPtr->musicVolume);
                     musicVolText.setString(os.str());
 
                     
@@ -118,7 +188,13 @@ void MusicMenu::render(){
     menuPtr->menuScreen->draw(bgSprite);
     menuPtr->menuScreen->draw(faderSprite);
     menuPtr->menuScreen->draw(faderKnobSprite);
-    //menuPtr->menuScreen->draw(muteSprite);
+
+    menuPtr->menuScreen->draw(radioSprite);
+    menuPtr->menuScreen->draw(currentMusicName);
+    menuPtr->menuScreen->draw(radioScreenSprite);
+    menuPtr->menuScreen->draw(seekForward);
+    menuPtr->menuScreen->draw(muteButtonSprite);
+    menuPtr->menuScreen->draw(seekBackward);
 
     if (is_volume_changing) {
         menuPtr->menuScreen->draw(musicVolText);

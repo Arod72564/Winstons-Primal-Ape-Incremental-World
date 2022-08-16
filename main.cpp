@@ -98,7 +98,9 @@ int main() {
                 MusicMenu* musicMenu = new MusicMenu(menu);
 
                 while (menu->currentGameType == music) {
+
                     musicMenu->update();
+
                     musicMenu->render();
                 }
 
