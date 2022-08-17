@@ -84,7 +84,7 @@ void CentipedeGameEngine::initTextures() {
         gameWindow->close();
     }
 
-    if(!pauseMusic.openFromFile("Music/WinstonPauseMenuMusic.wav")){
+    if(!pauseMusic.openFromFile("Music/WinstonPauseMenuMusic.ogg")){
         std::cout << "Error loading pause music.\n";
     }
 
