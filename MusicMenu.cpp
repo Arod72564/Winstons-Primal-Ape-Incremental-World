@@ -65,7 +65,7 @@ void MusicMenu::initMenu(){
 
     radioSprite.setTexture(radio);
     radioSprite.setPosition(200, 200);
-    radioSprite.setScale(.7,.7);
+    radioSprite.setScale(.7,.5);
 
     seekBackward.setTexture(seekButton);
     seekBackward.setOrigin(seekBackward.getGlobalBounds().width / 2, seekBackward.getGlobalBounds().height / 2);
@@ -84,10 +84,7 @@ void MusicMenu::initMenu(){
 
     radioScreenSprite.setTexture(radioScreen);
     radioScreenSprite.setPosition(200, 200);
-    radioScreenSprite.setScale(.7,.7);
-
-    //muteSprite.setTexture(menuPtr->muteButtonTexture);
-    //muteSprite.setPosition((6 * menuPtr->menuScreen->getSize().x) / 8, (1 * menuPtr->menuScreen->getSize().y) / 2);
+    radioScreenSprite.setScale(.7,.5);
 
     //Text
     menuPtr->currentMusicName.setFont(menuPtr->menuFont2);
