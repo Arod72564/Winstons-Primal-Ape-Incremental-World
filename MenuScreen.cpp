@@ -237,14 +237,14 @@ void MenuScreen::initText() {
         //MUSIC
     std::cout << "Initializing Music... ";
 
-    musicNameVec.push_back("Music/WinstonSexyRage2.wav");
+    musicNameVec.push_back("Music/MusicVec/WinstonSexyRage2.wav");
     musicNameVec.push_back("Music/MusicVec/A1 Berlin Heat.wav");
     musicNameVec.push_back("Music/MusicVec/A2 Pattern 2.wav");
     musicNameVec.push_back("Music/MusicVec/A3 Pattern 3.wav");
     musicNameVec.push_back("Music/MusicVec/B1 Ladybugs.wav");
 
 
-    if (!menuMusic.openFromFile("Music/WinstonSexyRage2.wav")) {
+    if (!menuMusic.openFromFile("Music/MusicVec/WinstonSexyRage2.wav")) {
         std::cout << "Error loading menu music.\n";
         menuScreen->close();
     }
