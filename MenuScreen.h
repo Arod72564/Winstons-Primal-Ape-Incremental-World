@@ -8,6 +8,7 @@ class MenuScreen {
     public:
         sf::VideoMode videoMode;
         sf::RenderWindow* menuScreen;
+
         sf::Texture clickBoxTexture;
         sf::Texture clickUpgrade1_Texture;
         sf::Texture clickUpgrade2_Texture;
@@ -16,18 +17,24 @@ class MenuScreen {
         sf::Texture backgroundTexture1;
         sf::Texture backgroundTexture2;
         sf::Texture backgroundTexture3;
+        sf::Texture centipedeGameTexture;
+        sf::Texture dungeonGameTexture;
+        sf::Texture ArcheryGameTexture;
+
         sf::Sprite backgroundSprite;
         sf::Sprite clickBoxSprite;
         sf::Sprite clickUpgrade1_Sprite;
         sf::Sprite clickUpgrade2_Sprite;
         sf::Sprite centipedeGameMult_Sprite;
         sf::Sprite muteButtonSprite;
+        sf::Sprite centipedeGameSprite;
+        sf::Sprite dungeonGameSprite;
+        sf::Sprite archerygameSprite;
+
         sf::Font menuFont1;
         sf::Font menuFont2;
 
         sf::Text centipedeGameText;
-        sf::Text dungeonGameText;
-        sf::Text ArcheryGameText;
 
         sf::Text pointsText;
 

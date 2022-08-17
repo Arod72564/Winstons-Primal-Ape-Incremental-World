@@ -99,6 +99,22 @@ void MenuScreen::initText() {
         menuScreen->close();
     }
 
+    if (!dungeonGameTexture.loadFromFile("images/MenuScreen/PUZZLEDUNGEON.png")) {
+        std::cout << "Error loading dungeon game texture.\n";
+        menuScreen->close();
+    }
+
+    if (!ArcheryGameTexture.loadFromFile("images/MenuScreen/ARCHERYGAME.png")) {
+        std::cout << "Error loading archery game texture.\n";
+        menuScreen->close();
+    }
+
+    if (!centipedeGameTexture.loadFromFile("images/MenuScreen/CENTIPEDEGAME.png")) {
+        std::cout << "Error loading centipede game texture.\n";
+        menuScreen->close();
+    }
+
+
     std::cout << "Textures Sucessfully Initialized.\n";
 
         //SPRITES
@@ -127,10 +143,29 @@ void MenuScreen::initText() {
     //Mute Button
     muteButtonSprite.setTexture(muteButtonTexture);
     muteButtonSprite.setPosition(menuScreen->getSize().x - muteButtonSprite.getGlobalBounds().width, menuScreen->getSize().y - muteButtonSprite.getGlobalBounds().height);
-    std::cout << "Sprites Sucessfully Initialized.\n";
-
+    
     //Background
     backgroundSprite.setTexture(backgroundTexture1);
+
+    //Centipede Game
+    centipedeGameSprite.setTexture(centipedeGameTexture);
+    centipedeGameSprite.setOrigin(centipedeGameSprite.getGlobalBounds().width / 2, 0);
+    centipedeGameSprite.setPosition(menuScreen->getSize().x / 2, 0);
+    centipedeGameSprite.setScale(0.8, 0.8);
+
+    //Dungeon game
+    dungeonGameSprite.setTexture(dungeonGameTexture);
+    dungeonGameSprite.setPosition(0,200);
+    dungeonGameSprite.setScale(0.3, 0.3);
+
+    //Archery Game
+    archerygameSprite.setTexture(ArcheryGameTexture);
+    archerygameSprite.setPosition(dungeonGameSprite.getPosition().x, dungeonGameSprite.getPosition().y + dungeonGameSprite.getGlobalBounds().height);
+    archerygameSprite.setScale(0.4, 0.4);
+
+    std::cout << "Sprites Sucessfully Initialized.\n";
+
+
 
         //FONTS
     std::cout << "Initializing Fonts... ";
@@ -147,21 +182,6 @@ void MenuScreen::initText() {
 
         //TEXT
     std::cout << "Initializing Text... ";
-    //Dungeon Game Text
-    dungeonGameText.setFont(menuFont2);
-    dungeonGameText.setString("Puzzle Dungeon");
-    dungeonGameText.setCharacterSize(25);
-    dungeonGameText.setFillColor(sf::Color::Red);
-    dungeonGameText.setStyle(sf::Text::Bold | sf::Text::Underlined);
-    dungeonGameText.setPosition(0, 200);
-
-    //Archery Game Text
-    ArcheryGameText.setFont(menuFont2);
-    ArcheryGameText.setString("Archery Game");
-    ArcheryGameText.setCharacterSize(25);
-    ArcheryGameText.setFillColor(sf::Color::Red);
-    ArcheryGameText.setStyle(sf::Text::Bold | sf::Text::Underlined);
-    ArcheryGameText.setPosition(dungeonGameText.getPosition().x, dungeonGameText.getPosition().y + ArcheryGameText.getGlobalBounds().height);
 
     //Centipede Game Text
     centipedeGameText.setFont(menuFont2);
@@ -290,18 +310,16 @@ void MenuScreen::update() {
                             centipedeGameMultCost = centipedeGameMultCost * clickerUpgradePriceScaling;
                         }
 
-                    } else if (centipedeGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //CentipedeGame Prompt
+                    } else if (centipedeGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || centipedeGameSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //CentipedeGame Prompt
                         if (is_CentipedeGame_Unlocked == false && playerPoints >= 100.f) {
                             is_CentipedeGame_Unlocked = true;
                             playerPoints -= 100.f;
-                            centipedeGameText.setString("Centipede Game");
-                            centipedeGameText.setCharacterSize(50);
                         } else if (is_CentipedeGame_Unlocked == true) {
                             currentGameType = centipedeGame;
                         }
-                    } else if (dungeonGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //DungeonGame Prompt
+                    } else if (dungeonGameSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //DungeonGame Prompt
                         currentGameType = dungeonGame;
-                    } else if (ArcheryGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
+                    } else if (archerygameSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
                         currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
                         currentGameType = music;
@@ -379,20 +397,21 @@ void MenuScreen::render() {
     menuScreen->draw(muteButtonSprite);
 
     //Centipede Game
-    menuScreen->draw(centipedeGameText);
-    if (is_CentipedeGame_Unlocked) {
+    
+    if (!is_CentipedeGame_Unlocked) {
+        menuScreen->draw(centipedeGameText);
+    } else {
+        menuScreen->draw(centipedeGameSprite);
         menuScreen->draw(centipedeMultiplierText);
         menuScreen->draw(centipedeMultiplierCostText);
         menuScreen->draw(centipedeGameMult_Sprite);
     }
 
     //Dungeon game
-    menuScreen->draw(dungeonGameText);
-
+    menuScreen->draw(dungeonGameSprite);
 
     // Archery Game
-    menuScreen->draw(ArcheryGameText);
-
+    menuScreen->draw(archerygameSprite);
 
     // Display menu screen
     menuScreen->display();
