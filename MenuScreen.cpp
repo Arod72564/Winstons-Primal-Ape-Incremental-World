@@ -236,10 +236,19 @@ void MenuScreen::initText() {
 
         //MUSIC
     std::cout << "Initializing Music... ";
+
+    musicNameVec.push_back("Music/WinstonSexyRage2.wav");
+    musicNameVec.push_back("Music/MusicVec/A1 Berlin Heat.wav");
+    musicNameVec.push_back("Music/MusicVec/A2 Pattern 2.wav");
+    musicNameVec.push_back("Music/MusicVec/A3 Pattern 3.wav");
+    musicNameVec.push_back("Music/MusicVec/B1 Ladybugs.wav");
+
+
     if (!menuMusic.openFromFile("Music/WinstonSexyRage2.wav")) {
         std::cout << "Error loading menu music.\n";
         menuScreen->close();
     }
+    
     menuMusic.setVolume(musicVolume);
     menuMusic.setPitch(1);
     menuMusic.setLoop(true);
@@ -298,17 +307,7 @@ void MenuScreen::update() {
                     } else if (ArcheryGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
                         currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
-                        
                         currentGameType = music;
-                        
-                        
-
-                        // if (is_MenuMusic_Paused) {
-                        //     menuMusic.play();
-                        // } else {
-                        //     menuMusic.pause();
-                        // }
-                        // is_MenuMusic_Paused = !(is_MenuMusic_Paused);
                     }
                 break;
             case sf::Event::MouseWheelMoved:
@@ -354,12 +353,12 @@ void MenuScreen::update() {
     }
 
     //set background texture
-    counter = (1+counter) % 120;
-    if (counter == 39) {
+    counter = (1+counter) % 60;
+    if (counter == 19) {
         backgroundSprite.setTexture(backgroundTexture2);
-    } else if (counter == 79 ) {
+    } else if (counter == 39 ) {
         backgroundSprite.setTexture(backgroundTexture3);
-    } else if (counter == 119) {
+    } else if (counter == 59) {
         backgroundSprite.setTexture(backgroundTexture1);
     }
 }

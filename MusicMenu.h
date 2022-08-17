@@ -14,13 +14,18 @@ class MusicMenu {
         sf::Texture fader;
         sf::Texture faderKnob;
         sf::Texture seekButton;
+        sf::Texture radio;
+        sf::Texture radioScreen;
+        sf::Texture mute;
 
         sf::Sprite bgSprite;
         sf::Sprite faderSprite;
         sf::Sprite faderKnobSprite;
         sf::Sprite seekForward;
         sf::Sprite seekBackward;
-        sf::Sprite muteSprite;
+        sf::Sprite radioSprite;
+        sf::Sprite radioScreenSprite;
+        sf::Sprite muteButtonSprite;
 
         sf::Font font;
         sf::Text currentMusicName;
@@ -28,7 +33,8 @@ class MusicMenu {
 
         sf::Event ev;
 
-        bool is_volume_changing;
+        float initVol;
+        bool is_volume_changing = false;
 
 
         MusicMenu(MenuScreen* menu);

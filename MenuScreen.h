@@ -41,13 +41,16 @@ class MenuScreen {
         sf::Text centipedeMultiplierCostText;
 
         sf::Music menuMusic;
+        std::vector<std::string> musicNameVec;
+
         sf::SoundBuffer soundBuffer;
         sf::Sound unlockSound;
         sf::Event event;
         GameTypes currentGameType;
 
         int counter = 0;
-        int musicVolume = 100;
+        int currentMusicIndex = 0;
+        float musicVolume = 75.0f;
 
         //Player Points
         long double playerPoints;
