@@ -259,6 +259,7 @@ void MenuScreen::initText() {
 
     musicNameVec.push_back("Music/MusicVec/WinstonTrap.ogg");
     musicNameVec.push_back("Music/MusicVec/WinstonSexyRage2.ogg");
+    musicNameVec.push_back("Music/MusicVec/Schizstoned-phrenia Audio.ogg");
 
 
     if (!menuMusic.openFromFile("Music/MusicVec/WinstonTrap.ogg")) {
