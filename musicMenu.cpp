@@ -95,7 +95,6 @@ void MusicMenu::initMenu(){
     }
 
     menuPtr->currentMusicName.setFont(font);
-    menuPtr->currentMusicName.setOrigin(menuPtr->currentMusicName.getGlobalBounds().width / 2, menuPtr->currentMusicName.getGlobalBounds().height / 2);
     menuPtr->currentMusicName.setPosition((.1 * radioSprite.getGlobalBounds().width) + radioSprite.getPosition().x, radioSprite.getPosition().y + (radioSprite.getGlobalBounds().height / 2));
     menuPtr->currentMusicName.setScale(.65, .65);
     menuPtr->currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
