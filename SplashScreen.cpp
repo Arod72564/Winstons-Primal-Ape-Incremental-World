@@ -15,7 +15,7 @@ void SplashScreen::initScreen(){
         window->close();
     }
 
-    if (!buffer.loadFromFile("Music/SplashScreen.wav")) {
+    if (!buffer.loadFromFile("Music/SplashScreen.ogg")) {
         window->close();
     }
 

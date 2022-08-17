@@ -406,6 +406,8 @@ void DungeonGameEngine::update() {
                 break;
         };
     }
+
+    if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
 }
 
 void DungeonGameEngine::render() {

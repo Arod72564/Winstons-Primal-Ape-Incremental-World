@@ -237,21 +237,18 @@ void MenuScreen::initText() {
         //MUSIC
     std::cout << "Initializing Music... ";
 
-    musicNameVec.push_back("Music/WinstonSexyRage2.wav");
-    musicNameVec.push_back("Music/MusicVec/A1 Berlin Heat.wav");
-    musicNameVec.push_back("Music/MusicVec/A2 Pattern 2.wav");
-    musicNameVec.push_back("Music/MusicVec/A3 Pattern 3.wav");
-    musicNameVec.push_back("Music/MusicVec/B1 Ladybugs.wav");
+    musicNameVec.push_back("Music/MusicVec/WinstonTrap.ogg");
+    musicNameVec.push_back("Music/MusicVec/WinstonSexyRage2.ogg");
 
 
-    if (!menuMusic.openFromFile("Music/WinstonSexyRage2.wav")) {
+    if (!menuMusic.openFromFile("Music/MusicVec/WinstonTrap.ogg")) {
         std::cout << "Error loading menu music.\n";
         menuScreen->close();
     }
     
     menuMusic.setVolume(musicVolume);
     menuMusic.setPitch(1);
-    menuMusic.setLoop(true);
+    menuMusic.setLoop(false);
     menuMusic.play();
     std::cout << "Music Sucessfully Initialized.\n";
 }
@@ -424,4 +421,15 @@ void MenuScreen::showShopMenu() {
             }
         }
     }
+}
+
+void MenuScreen::nextSong(){
+    currentMusicIndex++;
+    
+    menuMusic.openFromFile(musicNameVec[abs(currentMusicIndex % int(musicNameVec.size()))]);
+    currentMusicName.setString(musicNameVec[abs(currentMusicIndex % int(musicNameVec.size()))]);
+
+    menuMusic.setVolume(musicVolume);
+    menuMusic.play();
+    is_MenuMusic_Paused = false;
 }

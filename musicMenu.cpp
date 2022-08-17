@@ -90,17 +90,12 @@ void MusicMenu::initMenu(){
     //muteSprite.setPosition((6 * menuPtr->menuScreen->getSize().x) / 8, (1 * menuPtr->menuScreen->getSize().y) / 2);
 
     //Text
-    if (!font.loadFromFile("fonts/ARLRDBD.TTF")) {
-        menuPtr->menuScreen->close();
-    }
+    menuPtr->currentMusicName.setFont(menuPtr->menuFont2);
+    menuPtr->currentMusicName.setPosition((.1 * radioSprite.getGlobalBounds().width) + radioSprite.getPosition().x, radioSprite.getPosition().y + (radioSprite.getGlobalBounds().height / 2));
+    menuPtr->currentMusicName.setScale(.65, .65);
+    menuPtr->currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
 
-    currentMusicName.setFont(font);
-    currentMusicName.setOrigin(currentMusicName.getGlobalBounds().width / 2, currentMusicName.getGlobalBounds().height / 2);
-    currentMusicName.setPosition((.1 * radioSprite.getGlobalBounds().width) + radioSprite.getPosition().x, radioSprite.getPosition().y + (radioSprite.getGlobalBounds().height / 2));
-    currentMusicName.setScale(.65, .65);
-    currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
-
-    musicVolText.setFont(font);
+    musicVolText.setFont(menuPtr->menuFont2);
 }
 
 void MusicMenu::update(){
@@ -129,7 +124,7 @@ void MusicMenu::update(){
                         menuPtr->currentMusicIndex--;
 
                         menuPtr->menuMusic.openFromFile(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
-                        currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+                        menuPtr->currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
 
                         menuPtr->menuMusic.setVolume(menuPtr->musicVolume);
                         menuPtr->menuMusic.play();
@@ -140,8 +135,9 @@ void MusicMenu::update(){
                         menuPtr->menuMusic.stop();
                         menuPtr->currentMusicIndex++;
 
+                        
                         menuPtr->menuMusic.openFromFile(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
-                        currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
+                        menuPtr->currentMusicName.setString(menuPtr->musicNameVec[abs(menuPtr->currentMusicIndex % int(menuPtr->musicNameVec.size()))]);
 
                         menuPtr->menuMusic.setVolume(menuPtr->musicVolume);
                         menuPtr->menuMusic.play();
@@ -178,7 +174,7 @@ void MusicMenu::update(){
         };
     }
     
-    //std::cout << faderKnobSprite.getPosition().x << ", " << faderKnobSprite.getPosition().y << std::endl;
+    if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
 }
 
 void MusicMenu::render(){
@@ -190,7 +186,7 @@ void MusicMenu::render(){
     menuPtr->menuScreen->draw(faderKnobSprite);
 
     menuPtr->menuScreen->draw(radioSprite);
-    menuPtr->menuScreen->draw(currentMusicName);
+    menuPtr->menuScreen->draw(menuPtr->currentMusicName);
     menuPtr->menuScreen->draw(radioScreenSprite);
     menuPtr->menuScreen->draw(seekForward);
     menuPtr->menuScreen->draw(muteButtonSprite);
