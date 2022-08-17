@@ -253,7 +253,7 @@ void ArcheryGameEngine::update(){
 
 
 
-
+    if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
 }
 
 void ArcheryGameEngine::render(){
