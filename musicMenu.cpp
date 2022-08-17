@@ -159,7 +159,7 @@ void MusicMenu::update(){
                     menuPtr->musicVolume = (((y_pos - 500) / 3) * -1); //we want out of 100 for volume, and divide by 3 as fader track is 300 pixels 
                     menuPtr->menuMusic.setVolume(menuPtr->musicVolume);
 
-                    musicVolText.setPosition(faderKnobSprite.getPosition().x, faderKnobSprite.getPosition().y - 20);
+                    musicVolText.setPosition(faderKnobSprite.getPosition().x + 30, faderKnobSprite.getPosition().y - 20);
 
                     std::stringstream os;
                     os << std::fixed << std::setprecision(0) << abs(menuPtr->musicVolume);
