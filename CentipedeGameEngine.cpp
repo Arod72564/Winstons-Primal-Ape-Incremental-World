@@ -95,8 +95,9 @@ void CentipedeGameEngine::initTextures() {
     pauseText.setCharacterSize(40);
     pauseText.setFillColor(sf::Color::White);
     pauseText.setStyle(sf::Text::Bold || sf::Text::Underlined);
-    pauseText.setPosition(gameWindow->getSize().x / 2, gameWindow->getSize().y / 2);
     pauseText.setOrigin(pauseText.getLocalBounds().width / 2, pauseText.getLocalBounds().height / 2);
+    pauseText.setPosition(gameWindow->getSize().x / 2, gameWindow->getSize().y / 2);
+    
     
     //Win Text
     winText.setFont(pauseFont);
@@ -104,7 +105,6 @@ void CentipedeGameEngine::initTextures() {
     winText.setCharacterSize(30);
     winText.setFillColor(sf::Color::White);
     winText.setStyle(sf::Text::Bold || sf::Text::Underlined);
-    winText.setPosition(120, gameWindow->getSize().y / 2.f);
     
     //Pacifist win Text
     pacifistWinText.setFont(pauseFont);
@@ -112,7 +112,6 @@ void CentipedeGameEngine::initTextures() {
     pacifistWinText.setCharacterSize(30);
     pacifistWinText.setFillColor(sf::Color::White);
     pacifistWinText.setStyle(sf::Text::Bold || sf::Text::Underlined);
-    pacifistWinText.setPosition(10, gameWindow->getSize().y / 2);
 
     std::cout << "Textures sucessfully loaded.\n";
 
@@ -263,6 +262,9 @@ void CentipedeGameEngine::update(){
             std::stringstream os;
             os << std::fixed << std::setprecision(2) << sessionPoints;
             winText.setString("You died. " + os.str() + " points added.\nLMB to continue." );
+
+            winText.setOrigin(winText.getLocalBounds().width / 2, winText.getLocalBounds().height / 2);
+            winText.setPosition(gameWindow->getSize().x / 2, gameWindow->getSize().y / 2);
             displayWinScreen(winText);
             menuPtr->playerPoints += sessionPoints * 0.85;
             menuPtr->currentGameType = NULL_GAME;
@@ -333,6 +335,8 @@ void CentipedeGameEngine::update(){
         std::stringstream os;
         os << std::fixed << std::setprecision(2) << sessionPoints;
         winText.setString("Game won. " + os.str() + " points added.\nLMB to continue." );
+        winText.setOrigin(winText.getLocalBounds().width / 2, winText.getLocalBounds().height / 2);
+        winText.setPosition(gameWindow->getSize().x / 2, gameWindow->getSize().y / 2);
         displayWinScreen(winText);
         menuPtr->playerPoints += sessionPoints;
         menuPtr->currentGameType = NULL_GAME;
@@ -346,6 +350,8 @@ void CentipedeGameEngine::update(){
         std::stringstream os;
         os << std::fixed << std::setprecision(2) << sessionPoints;
         pacifistWinText.setString("Game won Mahatma Ghandi Style.\n" + os.str() + " points added.\nLMB to continue." );
+        pacifistWinText.setOrigin(pacifistWinText.getLocalBounds().width / 2, pacifistWinText.getLocalBounds().height / 2);
+        pacifistWinText.setPosition(gameWindow->getSize().x / 2, gameWindow->getSize().y / 2);
         displayWinScreen(pacifistWinText);
         menuPtr->playerPoints += sessionPoints;
         menuPtr->currentGameType = NULL_GAME;
