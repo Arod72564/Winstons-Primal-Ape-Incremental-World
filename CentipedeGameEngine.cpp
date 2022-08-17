@@ -84,7 +84,7 @@ void CentipedeGameEngine::initTextures() {
         gameWindow->close();
     }
 
-    if(!pauseMusic.openFromFile("Music/WinstonPauseMenuMusic.wav")){
+    if(!pauseMusic.openFromFile("Music/WinstonPauseMenuMusic.ogg")){
         std::cout << "Error loading pause music.\n";
     }
 
@@ -351,6 +351,8 @@ void CentipedeGameEngine::update(){
         menuPtr->currentGameType = NULL_GAME;
         return;
     }
+
+    if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
 }
 
 void CentipedeGameEngine::render(){

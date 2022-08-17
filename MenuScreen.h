@@ -40,6 +40,8 @@ class MenuScreen {
         sf::Text centipedeMultiplierText;
         sf::Text centipedeMultiplierCostText;
 
+        sf::Text currentMusicName;
+
         sf::Music menuMusic;
         std::vector<std::string> musicNameVec;
 
@@ -81,6 +83,7 @@ class MenuScreen {
         void render();
         bool isWindowOpen();
         void showShopMenu();
+        void nextSong();
 };
 
 #endif
