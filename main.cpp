@@ -106,6 +106,8 @@ int main() {
 
                 delete musicMenu;
             }
+
+            if (menu->menuMusic.getStatus() == sf::SoundSource::Stopped) { menu->nextSong(); }
         }
     }
 
