@@ -17,6 +17,7 @@ struct Archer {
 
 struct Arrow {
     static constexpr float EPSILON = 1e-7f;
+    int frame_time = 0;
     // sf::Texture arrowTexture;
     sf::Sprite arrowSprite;
 
@@ -26,7 +27,7 @@ struct Arrow {
     Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocity);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
-    BeamCollisionType updateMovement(bool &isArrowPresent, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer enemy);
+    BeamCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer self, Archer enemy);
 };
 
 class ArcheryGameEngine {
@@ -59,7 +60,7 @@ class ArcheryGameEngine {
         const double MAX_ARROW_POWER = 10.0; // Maximum velocity in pixels.
         const double LINE_LENGTH = 250.0;
         const int PLAYER_DIST = 2000;
-        const int WIND_CHANGE_FREQ = 20;
+        const int WIND_CHANGE_FREQ = 3;
         int player_dist_deviation;
         int turn_counter = 0;
         int pan_counter;

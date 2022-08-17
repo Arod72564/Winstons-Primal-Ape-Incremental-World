@@ -24,7 +24,7 @@ int main() {
     while (splashScreen->is_splash_displayed) {
         splashScreen->update();
         splashScreen->render();
-        
+
         if (!mainWindow->isOpen()) {
             delete splashScreen;
             delete mainWindow;
@@ -32,7 +32,7 @@ int main() {
         }
     }
     delete splashScreen;
-    
+
 
     // Initialize Menu screen
     MenuScreen* menu = new MenuScreen(mainWindow);
