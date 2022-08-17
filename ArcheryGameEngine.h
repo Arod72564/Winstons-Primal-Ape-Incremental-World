@@ -60,6 +60,7 @@ class ArcheryGameEngine {
         const double LINE_LENGTH = 250.0;
         const int PLAYER_DIST = 2000;
         const int WIND_CHANGE_FREQ = 20;
+        int player_dist_deviation;
         int turn_counter = 0;
         int pan_counter;
         int platform3_move = 5;
@@ -89,6 +90,8 @@ class ArcheryGameEngine {
         ArcheryGameEngine(MenuScreen* menu);
         virtual ~ArcheryGameEngine();
 
+
+        std::complex<float> calculateEnemyV();
         void calculateLine(Arrow* const arrow);
 
         void initGame();

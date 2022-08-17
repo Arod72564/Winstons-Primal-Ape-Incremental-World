@@ -40,7 +40,9 @@ void ArcheryGameEngine::initGame(){
     std::srand(std::time(nullptr));
     norm_dist = std::normal_distribution<float>(1.f, 0.1f);
 
-    drag = std::polar<float>( ((rand() % 301 + 200) / 10000.f), ((rand() % 101) / 100.f) * 2 * M_PI );
+    drag = std::polar<float>( ((rand() % 301 + 200) / 10000.f), ((rand() % 361) * M_PI / 180 ));
+    // drag = std::complex<float> (-0.005f,0.005f);
+    // std::cout << drag << std::endl;
     // drag = std::polar<float>(0.02, M_PI);
 
     //Text
@@ -78,11 +80,12 @@ void ArcheryGameEngine::initGame(){
     archer1.archerArmSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + (archer1.archerTorsoSprite.getGlobalBounds().width / 2), archer1.archerTorsoSprite.getPosition().y + (archer1.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
 
     // Archer player2;
+    player_dist_deviation = (rand() % 200 - 100);
     if (!archer2.archerTexture.loadFromFile("images/Archery/PlayerLeft.png")) {
         menuPtr->menuScreen->close();
     }
     archer2.archerSprite.setTexture(archer2.archerTexture);
-    archer2.archerSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST, archer1.archerTorsoSprite.getPosition().y);
+    archer2.archerSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST + player_dist_deviation, archer1.archerTorsoSprite.getPosition().y);
 
     //Arrows
     if (!arrowTexture.loadFromFile("images/Archery/temp_arrow.png")) { // Need to add this image
@@ -101,7 +104,7 @@ void ArcheryGameEngine::initGame(){
     platform2.setPosition(archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y + 0.9 * archer2.archerSprite.getGlobalBounds().height);
 
     platform3.setTexture(platformTexture);
-    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2 + (rand() % 200 - 100), 400);
+    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2, 400);
     platform3.setRotation(-90);
     platform3.setScale(2.5, 1);
     // platform3.setPosition(archer1.archerTorsoSprite.getPosition().x, 400);  // For testing
@@ -142,16 +145,8 @@ void ArcheryGameEngine::update(){
         float temp_deg_change = ((rand() % 21) - 10) * M_PI / 180.f;
         wind_deg_increment = temp_deg_change / WIND_CHANGE_FREQ;
         drag *= std::polar<float>( norm_dist(generator), 0.f );
-        // drag *= std::polar<float>(1.f, 1.f * M_PI / 180.f);
-        // wind_indicator.setScale(0.1, 0.1);
         wind_indicator.setRotation( std::arg(drag) * 180 / M_PI );
-        std::cout << "(" << std::abs(drag) << ", " << std::arg(drag) * 180 / M_PI << ")\n";
-
         if (std::abs(drag) < 1e-5) drag *= 1 / std::abs(drag) * 0.002;
-        // std::cout << norm_dist(generator) << std::endl;
-
-        // turn_counter = (turn_counter + 1) % 3;
-        // std::cout << std::arg(drag) * 180 / M_PI << std::endl;
     }
     turn_counter = (turn_counter + 1) % WIND_CHANGE_FREQ;
     drag *= std::polar<float>(1.f, wind_deg_increment);
@@ -188,11 +183,13 @@ void ArcheryGameEngine::update(){
         }
     } else if (!is_player_turn) {
         // std::cout << "Making enemy arrow\n";
-        arrow1 = new Arrow( arrowTexture, archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y, std::polar( float((rand() % 101) / 100.f * MAX_ARROW_POWER), float((rand() % 26 + 50) / 100.f * 2.f * M_PI) ) );
+        // arrow1 = new Arrow( arrowTexture, archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y, std::polar( float((rand() % 101) / 100.f * MAX_ARROW_POWER), float((rand() % 26 + 50) / 100.f * 2.f * M_PI) ) );
+        arrow1 = new Arrow( arrowTexture, archer2.archerSprite.getPosition().x, archer2.archerSprite.getPosition().y, calculateEnemyV());
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
         // std::cout << arrow1->arrow_velocity << " = (" << std::abs(arrow1->arrow_velocity) << ", " << std::arg(arrow1->arrow_velocity) * 180 / M_PI << ")" << std::endl;
         is_arrow_present = true;
+        // std::cout << "Rect: " << std::real(arrow1->arrow_velocity) << ", " << std::imag(arrow1->arrow_velocity) << std::endl;
         // turn_counter = (turn_counter + 1) % 3;
     }
 
@@ -288,6 +285,22 @@ void ArcheryGameEngine::render(){
     menuPtr->menuScreen->display();
 
 }
+
+std::complex<float> ArcheryGameEngine::calculateEnemyV() {
+    const float G = std::imag(drag) + g;
+    float init_angle;
+    float velocity;
+    if (G / std::real(drag) > 0) {
+        init_angle = (M_PI + std::atan(-1.f * G / std::real(drag)) + 2.f * M_PI) / 2;
+    } else {
+        init_angle = (M_PI + std::atan(-1.f * G / std::real(drag)) + M_PI) / 2;
+    }
+    velocity = std::sqrt(( (PLAYER_DIST + player_dist_deviation - archer1.archerTorsoSprite.getGlobalBounds().width / 2) * G * G) / (G * std::sin(2 * init_angle) + 2 * std::real(drag) * std::sin(init_angle) * std::sin(init_angle)) );
+    if (velocity > MAX_ARROW_POWER) velocity = float(MAX_ARROW_POWER);
+    // std::cout << "Polar: " << velocity << ", " << init_angle << std::endl;
+    return std::polar<float>(velocity , init_angle);
+}
+
 
 void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
     std::complex<double> temp_complex(initial_mouse_pos.x - final_mouse_pos.x, initial_mouse_pos.y - final_mouse_pos.y); // Makes a vector at the origin the same size of the vector correpsonding to intial mouse & mouse movement
