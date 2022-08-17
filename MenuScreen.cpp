@@ -251,7 +251,7 @@ void MenuScreen::initText() {
     
     menuMusic.setVolume(musicVolume);
     menuMusic.setPitch(1);
-    menuMusic.setLoop(true);
+    menuMusic.setLoop(false);
     menuMusic.play();
     std::cout << "Music Sucessfully Initialized.\n";
 }
@@ -424,4 +424,15 @@ void MenuScreen::showShopMenu() {
             }
         }
     }
+}
+
+void MenuScreen::nextSong(){
+    currentMusicIndex++;
+    
+    menuMusic.openFromFile(musicNameVec[abs(currentMusicIndex % int(musicNameVec.size()))]);
+    currentMusicName.setString(musicNameVec[abs(currentMusicIndex % int(musicNameVec.size()))]);
+
+    menuMusic.setVolume(musicVolume);
+    menuMusic.play();
+    is_MenuMusic_Paused = false;
 }

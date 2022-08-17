@@ -351,6 +351,8 @@ void CentipedeGameEngine::update(){
         menuPtr->currentGameType = NULL_GAME;
         return;
     }
+
+    if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
 }
 
 void CentipedeGameEngine::render(){

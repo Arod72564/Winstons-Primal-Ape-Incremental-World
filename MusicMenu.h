@@ -28,7 +28,7 @@ class MusicMenu {
         sf::Sprite muteButtonSprite;
 
         sf::Font font;
-        sf::Text currentMusicName;
+
         sf::Text musicVolText;
 
         sf::Event ev;
