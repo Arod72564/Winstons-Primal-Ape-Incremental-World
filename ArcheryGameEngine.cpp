@@ -297,8 +297,6 @@ std::complex<float> ArcheryGameEngine::calculateEnemyV() {
     }
 
     velocity = std::sqrt(( (PLAYER_DIST + player_dist_deviation - archer1.archerTorsoSprite.getGlobalBounds().width / 2) * G * G) / (G * std::sin(2 * init_angle) - 2 * std::real(drag) * std::sin(init_angle) * std::sin(init_angle)) );
-    // if (velocity > MAX_ARROW_POWER) velocity = float(MAX_ARROW_POWER);
-    // std::cout << "Polar: " << velocity << ", " << init_angle << std::endl;
     return std::polar<float>(velocity , init_angle);
 }
 
