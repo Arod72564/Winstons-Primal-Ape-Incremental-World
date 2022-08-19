@@ -93,10 +93,13 @@ void GameMenu::update(){
             case sf::Event::MouseButtonPressed:
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     if (centipedeGameSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //CentipedeGame Prompt
+                        gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
                         menuPtr->currentGameType = centipedeGame;
                     } else if (dungeonGameSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //DungeonGame Prompt
+                        gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
                         menuPtr->currentGameType = dungeonGame;
                     } else if (archerygameSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //Archery Game Prompt
+                        gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
                         menuPtr->currentGameType = archeryGame;
                     }
                 }
@@ -132,14 +135,16 @@ void GameMenu::update(){
 }
 
 void GameMenu::render(){
-
     menuPtr->menuScreen->setView(*gameView);
-    menuPtr->menuScreen->clear(sf::Color::Black);
 
-    menuPtr->menuScreen->draw(centipedeGameSprite);
-    menuPtr->menuScreen->draw(dungeonGameSprite);
-    menuPtr->menuScreen->draw(archerygameSprite);
+    if (menuPtr->currentGameType == games) {
+        menuPtr->menuScreen->clear(sf::Color::Black);
 
-    menuPtr->menuScreen->display();
+        menuPtr->menuScreen->draw(centipedeGameSprite);
+        menuPtr->menuScreen->draw(dungeonGameSprite);
+        menuPtr->menuScreen->draw(archerygameSprite);
+
+        menuPtr->menuScreen->display();
+    }
 
 }
