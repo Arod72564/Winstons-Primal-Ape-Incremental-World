@@ -1,8 +1,8 @@
 #include "GameMenu.h"
 
 GameMenu::GameMenu(MenuScreen* menu){
-    top = 400;
-    bottom = 3 * 400;
+    top = 400; //middle of screen
+    bottom = 800; //bottom of last game 
     menuPtr = menu;
     gameView = new sf::View(sf::Vector2f(menu->menuScreen->getSize().x/2,menu->menuScreen->getSize().y/2) , sf::Vector2f(menu->menuScreen->getSize().x,menu->menuScreen->getSize().y));
     initMenu();
@@ -105,10 +105,16 @@ void GameMenu::update(){
             case sf::Event::MouseWheelScrolled:   
 
                 if ( ev.mouseWheelScroll.delta < 0) {
-                    gameView->move(0, 30);
+                    gameView->move(0, 20);
+                    
+                    if(gameView->getCenter().y > bottom) { gameView->setCenter(gameView->getCenter().x, bottom); }
+
                 } else if (ev.mouseWheelScroll.delta > 0) {
-                    gameView->move(0, -30);
+                    gameView->move(0, -20);
+                    if(gameView->getCenter().y < top) { gameView->setCenter(gameView->getCenter().x, top); }
+                    
                 }
+
             default:
                 break;
         }
