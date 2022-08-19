@@ -17,20 +17,18 @@ void UpgradeMenu::initMenu(){
     // Centipede Mult Info
     centipedeMultiplierText.setFont(menuPtr->menuFont2);
     centipedeMultiplierText.setString("Centipede Game Multiplier: " + std::to_string(menuPtr->centipedeGameMultiplier));
-    centipedeMultiplierText.setCharacterSize(15);
-    centipedeMultiplierText.setFillColor(sf::Color::White);
+    centipedeMultiplierText.setCharacterSize(25);
+    centipedeMultiplierText.setFillColor(generateColor());
     centipedeMultiplierText.setStyle(sf::Text::Bold);
-    centipedeMultiplierText.setOrigin(centipedeMultiplierText.getLocalBounds().width / 2.f , centipedeMultiplierText.getLocalBounds().height / 2.f);
-    centipedeMultiplierText.setPosition(0,0);
+    centipedeMultiplierText.setPosition(50, 100);
 
     // Centipede Mult Upgrade Text
     centipedeMultiplierCostText.setFont(menuPtr->menuFont2);
     centipedeMultiplierCostText.setString("Upgrade Centipede Multiplier: " + std::to_string(menuPtr->centipedeGameMultCost));
-    centipedeMultiplierCostText.setCharacterSize(15);
-    centipedeMultiplierCostText.setFillColor(sf::Color::White);
+    centipedeMultiplierCostText.setCharacterSize(25);
+    centipedeMultiplierCostText.setFillColor(generateColor());
     centipedeMultiplierCostText.setStyle(sf::Text::Bold);
-    centipedeMultiplierCostText.setOrigin(centipedeMultiplierCostText.getLocalBounds().width / 2, centipedeMultiplierCostText.getLocalBounds().height / 2);
-    centipedeMultiplierCostText.setPosition(0, centipedeMultiplierText.getPosition().y + centipedeMultiplierText.getGlobalBounds().height);
+    centipedeMultiplierCostText.setPosition(50, centipedeMultiplierText.getPosition().y + centipedeMultiplierText.getGlobalBounds().height);
 
 }
 
@@ -81,10 +79,14 @@ void UpgradeMenu::update(){
     os << std::fixed << std::setprecision(2) << menuPtr->centipedeGameMultCost;
     centipedeMultiplierCostText.setString("Upgrade Centipede Multiplier: " + os.str());
     std::stringstream().swap(os);
+
+    centipedeMultiplierCostText.setFillColor(generateColor());
+    centipedeMultiplierText.setFillColor(generateColor());
 }
 
 
 void UpgradeMenu::render(){
+    menuPtr->menuScreen->setView(*gameView);
     menuPtr->menuScreen->clear(sf::Color::Black);
 
     menuPtr->menuScreen->draw(centipedeMultiplierText);

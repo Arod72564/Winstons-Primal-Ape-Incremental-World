@@ -45,4 +45,10 @@ template<typename T> T clamp(T arg1, T arg2, T arg3) {
     }
 }
 
+sf::Color generateColor() {
+    srand (time(NULL));
+    
+    return sf::Color(rand() % 255 + 1,rand() % 255 + 1,rand() % 255 + 1,255);
+}
+
 #endif

@@ -18,8 +18,7 @@ class GameMenu {
         sf::Sprite archerygameSprite;
         sf::Sprite centipedeGameMult_Sprite;
 
-        sf::Text centipedeMultiplierText;
-        sf::Text centipedeMultiplierCostText;
+
 
         std::stringstream os;
 

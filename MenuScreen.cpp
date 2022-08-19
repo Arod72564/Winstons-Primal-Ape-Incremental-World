@@ -132,11 +132,13 @@ void MenuScreen::initText() {
 
     //Game Menu
     gameMenuSprite.setTexture(gameMenuTexture);
-    gameMenuSprite.setPosition(0,200);
+    gameMenuSprite.setOrigin(gameMenuSprite.getGlobalBounds().width / 2, 0);
+    gameMenuSprite.setPosition(.25 * menuScreen->getSize().x ,25);
     gameMenuSprite.setScale(0.6, 0.6);
 
     upgradeMenuSprite.setTexture(upgradeMenuTexture);
-    upgradeMenuSprite.setPosition(0, gameMenuSprite.getPosition().y + gameMenuSprite.getGlobalBounds().height);
+    upgradeMenuSprite.setOrigin(upgradeMenuSprite.getGlobalBounds().width / 2, 0);
+    upgradeMenuSprite.setPosition(.75 * menuScreen->getSize().x, 25);
     upgradeMenuSprite.setScale(0.6, 0.6);
 
     std::cout << "Sprites Sucessfully Initialized.\n";
@@ -160,12 +162,12 @@ void MenuScreen::initText() {
     std::cout << "Initializing Text... ";
 
     //Centipede Game Text
-    centipedeGameText.setFont(menuFont2);
-    centipedeGameText.setString("Buy Centipede Game: 100");
-    centipedeGameText.setCharacterSize(30);
-    centipedeGameText.setFillColor(sf::Color::Blue);
-    centipedeGameText.setStyle(sf::Text::Bold);
-    centipedeGameText.setPosition( (menuScreen->getSize().x / 2) - (centipedeGameText.getLocalBounds().width / 2), 0);
+    GameText.setFont(menuFont2);
+    GameText.setString("Buy Centipede Game: 100");
+    GameText.setCharacterSize(30);
+    GameText.setFillColor(sf::Color::Blue);
+    GameText.setStyle(sf::Text::Bold);
+    GameText.setPosition( (menuScreen->getSize().x / 2) - (GameText.getLocalBounds().width / 2), 0);
 
     // Player Points Text
     pointsText.setFont(menuFont2);
