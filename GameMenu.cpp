@@ -1,29 +1,32 @@
 #include "GameMenu.h"
 
 GameMenu::GameMenu(MenuScreen* menu){
+    top = 400;
+    bottom = 3 * 400;
     menuPtr = menu;
+    gameView = new sf::View(sf::Vector2f(menu->menuScreen->getSize().x/2,menu->menuScreen->getSize().y/2) , sf::Vector2f(menu->menuScreen->getSize().x,menu->menuScreen->getSize().y));
     initMenu();
 
 }
 
 GameMenu::~GameMenu(){
-
+    delete gameView;
 }
 
 void GameMenu::initMenu() {
 
     //Textures
-    if (!dungeonGameTexture.loadFromFile("images/MenuScreen/PUZZLEDUNGEON.png")) {
+    if (!dungeonGameTexture.loadFromFile("images/GameMenu/PuzzleDungeon.png")) {
         std::cout << "Error loading dungeon game texture.\n";
         menuPtr->menuScreen->close();
     }
-
-    if (!ArcheryGameTexture.loadFromFile("images/MenuScreen/ARCHERYGAME.png")) {
+  
+    if (!ArcheryGameTexture.loadFromFile("images/GameMenu/ArcheryGame.png")) {
         std::cout << "Error loading archery game texture.\n";
         menuPtr->menuScreen->close();
     }
 
-    if (!centipedeGameTexture.loadFromFile("images/MenuScreen/CENTIPEDEGAME.png")) {
+    if (!centipedeGameTexture.loadFromFile("images/GameMenu/CentipedeGame.png")) {
         std::cout << "Error loading centipede game texture.\n";
         menuPtr->menuScreen->close();
     }
@@ -37,18 +40,15 @@ void GameMenu::initMenu() {
 
     //Centipede Game
     centipedeGameSprite.setTexture(centipedeGameTexture);
-    centipedeGameSprite.setPosition(0, 50);
-    centipedeGameSprite.setScale(0.6, 0.6);
+    centipedeGameSprite.setPosition(0, 0);
 
     //Dungeon game
     dungeonGameSprite.setTexture(dungeonGameTexture);
     dungeonGameSprite.setPosition(centipedeGameSprite.getPosition().x,centipedeGameSprite.getPosition().y + centipedeGameSprite.getGlobalBounds().height);
-    dungeonGameSprite.setScale(0.32, 0.32);
 
     //Archery Game
     archerygameSprite.setTexture(ArcheryGameTexture);
     archerygameSprite.setPosition(dungeonGameSprite.getPosition().x, dungeonGameSprite.getPosition().y + dungeonGameSprite.getGlobalBounds().height);
-    archerygameSprite.setScale(0.5, 0.5);
 
 
 
@@ -86,6 +86,7 @@ void GameMenu::update(){
 
         switch(ev.type) {
             case sf::Event::Closed:
+                gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
                 menuPtr->currentGameType = NULL_GAME;
                 return;
 
@@ -100,6 +101,14 @@ void GameMenu::update(){
                     }
                 }
                 break;
+
+            case sf::Event::MouseWheelScrolled:   
+
+                if ( ev.mouseWheelScroll.delta < 0) {
+                    gameView->move(0, 30);
+                } else if (ev.mouseWheelScroll.delta > 0) {
+                    gameView->move(0, -30);
+                }
             default:
                 break;
         }
@@ -118,6 +127,7 @@ void GameMenu::update(){
 
 void GameMenu::render(){
 
+    menuPtr->menuScreen->setView(*gameView);
     menuPtr->menuScreen->clear(sf::Color::Black);
 
     menuPtr->menuScreen->draw(centipedeGameSprite);

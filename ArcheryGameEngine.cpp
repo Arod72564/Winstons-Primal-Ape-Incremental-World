@@ -44,8 +44,8 @@ ArcheryGameEngine::ArcheryGameEngine(MenuScreen* menu){
 }
 
 ArcheryGameEngine::~ArcheryGameEngine(){
-    gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
     delete gameView;
+
 }
 
 void ArcheryGameEngine::initGame(){

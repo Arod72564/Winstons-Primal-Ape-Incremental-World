@@ -7,6 +7,7 @@
 class GameMenu {
     public:
         MenuScreen* menuPtr;
+        sf::View* gameView;
         sf::Texture centipedeGameTexture;
         sf::Texture dungeonGameTexture;
         sf::Texture ArcheryGameTexture;
@@ -23,6 +24,8 @@ class GameMenu {
         std::stringstream os;
 
         sf::Event ev;
+
+        int top, bottom;
 
         GameMenu(MenuScreen* menu);
         virtual ~GameMenu();
