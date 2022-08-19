@@ -18,11 +18,13 @@ class MenuScreen {
         sf::Texture backgroundTexture2;
         sf::Texture backgroundTexture3;
         sf::Texture gameMenuTexture;
+        sf::Texture upgradeMenuTexture;
 
         sf::Sprite backgroundSprite;
         sf::Sprite clickBoxSprite;
         sf::Sprite clickUpgrade1_Sprite;
         sf::Sprite clickUpgrade2_Sprite;
+        sf::Sprite upgradeMenuSprite;
 
         sf::Sprite muteButtonSprite;
         sf::Sprite gameMenuSprite;

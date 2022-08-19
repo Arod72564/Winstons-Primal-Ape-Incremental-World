@@ -362,6 +362,11 @@ void CentipedeGameEngine::update(){
 }
 
 void CentipedeGameEngine::render(){
+
+    if (!menuPtr->currentGameType == centipedeGame) {
+        return;
+    }
+
     // Clear Screen
     gameWindow->clear(sf::Color::Black);
 

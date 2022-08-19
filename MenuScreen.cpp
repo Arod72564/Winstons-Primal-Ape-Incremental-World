@@ -98,6 +98,10 @@ void MenuScreen::initText() {
         menuScreen->close();
     }
 
+    if (!upgradeMenuTexture.loadFromFile("images/MenuScreen/UPGRADES.png")) {
+        menuScreen->close();
+    }
+
     std::cout << "Textures Sucessfully Initialized.\n";
 
         //SPRITES
@@ -130,6 +134,10 @@ void MenuScreen::initText() {
     gameMenuSprite.setTexture(gameMenuTexture);
     gameMenuSprite.setPosition(0,200);
     gameMenuSprite.setScale(0.6, 0.6);
+
+    upgradeMenuSprite.setTexture(upgradeMenuTexture);
+    upgradeMenuSprite.setPosition(0, gameMenuSprite.getPosition().y + gameMenuSprite.getGlobalBounds().height);
+    upgradeMenuSprite.setScale(0.6, 0.6);
 
     std::cout << "Sprites Sucessfully Initialized.\n";
 
@@ -259,8 +267,10 @@ void MenuScreen::update() {
                         }
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
                         currentGameType = music;
-                    } else if (gameMenuSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) {
+                    } else if (gameMenuSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Game menu
                         currentGameType = games;
+                    } else if (upgradeMenuSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Game menu
+                        currentGameType = upgrades;
                     }
                 break;
 
@@ -329,24 +339,8 @@ void MenuScreen::render() {
 
     menuScreen->draw(muteButtonSprite);
 
-    //Centipede Game
-    
-    if (!is_CentipedeGame_Unlocked) {
-        menuScreen->draw(centipedeGameText);
-    } else {
-        //menuScreen->draw(centipedeGameSprite);
-        // menuScreen->draw(centipedeMultiplierText);
-        // menuScreen->draw(centipedeMultiplierCostText);
-        // menuScreen->draw(centipedeGameMult_Sprite);
-    }
-
-    // //Dungeon game
-    // menuScreen->draw(dungeonGameSprite);
-
-    // // Archery Game
-    // menuScreen->draw(archerygameSprite);
-
     menuScreen->draw(gameMenuSprite);
+    menuScreen->draw(upgradeMenuSprite);
 
     // Display menu screen
     menuScreen->display();

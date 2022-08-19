@@ -12,6 +12,7 @@
 #include "SplashScreen.cpp"
 #include "MusicMenu.cpp"
 #include "GameMenu.cpp"
+#include "UpgradeMenu.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -44,6 +45,19 @@ int main() {
             menu->update();
             menu->render();
 
+
+            if (menu->currentGameType == upgrades) { //UPGRADE MENU
+                UpgradeMenu* upgradeMenu = new UpgradeMenu(menu);
+
+                while (menu->currentGameType == upgrades) {
+
+                    upgradeMenu->update();
+
+                    upgradeMenu->render();
+                }
+
+                delete upgradeMenu;
+            }    
 
             if (menu->currentGameType == games) { //GAME SELECTION
                 GameMenu* gameMenu = new GameMenu(menu);
