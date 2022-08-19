@@ -74,11 +74,6 @@ void MenuScreen::initText() {
         menuScreen->close();
     }
 
-    if (!centipedeGameMult_Texture.loadFromFile("images/MenuScreen/CentipedeGameMult.png")) {
-        std::cout << "Error loading centipede mult texture.\n";
-        menuScreen->close();
-    }
-
     if (!muteButtonTexture.loadFromFile("images/MenuScreen/MuteButton.png")) {
         std::cout << "Error loading mute button texture.\n";
         menuScreen->close();
@@ -99,21 +94,9 @@ void MenuScreen::initText() {
         menuScreen->close();
     }
 
-    if (!dungeonGameTexture.loadFromFile("images/MenuScreen/PUZZLEDUNGEON.png")) {
-        std::cout << "Error loading dungeon game texture.\n";
+    if (!gameMenuTexture.loadFromFile("images/MenuScreen/GAMES.png")) {
         menuScreen->close();
     }
-
-    if (!ArcheryGameTexture.loadFromFile("images/MenuScreen/ARCHERYGAME.png")) {
-        std::cout << "Error loading archery game texture.\n";
-        menuScreen->close();
-    }
-
-    if (!centipedeGameTexture.loadFromFile("images/MenuScreen/CENTIPEDEGAME.png")) {
-        std::cout << "Error loading centipede game texture.\n";
-        menuScreen->close();
-    }
-
 
     std::cout << "Textures Sucessfully Initialized.\n";
 
@@ -134,11 +117,7 @@ void MenuScreen::initText() {
     clickUpgrade2_Sprite.setPosition(clickUpgrade1_Sprite.getPosition().x + clickUpgrade1_Sprite.getGlobalBounds().width + 10, clickUpgrade1_Sprite.getPosition().y);
     clickUpgrade2_Sprite.setScale(0.15, 0.15);
 
-    //Centipede Game Upgrades
-    centipedeGameMult_Sprite.setTexture(centipedeGameMult_Texture);
-    centipedeGameMult_Sprite.setOrigin(centipedeGameMult_Sprite.getLocalBounds().width / 2, centipedeGameMult_Sprite.getLocalBounds().height / 2);
-    centipedeGameMult_Sprite.setPosition(menuScreen->getSize().x / 2, 80);
-    centipedeGameMult_Sprite.setScale(0.2, 0.2);
+
 
     //Mute Button
     muteButtonSprite.setTexture(muteButtonTexture);
@@ -147,21 +126,10 @@ void MenuScreen::initText() {
     //Background
     backgroundSprite.setTexture(backgroundTexture1);
 
-    //Centipede Game
-    centipedeGameSprite.setTexture(centipedeGameTexture);
-    centipedeGameSprite.setOrigin(centipedeGameSprite.getGlobalBounds().width / 2, 0);
-    centipedeGameSprite.setPosition(menuScreen->getSize().x / 2, 0);
-    centipedeGameSprite.setScale(0.8, 0.8);
-
-    //Dungeon game
-    dungeonGameSprite.setTexture(dungeonGameTexture);
-    dungeonGameSprite.setPosition(0,200);
-    dungeonGameSprite.setScale(0.3, 0.3);
-
-    //Archery Game
-    archerygameSprite.setTexture(ArcheryGameTexture);
-    archerygameSprite.setPosition(dungeonGameSprite.getPosition().x, dungeonGameSprite.getPosition().y + dungeonGameSprite.getGlobalBounds().height);
-    archerygameSprite.setScale(0.4, 0.4);
+    //Game Menu
+    gameMenuSprite.setTexture(gameMenuTexture);
+    gameMenuSprite.setPosition(0,200);
+    gameMenuSprite.setScale(0.6, 0.6);
 
     std::cout << "Sprites Sucessfully Initialized.\n";
 
@@ -218,14 +186,7 @@ void MenuScreen::initText() {
     clickerMultiplierInfo.setOrigin(clickerMultiplierInfo.getLocalBounds().width / 2 , clickerMultiplierInfo.getLocalBounds().height / 2);
     clickerMultiplierInfo.setPosition(clickerRewardInfo.getPosition().x, clickerRewardInfo.getPosition().y + 20);
 
-    // Centipede Mult Info
-    centipedeMultiplierText.setFont(menuFont2);
-    centipedeMultiplierText.setString("Centipede Game Multiplier: " + std::to_string(centipedeGameMultiplier));
-    centipedeMultiplierText.setCharacterSize(15);
-    centipedeMultiplierText.setFillColor(sf::Color::White);
-    centipedeMultiplierText.setStyle(sf::Text::Bold);
-    centipedeMultiplierText.setOrigin(centipedeMultiplierText.getLocalBounds().width / 2.f , centipedeMultiplierText.getLocalBounds().height / 2.f);
-    centipedeMultiplierText.setPosition(clickerMultiplierInfo.getPosition().x, clickerMultiplierInfo.getPosition().y + 20);
+
 
     // Clicker Reward Upgrade Text
     upgradeClickerRewardText.setFont(menuFont2);
@@ -243,14 +204,7 @@ void MenuScreen::initText() {
     upgradeClickerMultiplierText.setStyle(sf::Text::Bold);
     upgradeClickerMultiplierText.setPosition(clickUpgrade2_Sprite.getPosition().x + 50, clickUpgrade2_Sprite.getPosition().y + clickUpgrade2_Sprite.getGlobalBounds().height + 10);
 
-    // Centipede Mult Upgrade Text
-    centipedeMultiplierCostText.setFont(menuFont2);
-    centipedeMultiplierCostText.setString("Upgrade Centipede Multiplier: " + std::to_string(centipedeGameMultCost));
-    centipedeMultiplierCostText.setCharacterSize(15);
-    centipedeMultiplierCostText.setFillColor(sf::Color::White);
-    centipedeMultiplierCostText.setStyle(sf::Text::Bold);
-    centipedeMultiplierCostText.setOrigin(centipedeMultiplierCostText.getLocalBounds().width / 2, centipedeMultiplierCostText.getLocalBounds().height / 2);
-    centipedeMultiplierCostText.setPosition(centipedeGameMult_Sprite.getPosition().x, centipedeGameMult_Sprite.getPosition().y + centipedeGameMult_Sprite.getGlobalBounds().height);
+
 
     std::cout << "Text Sucessfully Initialized.\n";
 
@@ -303,29 +257,13 @@ void MenuScreen::update() {
                             clickerRewardMultiplier += double( (rand() % 10) + 1) / 100;
                             clickerCostMultiplier = clickerCostMultiplier * clickerUpgradePriceScaling;
                         }
-
-                    } else if (centipedeMultiplierCostText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || centipedeGameMult_Sprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //CentipedeGame Mult
-                        if (playerPoints >= centipedeGameMultCost) {
-                            playerPoints -= centipedeGameMultCost;
-                            centipedeGameMultiplier += double( (rand() % 50) + 26) / 100;
-                            centipedeGameMultCost = centipedeGameMultCost * clickerUpgradePriceScaling;
-                        }
-
-                    } else if (centipedeGameText.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen))) || centipedeGameSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //CentipedeGame Prompt
-                        if (is_CentipedeGame_Unlocked == false && playerPoints >= 100.f) {
-                            is_CentipedeGame_Unlocked = true;
-                            playerPoints -= 100.f;
-                        } else if (is_CentipedeGame_Unlocked == true) {
-                            currentGameType = centipedeGame;
-                        }
-                    } else if (dungeonGameSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //DungeonGame Prompt
-                        currentGameType = dungeonGame;
-                    } else if (archerygameSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Archery Game Prompt
-                        currentGameType = archeryGame;
                     } else if (muteButtonSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) { //Pause music button
                         currentGameType = music;
+                    } else if (gameMenuSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) {
+                        currentGameType = games;
                     }
                 break;
+
             case sf::Event::MouseWheelMoved:
                 if (sf::Mouse::Wheel::HorizontalWheel && clickBoxSprite.getGlobalBounds().contains(menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuScreen)))) {
                     playerPoints += clickerReward * clickerRewardMultiplier;
@@ -359,13 +297,7 @@ void MenuScreen::update() {
     clickerMultiplierInfo.setString("Clicker Multiplier: " + os.str());
     std::stringstream().swap(os);
 
-    os << std::fixed << std::setprecision(2) << centipedeGameMultiplier;
-    centipedeMultiplierText.setString("Centipede Game Multiplier: " + os.str());
-    std::stringstream().swap(os);
 
-    os << std::fixed << std::setprecision(2) << centipedeGameMultCost;
-    centipedeMultiplierCostText.setString("Upgrade Centipede Multiplier: " + os.str());
-    std::stringstream().swap(os);
     }
 
     //set background texture
@@ -402,17 +334,19 @@ void MenuScreen::render() {
     if (!is_CentipedeGame_Unlocked) {
         menuScreen->draw(centipedeGameText);
     } else {
-        menuScreen->draw(centipedeGameSprite);
-        menuScreen->draw(centipedeMultiplierText);
-        menuScreen->draw(centipedeMultiplierCostText);
-        menuScreen->draw(centipedeGameMult_Sprite);
+        //menuScreen->draw(centipedeGameSprite);
+        // menuScreen->draw(centipedeMultiplierText);
+        // menuScreen->draw(centipedeMultiplierCostText);
+        // menuScreen->draw(centipedeGameMult_Sprite);
     }
 
-    //Dungeon game
-    menuScreen->draw(dungeonGameSprite);
+    // //Dungeon game
+    // menuScreen->draw(dungeonGameSprite);
 
-    // Archery Game
-    menuScreen->draw(archerygameSprite);
+    // // Archery Game
+    // menuScreen->draw(archerygameSprite);
+
+    menuScreen->draw(gameMenuSprite);
 
     // Display menu screen
     menuScreen->display();

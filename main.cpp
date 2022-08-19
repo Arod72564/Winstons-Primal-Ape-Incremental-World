@@ -11,6 +11,7 @@
 #include "ArcheryGameEngine.cpp"
 #include "SplashScreen.cpp"
 #include "MusicMenu.cpp"
+#include "GameMenu.cpp"
 
 int main() {
     sf::VideoMode videoMode;
@@ -42,6 +43,20 @@ int main() {
         if (menu->currentGameType == NULL_GAME) { //MAIN MENU
             menu->update();
             menu->render();
+
+
+            if (menu->currentGameType == games) { //GAME SELECTION
+                GameMenu* gameMenu = new GameMenu(menu);
+
+                while (menu->currentGameType == games) {
+
+                    gameMenu->update();
+
+                    gameMenu->render();
+                }
+
+                delete gameMenu;
+            }    
 
             if (menu->currentGameType == centipedeGame) { //CENTIPEDE GAME
                 //Initialize centipede game driver class
@@ -94,7 +109,7 @@ int main() {
                 delete archeryGameEngine;
             }
 
-            if (menu->currentGameType == music) {
+            if (menu->currentGameType == music) { // MUSIC MENU
                 MusicMenu* musicMenu = new MusicMenu(menu);
 
                 while (menu->currentGameType == music) {

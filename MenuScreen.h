@@ -12,24 +12,20 @@ class MenuScreen {
         sf::Texture clickBoxTexture;
         sf::Texture clickUpgrade1_Texture;
         sf::Texture clickUpgrade2_Texture;
-        sf::Texture centipedeGameMult_Texture;
+
         sf::Texture muteButtonTexture;
         sf::Texture backgroundTexture1;
         sf::Texture backgroundTexture2;
         sf::Texture backgroundTexture3;
-        sf::Texture centipedeGameTexture;
-        sf::Texture dungeonGameTexture;
-        sf::Texture ArcheryGameTexture;
+        sf::Texture gameMenuTexture;
 
         sf::Sprite backgroundSprite;
         sf::Sprite clickBoxSprite;
         sf::Sprite clickUpgrade1_Sprite;
         sf::Sprite clickUpgrade2_Sprite;
-        sf::Sprite centipedeGameMult_Sprite;
+
         sf::Sprite muteButtonSprite;
-        sf::Sprite centipedeGameSprite;
-        sf::Sprite dungeonGameSprite;
-        sf::Sprite archerygameSprite;
+        sf::Sprite gameMenuSprite;
 
         sf::Font menuFont1;
         sf::Font menuFont2;
@@ -44,8 +40,7 @@ class MenuScreen {
         sf::Text clickerRewardInfo;
         sf::Text clickerMultiplierInfo;
  
-        sf::Text centipedeMultiplierText;
-        sf::Text centipedeMultiplierCostText;
+
 
         sf::Text currentMusicName;
 
