@@ -1,0 +1,10 @@
+#ignore all output files
+*.o
+
+#ignore all txt files
+*.txt
+
+#ignore all exe files
+*.exe
+
+.vscode

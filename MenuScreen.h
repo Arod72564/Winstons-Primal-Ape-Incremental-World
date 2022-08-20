@@ -1,0 +1,91 @@
+#ifndef MENUSCREEN_H
+#define MENUSCREEN_H
+
+#include "headerFiles.h"
+
+class MenuScreen {
+
+    public:
+        sf::VideoMode videoMode;
+        sf::RenderWindow* menuScreen;
+
+        sf::Texture backgroundTexture1;
+        sf::Texture backgroundTexture2;
+        sf::Texture backgroundTexture3;
+        sf::Texture clickBoxTexture;
+        sf::Texture clickUpgrade1_Texture;
+        sf::Texture clickUpgrade2_Texture;
+        sf::Texture muteButtonTexture;
+        sf::Texture gameMenuTexture;
+        sf::Texture upgradeMenuTexture;
+
+        sf::Sprite backgroundSprite;
+        sf::Sprite clickBoxSprite;
+        sf::Sprite clickUpgrade1_Sprite;
+        sf::Sprite clickUpgrade2_Sprite;
+        sf::Sprite muteButtonSprite;
+        sf::Sprite gameMenuSprite;
+        sf::Sprite upgradeMenuSprite;
+
+        sf::Font menuFont1;
+        sf::Font menuFont2;
+
+        sf::Text GameText;
+
+        sf::Text pointsText;
+
+        sf::Text upgradeClickerRewardText;
+        sf::Text upgradeClickerMultiplierText;
+
+        sf::Text clickerRewardInfo;
+        sf::Text clickerMultiplierInfo;
+ 
+
+
+        sf::Text currentMusicName;
+
+        sf::Music menuMusic;
+        std::vector<std::string> musicNameVec;
+
+        sf::SoundBuffer soundBuffer;
+        sf::Sound unlockSound;
+        sf::Event event;
+        GameTypes currentGameType;
+
+        int counter = 0;
+        int currentMusicIndex = 0;
+        float musicVolume = 75.0f;
+
+        //Player Points
+        long double playerPoints;
+
+        //Game Multipliers
+        double centipedeGameMultiplier;
+        double centipedeGameMultCost;
+
+        //Clicker Multipliers
+        double clickerCostReward;
+        double clickerCostMultiplier;
+        double clickerReward;
+        double clickerRewardMultiplier;
+        double clickerUpgradePriceScaling;
+
+        //Unlocks
+            //CentipedeGame Unlocks
+        bool is_CentipedeGame_Unlocked;
+        bool is_CheaterBeam_Unlocked;
+
+        bool is_MenuMusic_Paused;
+
+        MenuScreen(sf::RenderWindow *window);
+        virtual ~MenuScreen();
+        void initMenuScreen(sf::RenderWindow *window);
+        void initText();
+        void update();
+        void render();
+        bool isWindowOpen();
+        void showShopMenu();
+        void nextSong();
+};
+
+#endif
