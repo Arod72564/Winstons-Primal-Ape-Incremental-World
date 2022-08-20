@@ -6,10 +6,10 @@ Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocit
     arrow_velocity = velocity;
 }
 
-BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer self, Archer enemy) {
+BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy) {
     // arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
-    float x_pos = std::real(arrow_velocity) * frame_time + 0.5f * std::real(drag)          * std::pow(frame_time, 2) + self.archerSprite.getPosition().x;
-    float y_pos = std::imag(arrow_velocity) * frame_time + 0.5f * (std::imag(drag) + grav) * std::pow(frame_time, 2) + self.archerSprite.getPosition().y;
+    float x_pos = std::real(arrow_velocity) * frame_time + 0.5f * std::real(drag)          * std::pow(frame_time, 2) + self.getPosition().x;
+    float y_pos = std::imag(arrow_velocity) * frame_time + 0.5f * (std::imag(drag) + grav) * std::pow(frame_time, 2) + self.getPosition().y;
 
     std::complex<float> new_vel = arrow_velocity + std::complex<float>(std::real(drag) * frame_time, (std::imag(drag) + grav) * frame_time);
     // arrowSprite.setPosition( menuPtr->menuScreen->mapPixelToCoords( sf::Vector2i( x_pos, y_pos ) ) );
@@ -24,14 +24,22 @@ BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPt
     if ( !bgSprite.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
+        // delete this;
         return BeamCollisionType::boundary;
-    } else if ( enemy.archerSprite.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
+    } else if ( enemy.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
+        // enemy.arrow_vector.push_back(this);
+        if (enemy.getPosition().x > 400) {
+            arrowSprite.move(enemy.getGlobalBounds().width, 0);
+        } else {
+            arrowSprite.move(-1 * enemy.getGlobalBounds().width, 0);
+        }
         return BeamCollisionType::centipede;
     } else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
+        // delete this;
         return BeamCollisionType::mushroom;
     }
     return BeamCollisionType::nan_;
@@ -45,10 +53,22 @@ ArcheryGameEngine::ArcheryGameEngine(MenuScreen* menu){
 
 ArcheryGameEngine::~ArcheryGameEngine(){
     delete gameView;
+    if (!archer1.arrow_vector.empty()) {
+        for (int i = 0; i < archer1.arrow_vector.size(); ++i) {
+            delete archer1.arrow_vector[i];
+        }
+    }
+
+    if (!archer2.arrow_vector.empty()) {
+        for (int i = 0; i < archer2.arrow_vector.size(); ++i) {
+            delete archer2.arrow_vector[i];
+        }
+    }
 
 }
 
 void ArcheryGameEngine::initGame(){
+    is_player_turn = true;
     // Initializing RNG
     std::srand(std::time(nullptr));
     norm_dist = std::normal_distribution<float>(1.f, 0.1f);
@@ -177,17 +197,28 @@ void ArcheryGameEngine::update(){
 
     if (is_arrow_present) {
         if (is_player_turn) {
-            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer1, archer2);
+            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer1.archerTorsoSprite, archer2.archerSprite);
         } else {
-            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer2, archer1);
+            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer2.archerSprite, archer1.archerTorsoSprite);
         }
 
         gameView->setCenter( arrow1->arrowSprite.getPosition() );
 
+        if (collisionType == BeamCollisionType::centipede) {
+            if (is_player_turn) {
+                archer2.arrow_vector.push_back(arrow1);
+                arrow1 = nullptr;
+            } else {
+                archer1.arrow_vector.push_back(arrow1);
+                arrow1 = nullptr;
+            }
+        }
+
         if (collisionType != BeamCollisionType::nan_) {
             delete arrow1;
+            arrow1 = nullptr;
             collisionType = BeamCollisionType::nan_;
-            is_player_turn = !is_player_turn;
+            is_player_turn = !(is_player_turn);
             if (is_player_turn) {
                 pan(archer1.archerTorsoSprite);
             } else {
@@ -290,13 +321,26 @@ void ArcheryGameEngine::render(){
         menuPtr->menuScreen->draw(arrowDeg);
     }
 
+    if(!archer1.arrow_vector.empty()) {
+        // std::cout << "We've been hit\n";
+        for (int i = 0; i < archer1.arrow_vector.size(); ++i) menuPtr->menuScreen->draw(archer1.arrow_vector[i]->arrowSprite);
+    }
+
+    if(!archer2.arrow_vector.empty()) {
+        // std::cout << "We've been hit\n";
+        for (int i = 0; i < archer2.arrow_vector.size(); ++i) menuPtr->menuScreen->draw(archer2.arrow_vector[i]->arrowSprite);
+    }
+
+    // if(!archer2.arrow_vector.empty()) {
+    //     for (Arrow* ptr : archer2.arrow_vector) menuPtr->menuScreen->draw(ptr->arrowSprite);
+    // }
+
     menuPtr->menuScreen->draw(archer1.archerArmSprite);
     menuPtr->menuScreen->draw(archer1.archerTorsoSprite);
     menuPtr->menuScreen->draw(archer2.archerSprite);
 
-    if (is_arrow_present) {
-        menuPtr->menuScreen->draw(arrow1->arrowSprite);
-    }
+    if (is_arrow_present) menuPtr->menuScreen->draw(arrow1->arrowSprite);
+
 
     menuPtr->menuScreen->draw(compass);
 
@@ -310,7 +354,7 @@ std::complex<float> ArcheryGameEngine::calculateEnemyV() {
     float velocity;
     float sweet_spot_angle = std::atan(G / std::real(drag)) + M_PI;
     // int total_player_dist = archer2.archerSprite.getPosition().x - archer1.archerTorsoSprite.getPosition().x;
-    int total_player_dist = PLAYER_DIST + player_dist_deviation - archer2.archerSprite.getGlobalBounds().width;
+    int total_player_dist = PLAYER_DIST + player_dist_deviation - archer2.archerSprite.getGlobalBounds().width / 2;
     if (G > 0) {
         if (std::real(drag) > 0) {
             init_angle = (M_PI + sweet_spot_angle) / 2;
