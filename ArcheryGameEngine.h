@@ -4,6 +4,10 @@
 #include "headerFiles.h"
 #include "MenuScreen.h"
 
+struct Archer;
+struct Arrow;
+class ArcheryGameEngine;
+
 struct Archer {
     sf::Texture archerTexture;
     sf::Sprite archerSprite;
@@ -13,6 +17,8 @@ struct Archer {
 
     sf::Texture archerTorsoTexture;
     sf::Sprite archerTorsoSprite;
+
+    std::vector<Arrow*> arrow_vector;
 };
 
 struct Arrow {
@@ -27,7 +33,7 @@ struct Arrow {
     Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocity);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
-    BeamCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, Archer self, Archer enemy);
+    BeamCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy);
 };
 
 class ArcheryGameEngine {
