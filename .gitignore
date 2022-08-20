@@ -7,4 +7,6 @@
 #ignore all exe files
 *.exe
 
-.vscode
+*.vscode
+
+*.json
