@@ -79,7 +79,7 @@ void ArcheryGameEngine::initGame(){
     std::srand(std::time(nullptr));
     norm_dist = std::normal_distribution<float>(1.f, 0.1f);
 
-    drag = std::polar<float>( ((rand() % 301 + 200) / 10000.f), ((rand() % 361) * M_PI / 180 ));
+    drag = std::polar<float>( ((rand() % 301 + 100) / 10000.f), ((rand() % 361) * M_PI / 180 ));
     // drag = std::complex<float> (-0.005f,0.005f);
     // drag = std::polar<float>(0.02, M_PI);
 
@@ -102,7 +102,7 @@ void ArcheryGameEngine::initGame(){
     backgroundSprite.setScale(2,2);
 
     //Archers
-    // Archer player1;
+        // Archer player1;
     if (!archer1.archerArmTexture.loadFromFile("images/Archery/PlayerRightArm.png")) {
         menuPtr->menuScreen->close();
     } else if (!archer1.archerTorsoTexture.loadFromFile("images/Archery/PlayerRightTorso.png")) {
@@ -115,7 +115,7 @@ void ArcheryGameEngine::initGame(){
     archer1.archerArmSprite.setOrigin(archer1.archerArmSprite.getGlobalBounds().width / 2, archer1.archerArmSprite.getGlobalBounds().height / 2);
     archer1.archerArmSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + (archer1.archerTorsoSprite.getGlobalBounds().width / 2), archer1.archerTorsoSprite.getPosition().y + (archer1.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
 
-    // Archer player2;
+        // Archer player2;
     player_dist_deviation = (rand() % 200 - 100);
 
     if (!archer2.archerTorsoTexture.loadFromFile("images/Archery/PlayerLeftTorso.png")) {
@@ -134,11 +134,16 @@ void ArcheryGameEngine::initGame(){
     archer2.archerArmSprite.setPosition(archer2.archerTorsoSprite.getPosition().x + (archer2.archerTorsoSprite.getGlobalBounds().width / 2), archer2.archerTorsoSprite.getPosition().y + (archer2.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
 
     //Arrows
-    if (!arrowTexture.loadFromFile("images/Archery/temp_arrow2.png")) { // Need to add this image
+
+    if (!arrowTexture.loadFromFile("images/Archery/temp_arrow2.png")) {
         menuPtr->menuScreen->close();
     }
 
-    if (!arrowTexture2.loadFromFile("images/Archery/temp_arrow3.png")) { // Need to add this image
+    if (!arrowTexture2.loadFromFile("images/Archery/temp_arrow3.png")) {
+        menuPtr->menuScreen->close();
+    }
+
+    if (!arrowTexture3.loadFromFile("images/Archery/temp_arrow.png")) {
         menuPtr->menuScreen->close();
     }
 
@@ -160,7 +165,7 @@ void ArcheryGameEngine::initGame(){
     // platform3.setPosition(archer1.archerTorsoSprite.getPosition().x, 400);  // For testing
 
     //Wind Indicator and Compass
-    wind_indicator.setTexture(arrowTexture);
+    wind_indicator.setTexture(arrowTexture3);
     wind_indicator.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().height / 2);
     wind_indicator.setScale(0.1, 0.1);
     wind_indicator.setPosition(archer1.archerTorsoSprite.getPosition().x - 300, archer1.archerTorsoSprite.getPosition().y - 300);
@@ -168,7 +173,7 @@ void ArcheryGameEngine::initGame(){
     compass = sf::CircleShape(wind_indicator.getGlobalBounds().width / 2, 30);
     compass.setOrigin(wind_indicator.getGlobalBounds().width / 2, wind_indicator.getGlobalBounds().width / 2);
     compass.setPosition(wind_indicator.getPosition());
-    compass.setFillColor(sf::Color::Transparent);
+    compass.setFillColor(sf::Color(135,145,255,150));
     compass.setOutlineThickness(1.f);
 
     //Set initial view to player 1
@@ -327,11 +332,15 @@ void ArcheryGameEngine::render(){
 
     menuPtr->menuScreen->setView(*gameView);
     menuPtr->menuScreen->clear(sf::Color::Black);
+
     menuPtr->menuScreen->draw(backgroundSprite);
-    menuPtr->menuScreen->draw(wind_indicator);
+
     menuPtr->menuScreen->draw(platform1);
     menuPtr->menuScreen->draw(platform2);
     menuPtr->menuScreen->draw(platform3);
+
+    menuPtr->menuScreen->draw(compass);
+    menuPtr->menuScreen->draw(wind_indicator);
 
     if (drawline) {
         menuPtr->menuScreen->draw(line, 2, sf::Lines);
@@ -340,12 +349,10 @@ void ArcheryGameEngine::render(){
     }
 
     if(!archer1.arrow_vector.empty()) {
-        // std::cout << "We've been hit\n";
         for (int i = 0; i < archer1.arrow_vector.size(); ++i) menuPtr->menuScreen->draw(archer1.arrow_vector[i]->arrowSprite);
     }
 
     if(!archer2.arrow_vector.empty()) {
-        // std::cout << "We've been hit\n";
         for (int i = 0; i < archer2.arrow_vector.size(); ++i) menuPtr->menuScreen->draw(archer2.arrow_vector[i]->arrowSprite);
     }
 
@@ -360,8 +367,6 @@ void ArcheryGameEngine::render(){
 
     if (is_arrow_present) menuPtr->menuScreen->draw(arrow1->arrowSprite);
 
-
-    menuPtr->menuScreen->draw(compass);
 
     menuPtr->menuScreen->display();
 

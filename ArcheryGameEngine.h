@@ -42,6 +42,7 @@ class ArcheryGameEngine {
         BeamCollisionType collisionType = nan_;
         sf::Texture arrowTexture;
         sf::Texture arrowTexture2;
+        sf::Texture arrowTexture3;
         sf::Texture platformTexture;
         sf::Texture backgroundTexture;
         sf::Sprite backgroundSprite;
