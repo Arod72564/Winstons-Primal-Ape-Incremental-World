@@ -1,6 +1,7 @@
 #include "ArcheryGameEngine.h"
 
 void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist) {
+    intake_velocity /= 100;
 
     for (int i = 0; i < particles.size() ; i++) {
         blood[i].position = init_position;
@@ -173,7 +174,7 @@ void ArcheryGameEngine::initGame(){
 
 void ArcheryGameEngine::update(){
 
-    //bloodSplat.updateMovement();
+    bloodSplat.updateMovement();
 
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
