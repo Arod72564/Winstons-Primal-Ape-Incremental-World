@@ -8,6 +8,18 @@ struct Archer;
 struct Arrow;
 class ArcheryGameEngine;
 
+struct BloodSplat {
+
+    sf::Vector2f emitter_position;
+    std::complex<float> intit_velocity;
+
+    std::vector<sf::Vector2f> particles[100];
+    sf::VertexArray emitter = sf::VertexArray(sf::Points, 100);
+
+    BloodSplat(std::complex<float> intake_velocity);
+
+};
+
 struct Archer {
 
     sf::Texture archerArmTexture;

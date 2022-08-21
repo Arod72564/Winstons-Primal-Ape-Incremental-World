@@ -1,5 +1,10 @@
 #include "ArcheryGameEngine.h"
 
+BloodSplat::BloodSplat(std::complex<float> intake_velocity) {
+    intit_velocity = intake_velocity;
+
+}
+
 Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocity) {
     arrowSprite.setTexture(texture);
     arrowSprite.setPosition(x, y);
