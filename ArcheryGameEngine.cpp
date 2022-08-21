@@ -34,26 +34,26 @@ Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocit
     arrow_velocity = velocity;
 }
 
-BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy) {
+ArrowCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy) {
     arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
     arrow_velocity += std::complex<float>(std::real(drag), std::imag(drag) + grav);
     arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
 
     if ( !bgSprite.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         isArrowPresent = !isArrowPresent;
-        return BeamCollisionType::boundary;
+        return ArrowCollisionType::background; //background boundary
     } else if ( enemy.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         isArrowPresent = !isArrowPresent;
         arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
         arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
         // frame_time = 0;
-        return BeamCollisionType::centipede;
+        return ArrowCollisionType::archer; //archer
     } else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
-        return BeamCollisionType::mushroom;
+        return ArrowCollisionType::platform; //platform
     }
-    return BeamCollisionType::nan_;
+    return ArrowCollisionType::none;
 }
 
 ArcheryGameEngine::ArcheryGameEngine(MenuScreen* menu){
@@ -108,33 +108,72 @@ void ArcheryGameEngine::initGame(){
 
     //Archers
         // Archer player1;
-    if (!archer1.archerArmTexture.loadFromFile("images/Archery/PlayerRightArm.png")) {
+    if (!archer1.archerTorsoTexture.loadFromFile("images/Archery/PlayerRightTorso3.png")) {
         menuPtr->menuScreen->close();
-    } else if (!archer1.archerTorsoTexture.loadFromFile("images/Archery/PlayerRightTorso.png")) {
+    } else if (!archer1.archerArmTexture.loadFromFile("images/Archery/PlayerRightArm.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!archer1.archerHeadTexture.loadFromFile("images/Archery/PlayerRightHead.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!archer1.archerLegsTexture.loadFromFile("images/Archery/PlayerRightLegs.png")) {
         menuPtr->menuScreen->close();
     }
 
-    archer1.archerArmSprite.setTexture(archer1.archerArmTexture);
+
+    archer1.archerHeadSprite.setTexture(archer1.archerHeadTexture);
+    archer1.archerHeadSprite.setPosition(-1000, 700);
+
     archer1.archerTorsoSprite.setTexture(archer1.archerTorsoTexture);
-    archer1.archerTorsoSprite.setPosition(-1000, 700);
+    archer1.archerTorsoSprite.setPosition(archer1.archerHeadSprite.getPosition().x, archer1.archerHeadSprite.getPosition().y + archer1.archerHeadSprite.getGlobalBounds().height);
+
+    archer1.archerLegsSprite.setTexture(archer1.archerLegsTexture);
+    archer1.archerLegsSprite.setPosition(archer1.archerTorsoSprite.getPosition().x, archer1.archerTorsoSprite.getPosition().y + archer1.archerTorsoSprite.getGlobalBounds().height);
+
+    archer1.archerArmSprite.setTexture(archer1.archerArmTexture);
     archer1.archerArmSprite.setOrigin(archer1.archerArmSprite.getGlobalBounds().width / 2, archer1.archerArmSprite.getGlobalBounds().height / 2);
     archer1.archerArmSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + (archer1.archerTorsoSprite.getGlobalBounds().width / 2), archer1.archerTorsoSprite.getPosition().y + (archer1.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
+
 
         // Archer player2;
     player_dist_deviation = (rand() % 200 - 100);
 
-    if (!archer2.archerTorsoTexture.loadFromFile("images/Archery/PlayerLeftTorso.png")) {
+    if (!archer2.archerTorsoTexture.loadFromFile("images/Archery/PlayerLeftTorso3.png")) {
         menuPtr->menuScreen->close();
     } else if (!archer2.archerArmTexture.loadFromFile("images/Archery/PlayerLeftArm.png")) {
         menuPtr->menuScreen->close();
+    } else if (!archer2.archerHeadTexture.loadFromFile("images/Archery/PlayerLeftHead.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!archer2.archerLegsTexture.loadFromFile("images/Archery/PlayerLeftLegs.png")) {
+        menuPtr->menuScreen->close();
     }
 
+    archer2.archerHeadSprite.setTexture(archer2.archerHeadTexture);
+    archer2.archerHeadSprite.setPosition(archer1.archerHeadSprite.getPosition().x + PLAYER_DIST + player_dist_deviation, archer1.archerHeadSprite.getPosition().y);
+
     archer2.archerTorsoSprite.setTexture(archer2.archerTorsoTexture);
-    archer2.archerTorsoSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST + player_dist_deviation, archer1.archerTorsoSprite.getPosition().y);
+    archer2.archerTorsoSprite.setPosition(archer2.archerHeadSprite.getPosition().x, archer2.archerHeadSprite.getPosition().y + archer2.archerHeadSprite.getGlobalBounds().height);
+
+    archer2.archerLegsSprite.setTexture(archer2.archerLegsTexture);
+    archer2.archerLegsSprite.setPosition(archer2.archerTorsoSprite.getPosition().x, archer2.archerTorsoSprite.getPosition().y + archer2.archerTorsoSprite.getGlobalBounds().height);
 
     archer2.archerArmSprite.setTexture(archer2.archerArmTexture);
     archer2.archerArmSprite.setOrigin(archer2.archerArmSprite.getGlobalBounds().width / 2, archer2.archerArmSprite.getGlobalBounds().height / 2);
     archer2.archerArmSprite.setPosition(archer2.archerTorsoSprite.getPosition().x + (archer2.archerTorsoSprite.getGlobalBounds().width / 2), archer2.archerTorsoSprite.getPosition().y + (archer2.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
+
+    //Platforms
+    if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
+        menuPtr->menuScreen->close();
+    }
+
+    platform1.setTexture(platformTexture);
+    platform1.setPosition(archer1.archerLegsSprite.getPosition().x - 40, archer1.archerLegsSprite.getPosition().y + 0.9 * archer1.archerLegsSprite.getGlobalBounds().height);
+
+    platform2.setTexture(platformTexture);
+    platform2.setPosition(archer2.archerLegsSprite.getPosition().x - 40, archer2.archerLegsSprite.getPosition().y + 0.9 * archer2.archerLegsSprite.getGlobalBounds().height);
+
+    platform3.setTexture(platformTexture);
+    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2, 400);
+    platform3.setRotation(-90);
+    platform3.setScale(2.5, 1);
 
     //Arrows
 
@@ -145,22 +184,6 @@ void ArcheryGameEngine::initGame(){
     } else if (!arrowTexture3.loadFromFile("images/Archery/temp_arrow.png")) {
         menuPtr->menuScreen->close();
     }
-
-    //Platforms
-    if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
-        menuPtr->menuScreen->close();
-    }
-
-    platform1.setTexture(platformTexture);
-    platform1.setPosition(archer1.archerTorsoSprite.getPosition().x - 40, archer1.archerTorsoSprite.getPosition().y + 0.9 * archer1.archerTorsoSprite.getGlobalBounds().height);
-
-    platform2.setTexture(platformTexture);
-    platform2.setPosition(archer2.archerTorsoSprite.getPosition().x, archer2.archerTorsoSprite.getPosition().y + 0.9 * archer2.archerTorsoSprite.getGlobalBounds().height);
-
-    platform3.setTexture(platformTexture);
-    platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2, 400);
-    platform3.setRotation(-90);
-    platform3.setScale(2.5, 1);
 
     //Wind Indicator and Compass
     wind_indicator.setTexture(arrowTexture3);
@@ -225,7 +248,7 @@ void ArcheryGameEngine::update(){
 
         gameView->setCenter( arrow1->arrowSprite.getPosition() );
 
-        if (collisionType == BeamCollisionType::centipede) {
+        if (collisionType == ArrowCollisionType::archer) {
             bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist);
             if (is_player_turn) {
                 archer2.arrow_vector.push_back(arrow1);
@@ -236,10 +259,10 @@ void ArcheryGameEngine::update(){
             }
         }
 
-        if (collisionType != BeamCollisionType::nan_) {
+        if (collisionType != ArrowCollisionType::none) {
             delete arrow1;
             arrow1 = nullptr;
-            collisionType = BeamCollisionType::nan_;
+            collisionType = ArrowCollisionType::none;
             is_player_turn = !(is_player_turn);
             if (is_player_turn) {
                 pan(archer1.archerTorsoSprite);
@@ -352,9 +375,14 @@ void ArcheryGameEngine::render(){
     menuPtr->menuScreen->draw(bloodSplat.blood);
 
     menuPtr->menuScreen->draw(archer1.archerArmSprite);
+    menuPtr->menuScreen->draw(archer1.archerHeadSprite);
     menuPtr->menuScreen->draw(archer1.archerTorsoSprite);
+    menuPtr->menuScreen->draw(archer1.archerLegsSprite);
+
     menuPtr->menuScreen->draw(archer2.archerArmSprite);
+    menuPtr->menuScreen->draw(archer2.archerHeadSprite);
     menuPtr->menuScreen->draw(archer2.archerTorsoSprite);
+    menuPtr->menuScreen->draw(archer2.archerLegsSprite);
 
     if (is_arrow_present) menuPtr->menuScreen->draw(arrow1->arrowSprite);
 

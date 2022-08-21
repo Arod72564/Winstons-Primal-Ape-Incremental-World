@@ -16,6 +16,7 @@
 #define _USE_MATH_DEFINES
 
 enum BeamCollisionType {centipede, mushroom, boundary, nan_};
+enum ArrowCollisionType {archer, platform, background, none};
 enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame, music, games, upgrades};
 
 #include <SFML/Audio.hpp>

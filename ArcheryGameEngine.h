@@ -10,7 +10,7 @@ class ArcheryGameEngine;
 
 struct BloodSplat {
     const float MAX_SPEED = 5.f;
-    const int NUM_OF_PARTS = 1e5;
+    const int NUM_OF_PARTS = 1e3; 
 
     sf::Vector2f emitter_position;
 
@@ -27,8 +27,14 @@ struct Archer {
     sf::Texture archerArmTexture;
     sf::Sprite archerArmSprite;
 
+    sf::Texture archerHeadTexture;
+    sf::Sprite archerHeadSprite;
+
     sf::Texture archerTorsoTexture;
     sf::Sprite archerTorsoSprite;
+
+    sf::Texture archerLegsTexture;
+    sf::Sprite archerLegsSprite;
 
     std::vector<Arrow*> arrow_vector;
 };
@@ -45,7 +51,7 @@ struct Arrow {
     Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocity);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
-    BeamCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy);
+    ArrowCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy);
 };
 
 class ArcheryGameEngine {
@@ -53,7 +59,7 @@ class ArcheryGameEngine {
         MenuScreen* menuPtr;
         Archer archer1, archer2;
         Arrow *arrow1;
-        BeamCollisionType collisionType = nan_;
+        ArrowCollisionType collisionType = none;
         std::stringstream os;
 
         sf::Texture arrowTexture;
