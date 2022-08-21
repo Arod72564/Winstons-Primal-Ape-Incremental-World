@@ -24,28 +24,20 @@ BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPt
     if ( !bgSprite.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
-        // delete this;
         return BeamCollisionType::boundary;
     } else if ( enemy.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         ++frame_time;
         isArrowPresent = !isArrowPresent;
-        // enemy.arrow_vector.push_back(this);
         x_pos = std::real(arrow_velocity) * frame_time + 0.5f * std::real(drag)          * std::pow(frame_time, 2) + self.getPosition().x;
         y_pos = std::imag(arrow_velocity) * frame_time + 0.5f * (std::imag(drag) + grav) * std::pow(frame_time, 2) + self.getPosition().y;
         std::complex<float> new_vel = arrow_velocity + std::complex<float>(std::real(drag) * frame_time, (std::imag(drag) + grav) * frame_time);
         arrowSprite.setPosition(x_pos, y_pos);
         arrowSprite.setRotation(std::arg(new_vel) * 180 / M_PI);
-        // if (enemy.getPosition().x > 400) {
-        //     arrowSprite.move(enemy.getGlobalBounds().width, 0);
-        // } else {
-        //     arrowSprite.move(-1 * enemy.getGlobalBounds().width, 0);
-        // }
         frame_time = 0;
         return BeamCollisionType::centipede;
     } else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
-        // delete this;
         return BeamCollisionType::mushroom;
     }
     return BeamCollisionType::nan_;
@@ -96,6 +88,7 @@ void ArcheryGameEngine::initGame(){
     if (!backgroundTexture.loadFromFile("images/Archery/Background.png")) {
         menuPtr->menuScreen->close();
     }
+
     backgroundSprite.setTexture(backgroundTexture);
     backgroundSprite.setOrigin(backgroundSprite.getGlobalBounds().width / 2, backgroundSprite.getGlobalBounds().height / 2);
     backgroundSprite.setPosition(menuPtr->menuScreen->getSize().x / 2, menuPtr->menuScreen->getSize().y / 2);
@@ -120,9 +113,7 @@ void ArcheryGameEngine::initGame(){
 
     if (!archer2.archerTorsoTexture.loadFromFile("images/Archery/PlayerLeftTorso.png")) {
         menuPtr->menuScreen->close();
-    }
-
-    if (!archer2.archerArmTexture.loadFromFile("images/Archery/PlayerLeftArm.png")) {
+    } else if (!archer2.archerArmTexture.loadFromFile("images/Archery/PlayerLeftArm.png")) {
         menuPtr->menuScreen->close();
     }
 
@@ -137,13 +128,9 @@ void ArcheryGameEngine::initGame(){
 
     if (!arrowTexture.loadFromFile("images/Archery/temp_arrow2.png")) {
         menuPtr->menuScreen->close();
-    }
-
-    if (!arrowTexture2.loadFromFile("images/Archery/temp_arrow3.png")) {
+    } else if (!arrowTexture2.loadFromFile("images/Archery/temp_arrow3.png")) {
         menuPtr->menuScreen->close();
-    }
-
-    if (!arrowTexture3.loadFromFile("images/Archery/temp_arrow.png")) {
+    } else if (!arrowTexture3.loadFromFile("images/Archery/temp_arrow.png")) {
         menuPtr->menuScreen->close();
     }
 
@@ -162,7 +149,6 @@ void ArcheryGameEngine::initGame(){
     platform3.setPosition(archer1.archerTorsoSprite.getPosition().x + PLAYER_DIST / 2, 400);
     platform3.setRotation(-90);
     platform3.setScale(2.5, 1);
-    // platform3.setPosition(archer1.archerTorsoSprite.getPosition().x, 400);  // For testing
 
     //Wind Indicator and Compass
     wind_indicator.setTexture(arrowTexture3);
@@ -179,9 +165,6 @@ void ArcheryGameEngine::initGame(){
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
 
-
-
-
 }
 
 void ArcheryGameEngine::update(){
@@ -194,6 +177,7 @@ void ArcheryGameEngine::update(){
     if (platform3.getPosition().y < 0 - backgroundSprite.getGlobalBounds().height / 4 || platform3.getPosition().y + platform3.getGlobalBounds().height > backgroundSprite.getGlobalBounds().height / 4 + WINDOW_HEIGHT) {
         platform3_move *= -1;
     }
+
     platform3.move(0, platform3_move);
 
 /********************************************** For continuously updating drag
@@ -215,7 +199,6 @@ void ArcheryGameEngine::update(){
         turn_counter = (turn_counter + 1) % WIND_CHANGE_FREQ;
         // std::cout << drag << std::endl;
     }
-
 
     if (is_arrow_present) {
         if (is_player_turn) {
@@ -248,7 +231,6 @@ void ArcheryGameEngine::update(){
             }
             v = std::complex<float>(0.f,0.f);
             is_panning = true;
-            //gameView->setCenter( menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2 );
         }
     } else if (is_panning) {
         if(pan_counter < 100) {
@@ -258,7 +240,6 @@ void ArcheryGameEngine::update(){
             is_panning = false;
         }
     } else if (!is_player_turn) {
-        // arrow1 = new Arrow( arrowTexture, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, std::polar( float((rand() % 101) / 100.f * MAX_ARROW_POWER), float((rand() % 26 + 50) / 100.f * 2.f * M_PI) ) );
         arrow1 = new Arrow( arrowTexture2, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV());
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
@@ -316,14 +297,9 @@ void ArcheryGameEngine::update(){
                     final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
                     calculateLine(arrow1);
                     archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
-                    // std::cout << final_mouse_pos.x << ", " << final_mouse_pos.y << std::endl;
                 }
             }
         }
-    // }
-
-
-
 
     if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
 }
@@ -356,10 +332,6 @@ void ArcheryGameEngine::render(){
         for (int i = 0; i < archer2.arrow_vector.size(); ++i) menuPtr->menuScreen->draw(archer2.arrow_vector[i]->arrowSprite);
     }
 
-    // if(!archer2.arrow_vector.empty()) {
-    //     for (Arrow* ptr : archer2.arrow_vector) menuPtr->menuScreen->draw(ptr->arrowSprite);
-    // }
-
     menuPtr->menuScreen->draw(archer1.archerArmSprite);
     menuPtr->menuScreen->draw(archer1.archerTorsoSprite);
     menuPtr->menuScreen->draw(archer2.archerArmSprite);
@@ -367,9 +339,7 @@ void ArcheryGameEngine::render(){
 
     if (is_arrow_present) menuPtr->menuScreen->draw(arrow1->arrowSprite);
 
-
     menuPtr->menuScreen->display();
-
 }
 
 std::complex<float> ArcheryGameEngine::calculateEnemyV() {
@@ -408,9 +378,16 @@ void ArcheryGameEngine::calculateLine(Arrow* const arrow) {
     }
 
     float temp = (std::abs( temp_complex ) / LINE_LENGTH) * 100;
-    arrowPower.setString(std::to_string(temp));
+
+    os << std::fixed << std::setprecision(2) << temp;
+    arrowPower.setString(os.str());
+    std::stringstream().swap(os);
     arrowPower.setPosition(line[1].position.x, line[1].position.y + 20);
-    arrowDeg.setString( std::to_string( std::arg(std::conj(v)) * 180 / M_PI ) );
+
+    os << std::fixed << std::setprecision(2) << std::arg(std::conj(v)) * 180 / M_PI;
+    arrowDeg.setString(os.str());
+    std::stringstream().swap(os);
+
     v = temp_complex * ((1.0 / LINE_LENGTH) * MAX_ARROW_POWER); // v_f = (v_i / |v_i|) * (|v_i| / LINE_LENGTH * MAX_ARROW_POWER)
 }
 

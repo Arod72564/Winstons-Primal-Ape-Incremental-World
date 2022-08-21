@@ -40,6 +40,8 @@ class ArcheryGameEngine {
         Archer archer1, archer2;
         Arrow *arrow1;
         BeamCollisionType collisionType = nan_;
+        std::stringstream os;
+
         sf::Texture arrowTexture;
         sf::Texture arrowTexture2;
         sf::Texture arrowTexture3;
