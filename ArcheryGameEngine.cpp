@@ -27,6 +27,7 @@ void BloodSplat::updateMovement() {
     for (int i = 0; i < particles.size(); i++) {
         particles[i].y += 0.01f;
         blood[i].position += particles[i];
+
     }
 }
 
@@ -131,6 +132,10 @@ void ArcheryGameEngine::initGame(){
         menuPtr->menuScreen->close();
     } else if (!archer1.archerLegsTexture.loadFromFile("images/Archery/PlayerRightLegs.png")) {
         menuPtr->menuScreen->close();
+    } else if (!archer1.healthBar.loadFromFile("images/Archery/HP.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!archer1.remainingHealth.loadFromFile("images/Archery/MissingHP.png")) {
+        menuPtr->menuScreen->close();
     }
 
 
@@ -147,6 +152,12 @@ void ArcheryGameEngine::initGame(){
     archer1.archerArmSprite.setOrigin(archer1.archerArmSprite.getGlobalBounds().width / 2, archer1.archerArmSprite.getGlobalBounds().height / 2);
     archer1.archerArmSprite.setPosition(archer1.archerTorsoSprite.getPosition().x + (archer1.archerTorsoSprite.getGlobalBounds().width / 2), archer1.archerTorsoSprite.getPosition().y + (archer1.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
 
+    archer1.healthBarSprite.setTexture(archer1.healthBar);
+    archer1.healthBarSprite.setColor(sf::Color(255,0,0,150));
+    archer1.healthBarSprite.setPosition(archer1.archerTorsoSprite.getPosition().x - (archer1.healthBarSprite.getGlobalBounds().width / 2) + 10, archer1.archerHeadSprite.getPosition().y - 30);
+
+    archer1.remainingHealthSprite.setTexture(archer1.remainingHealth);
+    archer1.remainingHealthSprite.setPosition(archer1.archerTorsoSprite.getPosition().x - (archer1.healthBarSprite.getGlobalBounds().width / 2) + 10, archer1.archerHeadSprite.getPosition().y - 30);
 
         // Archer player2;
     player_dist_deviation = (rand() % 200 - 100);
@@ -158,6 +169,10 @@ void ArcheryGameEngine::initGame(){
     } else if (!archer2.archerHeadTexture.loadFromFile("images/Archery/PlayerLeftHead.png")) {
         menuPtr->menuScreen->close();
     } else if (!archer2.archerLegsTexture.loadFromFile("images/Archery/PlayerLeftLegs.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!archer2.healthBar.loadFromFile("images/Archery/HP.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!archer2.remainingHealth.loadFromFile("images/Archery/MissingHP.png")) {
         menuPtr->menuScreen->close();
     }
 
@@ -173,6 +188,14 @@ void ArcheryGameEngine::initGame(){
     archer2.archerArmSprite.setTexture(archer2.archerArmTexture);
     archer2.archerArmSprite.setOrigin(archer2.archerArmSprite.getGlobalBounds().width / 2, archer2.archerArmSprite.getGlobalBounds().height / 2);
     archer2.archerArmSprite.setPosition(archer2.archerTorsoSprite.getPosition().x + (archer2.archerTorsoSprite.getGlobalBounds().width / 2), archer2.archerTorsoSprite.getPosition().y + (archer2.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
+
+    archer2.healthBarSprite.setTexture(archer2.healthBar);
+    archer2.healthBarSprite.setColor(sf::Color(255,0,0,150));
+    archer2.healthBarSprite.setPosition(archer2.archerTorsoSprite.getPosition().x - (archer2.healthBarSprite.getGlobalBounds().width / 2) + 10, archer2.archerHeadSprite.getPosition().y - 30);
+
+    archer2.remainingHealthSprite.setTexture(archer2.remainingHealth);
+    archer2.remainingHealthSprite.setPosition(archer2.archerTorsoSprite.getPosition().x - (archer2.healthBarSprite.getGlobalBounds().width / 2) + 10, archer2.archerHeadSprite.getPosition().y - 30);
+
 
     //Platforms
     if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
@@ -211,6 +234,20 @@ void ArcheryGameEngine::initGame(){
     compass.setPosition(wind_indicator.getPosition());
     compass.setFillColor(sf::Color(135,145,255,150));
     compass.setOutlineThickness(1.f);
+
+    //Win/Lose Screen
+
+    if (!loseScreenTexture.loadFromFile("images/Archery/LostScreen.png")) {
+        menuPtr->menuScreen->close();
+    } else if (!winScreenTexture.loadFromFile("images/Archery/WinScreen.png")) {
+        menuPtr->menuScreen->close();
+    }
+
+    loseScreenSprite.setTexture(loseScreenTexture);
+    loseScreenSprite.setPosition(0,0);
+
+    winScreenSprite.setTexture(winScreenTexture);
+    winScreenSprite.setPosition(0,0);
 
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
@@ -267,27 +304,33 @@ void ArcheryGameEngine::update(){
             bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist, 1E6);
             if (is_player_turn) {
                 archer2.arrow_vector.push_back(arrow1);
+                archer2.health -= 15;
                 arrow1 = nullptr;
             } else {
                 archer1.arrow_vector.push_back(arrow1);
+                archer1.health -= 15;
                 arrow1 = nullptr;
             }
         } else if (collisionType == ArrowCollisionType::archer_torso) {
             bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist, 1E5);
             if (is_player_turn) {
                 archer2.arrow_vector.push_back(arrow1);
+                archer2.health -= 10;
                 arrow1 = nullptr;
             } else {
                 archer1.arrow_vector.push_back(arrow1);
+                archer1.health -= 10;
                 arrow1 = nullptr;
             }
         } else if (collisionType == ArrowCollisionType::archer_legs) {
             bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist, 1E4);
             if (is_player_turn) {
                 archer2.arrow_vector.push_back(arrow1);
+                archer2.health-= 5;
                 arrow1 = nullptr;
             } else {
                 archer1.arrow_vector.push_back(arrow1);
+                archer1.health-= 5;
                 arrow1 = nullptr;
             }
         }
@@ -312,8 +355,7 @@ void ArcheryGameEngine::update(){
         } else {
             is_panning = false;
         }
-    } else if (!is_player_turn) {
-        // Difficulty hardcoded to EASY for now.  Need to implement Options menu to choose difficulty.
+    } else if (!is_player_turn && archer1.health > 0 && archer2.health > 0) {
         arrow1 = new Arrow( arrowTexture2, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV(GameDifficulty::HARD));
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
@@ -321,58 +363,83 @@ void ArcheryGameEngine::update(){
         is_arrow_present = true;
     }
 
-    while (menuPtr->menuScreen->pollEvent(ev)) {
-        is_a_turn = is_arrow_present || is_panning;
-        switch (ev.type) {
+    archer1.remainingHealthSprite.setScale((archer1.health / 100) , 1);
+    archer2.remainingHealthSprite.setScale((archer2.health / 100) , 1);
 
-            case sf::Event::EventType::Closed:
+    if (archer1.health > 0 && archer2.health > 0) {
+        while (menuPtr->menuScreen->pollEvent(ev)) {
+            is_a_turn = is_arrow_present || is_panning;
+            switch (ev.type) {
+
+                case sf::Event::EventType::Closed:
+                    gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
+                    menuPtr->currentGameType = NULL_GAME;
+                    break;
+
+                case sf::Event::MouseButtonReleased:
+                    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
+                        arrow1 = new Arrow(arrowTexture, archer1.archerArmSprite.getPosition().x, archer1.archerArmSprite.getPosition().y, v);
+                        arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
+                        arrow1->arrowSprite.setScale(0.07, 0.04);
+                        turn_counter = (turn_counter + 1) % WIND_CHANGE_FREQ;
+                        is_mouse_first_pressed = false;
+                        is_arrow_present = true;
+                        drawline = false;
+                    }
+                    break;
+
+                case sf::Event::MouseButtonPressed:
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_a_turn) {
+                        // Playing around with click and drag type archery game
+                        initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
+                        v = std::complex<float>(0.f,0.f);
+                        // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
+                        float temp = std::arg(v) * 180 / M_PI;
+                        arrowDeg.setString(std::to_string(temp));
+                        arrowDeg.setPosition(initial_mouse_pos.x, initial_mouse_pos.y - 20);
+
+                        line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
+                        line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
+                        is_mouse_first_pressed = true;
+                        drawline = true;
+                    } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && menuPtr->muteButtonSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
+                        if(menuPtr->is_MenuMusic_Paused){
+                            menuPtr->menuMusic.play();
+                        } else {
+                            menuPtr->menuMusic.pause();
+                        }
+                        menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
+                        }
+                    break;
+
+                case sf::Event::MouseMoved:
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
+                        final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
+                        calculateLine(arrow1);
+                        archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
+                    }
+            }
+        }
+    } else {
+        while (menuPtr->menuScreen->pollEvent(ev)) {
+            switch (ev.type) {
+            case sf::Event::Closed:
+            case sf::Event::MouseButtonPressed:
+            case sf::Event::KeyPressed:
                 gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
                 menuPtr->currentGameType = NULL_GAME;
                 break;
-
-            case sf::Event::MouseButtonReleased:
-                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
-                    arrow1 = new Arrow(arrowTexture, archer1.archerArmSprite.getPosition().x, archer1.archerArmSprite.getPosition().y, v);
-                    arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
-                    arrow1->arrowSprite.setScale(0.07, 0.04);
-                    turn_counter = (turn_counter + 1) % WIND_CHANGE_FREQ;
-                    is_mouse_first_pressed = false;
-                    is_arrow_present = true;
-                    drawline = false;
-                }
+            
+            default:
                 break;
-
-            case sf::Event::MouseButtonPressed:
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !is_mouse_first_pressed && !is_a_turn) {
-                    // Playing around with click and drag type archery game
-                    initial_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
-                    v = std::complex<float>(0.f,0.f);
-                    // Initial - final is calculated to account for the fact that the velocity vector v = -1 * drawn_vector
-                    float temp = std::arg(v) * 180 / M_PI;
-                    arrowDeg.setString(std::to_string(temp));
-                    arrowDeg.setPosition(initial_mouse_pos.x, initial_mouse_pos.y - 20);
-
-                    line[0] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
-                    line[1] = sf::Vertex( sf::Vector2f( initial_mouse_pos.x, initial_mouse_pos.y) );
-                    is_mouse_first_pressed = true;
-                    drawline = true;
-                } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && menuPtr->muteButtonSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) {
-                    if(menuPtr->is_MenuMusic_Paused){
-                        menuPtr->menuMusic.play();
-                    } else {
-                        menuPtr->menuMusic.pause();
-                    }
-                    menuPtr->is_MenuMusic_Paused = !(menuPtr->is_MenuMusic_Paused);
-                    }
-                break;
-
-            case sf::Event::MouseMoved:
-                if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && is_mouse_first_pressed && !is_a_turn) {
-                    final_mouse_pos = menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y));
-                    calculateLine(arrow1);
-                    archer1.archerArmSprite.setRotation(std::arg(v) * 180 / M_PI);
-                }
             }
+        }
+    }
+
+        if (archer1.health <= 0) {
+            loseScreenSprite.setPosition(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(0, 0)));
+        } else if (archer2.health <= 0) {
+            winScreenSprite.setPosition(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(0, 0)));
         }
 
     if (menuPtr->menuMusic.getStatus() == sf::SoundSource::Stopped) { menuPtr->nextSong(); }
@@ -412,13 +479,25 @@ void ArcheryGameEngine::render(){
     menuPtr->menuScreen->draw(archer1.archerHeadSprite);
     menuPtr->menuScreen->draw(archer1.archerTorsoSprite);
     menuPtr->menuScreen->draw(archer1.archerLegsSprite);
+    menuPtr->menuScreen->draw(archer1.healthBarSprite);
+    menuPtr->menuScreen->draw(archer1.remainingHealthSprite);
 
     menuPtr->menuScreen->draw(archer2.archerArmSprite);
     menuPtr->menuScreen->draw(archer2.archerHeadSprite);
     menuPtr->menuScreen->draw(archer2.archerTorsoSprite);
     menuPtr->menuScreen->draw(archer2.archerLegsSprite);
+    menuPtr->menuScreen->draw(archer2.healthBarSprite);
+    menuPtr->menuScreen->draw(archer2.remainingHealthSprite);
+
+
 
     if (is_arrow_present) menuPtr->menuScreen->draw(arrow1->arrowSprite);
+
+    if (archer1.health <= 0) {
+        menuPtr->menuScreen->draw(loseScreenSprite);
+    } else if (archer2.health <= 0) {
+        menuPtr->menuScreen->draw(winScreenSprite);
+    }
 
     menuPtr->menuScreen->display();
 }
@@ -453,6 +532,7 @@ std::complex<float> ArcheryGameEngine::calculateEnemyV(GameDifficulty game_diff)
             // init_angle = (M_PI_2 + M_PI) / 2;
         }
     }
+
     if (game_diff == EASY) {
         std::uniform_real_distribution<float> vel_distribution(-2.f, 2.f);
         vel_offset = vel_distribution(generator);
