@@ -27,14 +27,20 @@ BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPt
         // delete this;
         return BeamCollisionType::boundary;
     } else if ( enemy.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
-        frame_time = 0;
+        ++frame_time;
         isArrowPresent = !isArrowPresent;
         // enemy.arrow_vector.push_back(this);
-        if (enemy.getPosition().x > 400) {
-            arrowSprite.move(enemy.getGlobalBounds().width, 0);
-        } else {
-            arrowSprite.move(-1 * enemy.getGlobalBounds().width, 0);
-        }
+        x_pos = std::real(arrow_velocity) * frame_time + 0.5f * std::real(drag)          * std::pow(frame_time, 2) + self.getPosition().x;
+        y_pos = std::imag(arrow_velocity) * frame_time + 0.5f * (std::imag(drag) + grav) * std::pow(frame_time, 2) + self.getPosition().y;
+        std::complex<float> new_vel = arrow_velocity + std::complex<float>(std::real(drag) * frame_time, (std::imag(drag) + grav) * frame_time);
+        arrowSprite.setPosition(x_pos, y_pos);
+        arrowSprite.setRotation(std::arg(new_vel) * 180 / M_PI);
+        // if (enemy.getPosition().x > 400) {
+        //     arrowSprite.move(enemy.getGlobalBounds().width, 0);
+        // } else {
+        //     arrowSprite.move(-1 * enemy.getGlobalBounds().width, 0);
+        // }
+        frame_time = 0;
         return BeamCollisionType::centipede;
     } else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
         frame_time = 0;
