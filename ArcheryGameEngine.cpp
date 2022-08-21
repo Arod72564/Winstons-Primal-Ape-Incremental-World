@@ -1,20 +1,29 @@
 #include "ArcheryGameEngine.h"
 
 void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist) {
-    intake_velocity /= 100;
+    if (std::real(intake_velocity) < 0) {
+        norm_dist = std::normal_distribution<float>(-0.4f, 0.4f);
+    } else {
+        norm_dist = std::normal_distribution<float>(0.4f, 0.4f);
+    }
 
+    intake_velocity /= 10;
+    float temp_abs;
     for (int i = 0; i < particles.size() ; i++) {
         blood[i].position = init_position;
         blood[i].color = sf::Color::Red;
 
         particles[i].x = intake_velocity.real() + norm_dist(generator);
         particles[i].y = intake_velocity.imag() + norm_dist(generator);
+        temp_abs = std::sqrt( std::pow(particles[i].x, 2) + std::pow(particles[i].y, 2) );
+        if (temp_abs > MAX_SPEED) particles[i] *= 1 / temp_abs * MAX_SPEED;
     }
 
 }
 
 void BloodSplat::updateMovement() {
     for (int i = 0; i < particles.size(); i++) {
+        particles[i].y += 0.01f;
         blood[i].position += particles[i];
     }
 }

@@ -9,11 +9,13 @@ struct Arrow;
 class ArcheryGameEngine;
 
 struct BloodSplat {
+    const float MAX_SPEED = 5.f;
+    const int NUM_OF_PARTS = 10000;
 
     sf::Vector2f emitter_position;
 
-    std::vector<sf::Vector2f> particles = std::vector<sf::Vector2f>(100, sf::Vector2f());
-    sf::VertexArray blood = sf::VertexArray(sf::Points, 100);
+    std::vector<sf::Vector2f> particles = std::vector<sf::Vector2f>(NUM_OF_PARTS, sf::Vector2f());
+    sf::VertexArray blood = sf::VertexArray(sf::Points, NUM_OF_PARTS);
 
     void createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, const std::normal_distribution<float> norm_dist);
     void updateMovement();
