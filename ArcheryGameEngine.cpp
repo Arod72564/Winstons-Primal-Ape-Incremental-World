@@ -27,6 +27,7 @@ void BloodSplat::updateMovement() {
     for (int i = 0; i < particles.size(); i++) {
         particles[i].y += 0.01f;
         blood[i].position += particles[i];
+
     }
 }
 
@@ -354,7 +355,7 @@ void ArcheryGameEngine::update(){
         } else {
             is_panning = false;
         }
-    } else if (!is_player_turn) {
+    } else if (!is_player_turn && archer1.health > 0 && archer2.health > 0) {
         arrow1 = new Arrow( arrowTexture2, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV());
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
@@ -522,6 +523,7 @@ std::complex<float> ArcheryGameEngine::calculateEnemyV() {
         }
     }
     velocity = std::sqrt(( total_player_dist * G * G) / (G * std::sin(2 * init_angle) - 2 * std::real(drag) * std::sin(init_angle) * std::sin(init_angle)) );
+
     return std::polar<float>(velocity , init_angle);
 }
 
