@@ -1,6 +1,8 @@
 #include "ArcheryGameEngine.h"
 
-void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist) {
+void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist, int parts) {
+    NUM_OF_PARTS = parts;
+    
     if (std::real(intake_velocity) < 0) {
         norm_dist = std::normal_distribution<float>(-0.4f, 0.4f);
     } else {
@@ -34,7 +36,7 @@ Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocit
     arrow_velocity = velocity;
 }
 
-ArrowCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy) {
+ArrowCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemyHead, sf::Sprite enemyTorso, sf::Sprite enemyLegs) {
     arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
     arrow_velocity += std::complex<float>(std::real(drag), std::imag(drag) + grav);
     arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
@@ -42,13 +44,26 @@ ArrowCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuP
     if ( !bgSprite.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         isArrowPresent = !isArrowPresent;
         return ArrowCollisionType::background; //background boundary
-    } else if ( enemy.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
+    } else if ( enemyHead.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
         isArrowPresent = !isArrowPresent;
         arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
         arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
         // frame_time = 0;
-        return ArrowCollisionType::archer; //archer
-    } else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
+        return ArrowCollisionType::archer_head; //archer
+    } else if ( enemyTorso.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
+        isArrowPresent = !isArrowPresent;
+        arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
+        arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
+        // frame_time = 0;
+        return ArrowCollisionType::archer_torso; //archer
+    } else if ( enemyLegs.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
+        isArrowPresent = !isArrowPresent;
+        arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
+        arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
+        // frame_time = 0;
+        return ArrowCollisionType::archer_legs; //archer
+    }
+     else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
         frame_time = 0;
         isArrowPresent = !isArrowPresent;
         return ArrowCollisionType::platform; //platform
@@ -241,15 +256,33 @@ void ArcheryGameEngine::update(){
 
     if (is_arrow_present) {
         if (is_player_turn) {
-            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer1.archerTorsoSprite, archer2.archerTorsoSprite);
+            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer1.archerTorsoSprite, archer2.archerHeadSprite, archer2.archerTorsoSprite, archer2.archerLegsSprite);
         } else {
-            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer2.archerTorsoSprite, archer1.archerTorsoSprite);
+            collisionType = arrow1->updateMovement(is_arrow_present, menuPtr, drag, g, backgroundSprite, platform1, platform2, platform3, archer2.archerTorsoSprite, archer1.archerHeadSprite, archer1.archerTorsoSprite, archer1.archerLegsSprite);
         }
 
         gameView->setCenter( arrow1->arrowSprite.getPosition() );
 
-        if (collisionType == ArrowCollisionType::archer) {
-            bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist);
+        if (collisionType == ArrowCollisionType::archer_head) {
+            bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist, 1E6);
+            if (is_player_turn) {
+                archer2.arrow_vector.push_back(arrow1);
+                arrow1 = nullptr;
+            } else {
+                archer1.arrow_vector.push_back(arrow1);
+                arrow1 = nullptr;
+            }
+        } else if (collisionType == ArrowCollisionType::archer_torso) {
+            bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist, 1E5);
+            if (is_player_turn) {
+                archer2.arrow_vector.push_back(arrow1);
+                arrow1 = nullptr;
+            } else {
+                archer1.arrow_vector.push_back(arrow1);
+                arrow1 = nullptr;
+            }
+        } else if (collisionType == ArrowCollisionType::archer_legs) {
+            bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist, 1E4);
             if (is_player_turn) {
                 archer2.arrow_vector.push_back(arrow1);
                 arrow1 = nullptr;

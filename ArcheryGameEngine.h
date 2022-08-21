@@ -10,14 +10,14 @@ class ArcheryGameEngine;
 
 struct BloodSplat {
     const float MAX_SPEED = 5.f;
-    const int NUM_OF_PARTS = 1e3; 
+    int NUM_OF_PARTS = 1e2; 
 
     sf::Vector2f emitter_position;
 
     std::vector<sf::Vector2f> particles = std::vector<sf::Vector2f>(NUM_OF_PARTS, sf::Vector2f());
     sf::VertexArray blood = sf::VertexArray(sf::Points, NUM_OF_PARTS);
 
-    void createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, const std::normal_distribution<float> norm_dist);
+    void createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, const std::normal_distribution<float> norm_dist, int parts);
     void updateMovement();
 
 };
@@ -51,7 +51,7 @@ struct Arrow {
     Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocity);
 
     // Arrow movement.  Might need to refactor to implement arrow collisions.
-    ArrowCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy);
+    ArrowCollisionType updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemyHead, sf::Sprite enemyTorso, sf::Sprite enemyLegs);
 };
 
 class ArcheryGameEngine {
