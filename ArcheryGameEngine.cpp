@@ -134,7 +134,7 @@ void ArcheryGameEngine::initGame(){
     archer2.archerArmSprite.setPosition(archer2.archerTorsoSprite.getPosition().x + (archer2.archerTorsoSprite.getGlobalBounds().width / 2), archer2.archerTorsoSprite.getPosition().y + (archer2.archerTorsoSprite.getGlobalBounds().height / 2) - 15);
 
     //Arrows
-    if (!arrowTexture.loadFromFile("images/Archery/temp_arrow.png")) { // Need to add this image
+    if (!arrowTexture.loadFromFile("images/Archery/temp_arrow2.png")) { // Need to add this image
         menuPtr->menuScreen->close();
     }
 
