@@ -10,7 +10,7 @@ class ArcheryGameEngine;
 
 struct BloodSplat {
     const float MAX_SPEED = 5.f;
-    int NUM_OF_PARTS = 1e2; 
+    int NUM_OF_PARTS = 1e2;
 
     sf::Vector2f emitter_position;
 
@@ -134,7 +134,7 @@ class ArcheryGameEngine {
         virtual ~ArcheryGameEngine();
 
 
-        std::complex<float> calculateEnemyV();
+        std::complex<float> calculateEnemyV(GameDifficulty game_diff);
         void calculateLine(Arrow* const arrow);
 
         void initGame();

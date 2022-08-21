@@ -17,6 +17,7 @@
 
 enum BeamCollisionType {centipede, mushroom, boundary, nan_};
 enum ArrowCollisionType {archer_head, archer_torso, archer_legs, platform, background, none};
+enum GameDifficulty { EASY, NORMAL, HARD, IMPOSSIBLE };
 enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame, music, games, upgrades};
 
 #include <SFML/Audio.hpp>
@@ -48,7 +49,7 @@ template<typename T> T clamp(T arg1, T arg2, T arg3) {
 
 sf::Color generateColor() {
     srand (time(NULL));
-    
+
     return sf::Color(rand() % 255 + 1,rand() % 255 + 1,rand() % 255 + 1,255);
 }
 

@@ -2,7 +2,7 @@
 
 void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist, int parts) {
     NUM_OF_PARTS = parts;
-    
+
     if (std::real(intake_velocity) < 0) {
         norm_dist = std::normal_distribution<float>(-0.4f, 0.4f);
     } else {
@@ -356,7 +356,7 @@ void ArcheryGameEngine::update(){
             is_panning = false;
         }
     } else if (!is_player_turn && archer1.health > 0 && archer2.health > 0) {
-        arrow1 = new Arrow( arrowTexture2, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV());
+        arrow1 = new Arrow( arrowTexture2, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV(GameDifficulty::HARD));
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
         archer2.archerArmSprite.setRotation((std::arg(arrow1->arrow_velocity) * 180 / M_PI) - 180);
@@ -502,28 +502,55 @@ void ArcheryGameEngine::render(){
     menuPtr->menuScreen->display();
 }
 
-std::complex<float> ArcheryGameEngine::calculateEnemyV() {
+std::complex<float> ArcheryGameEngine::calculateEnemyV(GameDifficulty game_diff) {
     const float G = std::imag(drag) + g;
     float init_angle;
     float velocity;
-    float sweet_spot_angle = std::atan(G / std::real(drag)) + M_PI;
+    float sweet_spot_angle = std::atan2(G, std::real(drag)) + M_PI;
+    const float domain_offset = 0.15f;
+    float vel_offset;
     // int total_player_dist = archer2.archerTorsoSprite.getPosition().x - archer1.archerTorsoSprite.getPosition().x;
     int total_player_dist = PLAYER_DIST + player_dist_deviation - archer2.archerTorsoSprite.getGlobalBounds().width / 2;
     if (G > 0) {
         if (std::real(drag) > 0) {
-            init_angle = (M_PI + sweet_spot_angle) / 2;
+            std::uniform_real_distribution<float> distribution(M_PI + domain_offset, sweet_spot_angle - domain_offset);
+            init_angle = distribution(generator);
+            // init_angle = (M_PI + sweet_spot_angle) / 2;
         } else {
-            init_angle = (M_PI + 3.f * M_PI_2) / 2;
+            std::uniform_real_distribution<float> distribution(M_PI + domain_offset, 3.f * M_PI_2 - domain_offset);
+            init_angle = distribution(generator);
+            // init_angle = (M_PI + 3.f * M_PI_2) / 2;
         }
     } else {
         if (std::real(drag) > 0) {
-            init_angle = ( sweet_spot_angle + M_PI ) / 2;
+            std::uniform_real_distribution<float> distribution(sweet_spot_angle + domain_offset, M_PI - domain_offset);
+            init_angle = distribution(generator);
+            // init_angle = ( sweet_spot_angle + M_PI ) / 2;
         } else {
-            init_angle = (M_PI_2 + M_PI) / 2;
+            std::uniform_real_distribution<float> distribution(M_PI_2 + domain_offset, M_PI - domain_offset);
+            init_angle = distribution(generator);
+            // init_angle = (M_PI_2 + M_PI) / 2;
         }
     }
-    velocity = std::sqrt(( total_player_dist * G * G) / (G * std::sin(2 * init_angle) - 2 * std::real(drag) * std::sin(init_angle) * std::sin(init_angle)) );
 
+    if (game_diff == EASY) {
+        std::uniform_real_distribution<float> vel_distribution(-2.f, 2.f);
+        vel_offset = vel_distribution(generator);
+    }
+    else if (game_diff == NORMAL) {
+        std::normal_distribution<float> vel_distribution(0.f, 0.3f);
+        vel_offset = vel_distribution(generator);
+    }
+    else if (game_diff == HARD) {
+        std::normal_distribution<float> vel_distribution(0.f, 0.1f);
+        vel_offset = vel_distribution(generator);
+    }
+    else {
+        std::uniform_real_distribution<float> vel_distribution(0.f, 0.f);
+        vel_offset = vel_distribution(generator);
+    }
+
+    velocity = std::sqrt(( total_player_dist * G * G) / (G * std::sin(2 * init_angle) - 2 * std::real(drag) * std::sin(init_angle) * std::sin(init_angle)) ) + vel_offset;
     return std::polar<float>(velocity , init_angle);
 }
 
