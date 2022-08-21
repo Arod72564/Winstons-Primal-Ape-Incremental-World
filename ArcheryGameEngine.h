@@ -9,8 +9,6 @@ struct Arrow;
 class ArcheryGameEngine;
 
 struct Archer {
-    sf::Texture archerTexture;
-    sf::Sprite archerSprite;
 
     sf::Texture archerArmTexture;
     sf::Sprite archerArmSprite;
@@ -43,6 +41,7 @@ class ArcheryGameEngine {
         Arrow *arrow1;
         BeamCollisionType collisionType = nan_;
         sf::Texture arrowTexture;
+        sf::Texture arrowTexture2;
         sf::Texture platformTexture;
         sf::Texture backgroundTexture;
         sf::Sprite backgroundSprite;
@@ -63,14 +62,14 @@ class ArcheryGameEngine {
         sf::Vector2f final_mouse_pos; // Calculating arrow power and angle
         sf::Vertex line[2]; // Drawing line for mouse click hold and drag
 
-        const double MAX_ARROW_POWER = 10.0; // Maximum velocity in pixels.
+        const double MAX_ARROW_POWER = 14.0; // Maximum velocity in pixels.
         const double LINE_LENGTH = 250.0;
         const int PLAYER_DIST = 2000;
         const int WIND_CHANGE_FREQ = 3;
         int player_dist_deviation;
         int turn_counter = 0;
         int pan_counter;
-        int platform3_move = 5;
+        int platform3_move = 2;
 
         float wind_deg_increment;
         float degRotation;

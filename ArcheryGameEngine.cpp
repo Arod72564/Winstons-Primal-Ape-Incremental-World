@@ -138,6 +138,10 @@ void ArcheryGameEngine::initGame(){
         menuPtr->menuScreen->close();
     }
 
+    if (!arrowTexture2.loadFromFile("images/Archery/temp_arrow3.png")) { // Need to add this image
+        menuPtr->menuScreen->close();
+    }
+
     //Platforms
     if (!platformTexture.loadFromFile("images/Archery/Platform.png")) {
         menuPtr->menuScreen->close();
@@ -250,7 +254,7 @@ void ArcheryGameEngine::update(){
         }
     } else if (!is_player_turn) {
         // arrow1 = new Arrow( arrowTexture, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, std::polar( float((rand() % 101) / 100.f * MAX_ARROW_POWER), float((rand() % 26 + 50) / 100.f * 2.f * M_PI) ) );
-        arrow1 = new Arrow( arrowTexture, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV());
+        arrow1 = new Arrow( arrowTexture2, archer2.archerArmSprite.getPosition().x, archer2.archerArmSprite.getPosition().y, calculateEnemyV());
         arrow1->arrowSprite.setOrigin(arrow1->arrowSprite.getGlobalBounds().width / 2, arrow1->arrowSprite.getGlobalBounds().height / 2);
         arrow1->arrowSprite.setScale(0.07, 0.04);
         archer2.archerArmSprite.setRotation((std::arg(arrow1->arrow_velocity) * 180 / M_PI) - 180);
