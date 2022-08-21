@@ -24,6 +24,12 @@ struct BloodSplat {
 
 struct Archer {
 
+    sf::Texture healthBar;
+    sf::Sprite healthBarSprite;
+
+    sf::Texture remainingHealth;
+    sf::Sprite remainingHealthSprite;
+
     sf::Texture archerArmTexture;
     sf::Sprite archerArmSprite;
 
@@ -35,6 +41,8 @@ struct Archer {
 
     sf::Texture archerLegsTexture;
     sf::Sprite archerLegsSprite;
+
+    float health = 100;
 
     std::vector<Arrow*> arrow_vector;
 };
@@ -67,11 +75,15 @@ class ArcheryGameEngine {
         sf::Texture arrowTexture3;
         sf::Texture platformTexture;
         sf::Texture backgroundTexture;
+        sf::Texture loseScreenTexture;
+        sf::Texture winScreenTexture;
         sf::Sprite backgroundSprite;
         sf::Sprite platform1;
         sf::Sprite platform2;
         sf::Sprite platform3;
         sf::Sprite wind_indicator;
+        sf::Sprite loseScreenSprite;
+        sf::Sprite winScreenSprite;
         sf::Text arrowPower;
         sf::Text arrowDeg;
         sf::Font textFont;
