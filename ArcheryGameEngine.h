@@ -10,7 +10,7 @@ class ArcheryGameEngine;
 
 struct BloodSplat {
     const float MAX_SPEED = 5.f;
-    const int NUM_OF_PARTS = 10000;
+    const int NUM_OF_PARTS = 1e5;
 
     sf::Vector2f emitter_position;
 
