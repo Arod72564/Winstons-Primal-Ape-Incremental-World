@@ -11,12 +11,12 @@ class ArcheryGameEngine;
 struct BloodSplat {
 
     sf::Vector2f emitter_position;
-    std::complex<float> intit_velocity;
 
-    std::vector<sf::Vector2f> particles[100];
-    sf::VertexArray emitter = sf::VertexArray(sf::Points, 100);
+    std::vector<sf::Vector2f> particles = std::vector<sf::Vector2f>(100, sf::Vector2f());
+    sf::VertexArray blood = sf::VertexArray(sf::Points, 100);
 
-    BloodSplat(std::complex<float> intake_velocity);
+    void createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, const std::normal_distribution<float> norm_dist);
+    void updateMovement();
 
 };
 
@@ -91,13 +91,15 @@ class ArcheryGameEngine {
         float x_offset;
         float y_offset;
 
+        BloodSplat bloodSplat;
+
         std::complex<float> panSpeed;
         std::complex<float> v;
         std::complex<float> drag = std::complex<float>(0.f, 0.f);
         float g = 0.05;
 
         // Random number generator for wind
-        std::normal_distribution<float> norm_dist;
+        std::normal_distribution<float> norm_dist = std::normal_distribution<float>(1.f, 0.1f);;
         std::default_random_engine generator;
 
         bool is_mouse_first_pressed = false;

@@ -1,8 +1,21 @@
 #include "ArcheryGameEngine.h"
 
-BloodSplat::BloodSplat(std::complex<float> intake_velocity) {
-    intit_velocity = intake_velocity;
+void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist) {
+    
+    for (int i = 0; i < particles.size() ; i++) {
+        blood[i].position = init_position;
+        blood[i].color = sf::Color::Red;
 
+        particles[i].x = intake_velocity.real() + norm_dist(generator);
+        particles[i].y = intake_velocity.imag() + norm_dist(generator);
+    }
+
+}
+
+void BloodSplat::updateMovement() {
+    for (int i = 0; i < particles.size(); i++) {
+        blood[i].position += particles[i];
+    }
 }
 
 Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocity) {
@@ -74,7 +87,6 @@ void ArcheryGameEngine::initGame(){
     is_player_turn = true;
     // Initializing RNG
     std::srand(std::time(nullptr));
-    norm_dist = std::normal_distribution<float>(1.f, 0.1f);
 
     drag = std::polar<float>( ((rand() % 301 + 100) / 10000.f), ((rand() % 361) * M_PI / 180 ));
     // drag = std::complex<float> (-0.005f,0.005f);
@@ -170,9 +182,13 @@ void ArcheryGameEngine::initGame(){
     //Set initial view to player 1
     gameView->setCenter( archer1.archerTorsoSprite.getPosition() );
 
+    //bloodSplat.createBloodSplat(sf::Vector2f(400,400), std::complex<float>(0, g), generator, norm_dist);
+
 }
 
 void ArcheryGameEngine::update(){
+
+    //bloodSplat.updateMovement();
 
     sf::Vector2f mousePosition = menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen));
 
@@ -215,6 +231,7 @@ void ArcheryGameEngine::update(){
         gameView->setCenter( arrow1->arrowSprite.getPosition() );
 
         if (collisionType == BeamCollisionType::centipede) {
+            bloodSplat.createBloodSplat(arrow1->arrowSprite.getPosition(), arrow1->arrow_velocity, generator, norm_dist);
             if (is_player_turn) {
                 archer2.arrow_vector.push_back(arrow1);
                 arrow1 = nullptr;
@@ -336,6 +353,8 @@ void ArcheryGameEngine::render(){
     if(!archer2.arrow_vector.empty()) {
         for (int i = 0; i < archer2.arrow_vector.size(); ++i) menuPtr->menuScreen->draw(archer2.arrow_vector[i]->arrowSprite);
     }
+
+    menuPtr->menuScreen->draw(bloodSplat.blood);
 
     menuPtr->menuScreen->draw(archer1.archerArmSprite);
     menuPtr->menuScreen->draw(archer1.archerTorsoSprite);
