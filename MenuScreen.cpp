@@ -12,7 +12,6 @@ MenuScreen::~MenuScreen() {
     delete menuScreen;
 }
 
-
 void MenuScreen::initMenuScreen(sf::RenderWindow *window) {
     std::cout << "Initializing menu screen... ";
 

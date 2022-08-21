@@ -39,8 +39,6 @@ class MenuScreen {
 
         sf::Text clickerRewardInfo;
         sf::Text clickerMultiplierInfo;
- 
-
 
         sf::Text currentMusicName;
 
