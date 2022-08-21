@@ -1,7 +1,7 @@
 #include "ArcheryGameEngine.h"
 
 void BloodSplat::createBloodSplat(const sf::Vector2f init_position, std::complex<float> intake_velocity, std::default_random_engine generator, std::normal_distribution<float> norm_dist) {
-    
+
     for (int i = 0; i < particles.size() ; i++) {
         blood[i].position = init_position;
         blood[i].color = sf::Color::Red;
@@ -25,33 +25,18 @@ Arrow::Arrow(sf::Texture &texture, float x, float y, std::complex<float> velocit
 }
 
 BeamCollisionType Arrow::updateMovement(bool &isArrowPresent, MenuScreen* menuPtr, std::complex<float> drag, const float grav, sf::Sprite bgSprite, sf::Sprite plat1, sf::Sprite plat2, sf::Sprite plat3, sf::Sprite self, sf::Sprite enemy) {
-    // arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
-    float x_pos = std::real(arrow_velocity) * frame_time + 0.5f * std::real(drag)          * std::pow(frame_time, 2) + self.getPosition().x;
-    float y_pos = std::imag(arrow_velocity) * frame_time + 0.5f * (std::imag(drag) + grav) * std::pow(frame_time, 2) + self.getPosition().y;
-
-    std::complex<float> new_vel = arrow_velocity + std::complex<float>(std::real(drag) * frame_time, (std::imag(drag) + grav) * frame_time);
-    // arrowSprite.setPosition( menuPtr->menuScreen->mapPixelToCoords( sf::Vector2i( x_pos, y_pos ) ) );
-    arrowSprite.setPosition(x_pos, y_pos);
-    arrowSprite.setRotation(std::arg(new_vel) * 180 / M_PI);
-    frame_time++;
-    // std::cout << frame_time << std::endl;
-    // std::cout << self.archerSprite.getPosition().x << ", " << self.archerSprite.getPosition().y << std::endl;
-    // std::cout << menuPtr->menuScreen->mapPixelToCoords( sf::Vector2i(self.archerSprite.getPosition().x, self.archerSprite.getPosition().y) ).x << ", " << menuPtr->menuScreen->mapPixelToCoords( sf::Vector2i(self.archerSprite.getPosition().x, self.archerSprite.getPosition().y) ).y << std::endl;
-    // arrow_velocity += std::complex<float>(std::real(drag), std::imag(drag) + grav);
+    arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
+    arrow_velocity += std::complex<float>(std::real(drag), std::imag(drag) + grav);
+    arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
 
     if ( !bgSprite.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
-        frame_time = 0;
         isArrowPresent = !isArrowPresent;
         return BeamCollisionType::boundary;
     } else if ( enemy.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) ) {
-        ++frame_time;
         isArrowPresent = !isArrowPresent;
-        x_pos = std::real(arrow_velocity) * frame_time + 0.5f * std::real(drag)          * std::pow(frame_time, 2) + self.getPosition().x;
-        y_pos = std::imag(arrow_velocity) * frame_time + 0.5f * (std::imag(drag) + grav) * std::pow(frame_time, 2) + self.getPosition().y;
-        std::complex<float> new_vel = arrow_velocity + std::complex<float>(std::real(drag) * frame_time, (std::imag(drag) + grav) * frame_time);
-        arrowSprite.setPosition(x_pos, y_pos);
-        arrowSprite.setRotation(std::arg(new_vel) * 180 / M_PI);
-        frame_time = 0;
+        arrowSprite.move( std::real(arrow_velocity), std::imag(arrow_velocity) );
+        arrowSprite.setRotation(std::arg(arrow_velocity) * 180 / M_PI);
+        // frame_time = 0;
         return BeamCollisionType::centipede;
     } else if (plat1.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat2.getGlobalBounds().intersects(arrowSprite.getGlobalBounds()) || plat3.getGlobalBounds().intersects(arrowSprite.getGlobalBounds())) {
         frame_time = 0;
