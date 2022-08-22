@@ -10,7 +10,7 @@ class ArcheryGameEngine;
 
 struct BloodSplat {
     const float MAX_SPEED = 5.f;
-    int NUM_OF_PARTS = 1e2;
+    int NUM_OF_PARTS = 1e4;
 
     sf::Vector2f emitter_position;
 
@@ -35,6 +35,9 @@ struct Archer {
 
     sf::Texture archerHeadTexture;
     sf::Sprite archerHeadSprite;
+
+    sf::Texture archerHeadHitBox;
+    sf::Sprite archerHeadHitBoxSprite;
 
     sf::Texture archerTorsoTexture;
     sf::Sprite archerTorsoSprite;
