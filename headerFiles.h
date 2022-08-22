@@ -53,4 +53,69 @@ sf::Color generateColor() {
     return sf::Color(rand() % 255 + 1,rand() % 255 + 1,rand() % 255 + 1,255);
 }
 
+template<typename T> class PhysVector2 {
+public:
+    // std::complex<T> phys_vector;
+    T x;
+    T y;
+
+    PhysVector2(const T& x_, const T& y_) {
+        x = x_;
+        y = y_;
+    }
+
+    PhysVector2(const PhysVector2<T>& v) {
+        x = v.x;
+        y = v.y;
+    }
+
+    PhysVector2(const std::complex<T>& complex) {
+        x = complex.real();
+        y = complex.imag();
+    }
+
+    PhysVector2(const T& r, const PhysVector2<T>& v) {
+        v = v.normalize() * r;
+        x = v.x;
+        y = v.y;
+    }
+
+    static PhysVector2<T> polar(const T& r, const T& theta) {
+        std::complex<T> temp = std::polar(r, theta);
+        return PhysVector2<T>(temp.real(), temp.imag());
+    }
+
+    float mag() { return std::abs(std::complex<T>(x, y)); }
+    float dir() { return std::arg(std::complex<T>(x, y)); }
+
+    // Componentwise addition and subtraction
+    PhysVector2<T> operator+(const PhysVector2<T>& rhs) { return PhysVector2(x + rhs.x, y + rhs.y); }
+    PhysVector2<T> operator-(const PhysVector2<T>& rhs) { return PhysVector2(x - rhs.x, y - rhs.y); }
+    PhysVector2<T>& operator+=(const PhysVector2<T>& rhs) {
+        this->x += rhs.x;
+        this->y += rhs.y;
+        return *this;
+    }
+    PhysVector2<T>& operator-=(const PhysVector2<T>& rhs) {
+        this->x -= rhs.x;
+        this->y -= rhs.y;
+        return *this;
+    }
+    // The dot product
+    float operator*(const PhysVector2<T> &rhs) { return x * rhs.x + y * rhs.y; }
+
+    // Scalar multiplication
+    PhysVector2<T> operator*(const T &scalar) { return PhysVector2(x * scalar, y * scalar); }
+    PhysVector2<T>& operator*=(const T &scalar) {
+        this->x *= scalar;
+        this->y *= scalar;
+        return *this;
+    }
+    // Scalar division
+    PhysVector2<T> operator/(const T& scalar) { return this * 1 / scalar; }
+
+    // Normalize a vector
+    PhysVector2<T> normalize() { return this / mag(); }
+};
+
 #endif
