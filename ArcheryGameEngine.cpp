@@ -124,11 +124,11 @@ void ArcheryGameEngine::initGame(){
 
     //Archers
         // Archer player1;
-    if (!archer1.archerTorsoTexture.loadFromFile("images/Archery/PlayerRightTorso3.png")) {
+    if (!archer1.archerTorsoTexture.loadFromFile("images/Archery/PlayerRightTorso2.png")) {
         menuPtr->menuScreen->close();
     } else if (!archer1.archerArmTexture.loadFromFile("images/Archery/PlayerRightArm.png")) {
         menuPtr->menuScreen->close();
-    } else if (!archer1.archerHeadTexture.loadFromFile("images/Archery/PlayerRightHead.png")) {
+    } else if (!archer1.archerHeadTexture.loadFromFile("images/Archery/PlayerRightHead2.png")) {
         menuPtr->menuScreen->close();
     } else if (!archer1.archerLegsTexture.loadFromFile("images/Archery/PlayerRightLegs.png")) {
         menuPtr->menuScreen->close();
@@ -146,7 +146,7 @@ void ArcheryGameEngine::initGame(){
     archer1.archerTorsoSprite.setPosition(archer1.archerHeadSprite.getPosition().x, archer1.archerHeadSprite.getPosition().y + archer1.archerHeadSprite.getGlobalBounds().height);
 
     archer1.archerLegsSprite.setTexture(archer1.archerLegsTexture);
-    archer1.archerLegsSprite.setPosition(archer1.archerTorsoSprite.getPosition().x, archer1.archerTorsoSprite.getPosition().y + archer1.archerTorsoSprite.getGlobalBounds().height);
+    archer1.archerLegsSprite.setPosition(archer1.archerTorsoSprite.getPosition().x - 4, archer1.archerTorsoSprite.getPosition().y + archer1.archerTorsoSprite.getGlobalBounds().height);
 
     archer1.archerArmSprite.setTexture(archer1.archerArmTexture);
     archer1.archerArmSprite.setOrigin(archer1.archerArmSprite.getGlobalBounds().width / 2, archer1.archerArmSprite.getGlobalBounds().height / 2);
@@ -162,7 +162,7 @@ void ArcheryGameEngine::initGame(){
         // Archer player2;
     player_dist_deviation = (rand() % 200 - 100);
 
-    if (!archer2.archerTorsoTexture.loadFromFile("images/Archery/PlayerLeftTorso3.png")) {
+    if (!archer2.archerTorsoTexture.loadFromFile("images/Archery/PlayerLeftTorso.png")) {
         menuPtr->menuScreen->close();
     } else if (!archer2.archerArmTexture.loadFromFile("images/Archery/PlayerLeftArm.png")) {
         menuPtr->menuScreen->close();
