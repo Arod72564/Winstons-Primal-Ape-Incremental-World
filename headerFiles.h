@@ -74,6 +74,7 @@ public:
         y = complex.imag();
     }
 
+    // Builds a PhysVector2 with magnitude r that points in the direction of v
     PhysVector2(const T& r, const PhysVector2<T>& v) {
         v = v.normalize() * r;
         x = v.x;
@@ -116,6 +117,13 @@ public:
 
     // Normalize a vector
     PhysVector2<T> normalize() { return this / mag(); }
+
+    sf::Vector2<T> toSF() { return sf::Vector2<T>(x, y); }
+
+    friend ostream& operator<<(ostream& os, const PhysVector2<T>& v) {
+        os << v.x << ", " << v.y;
+        return os;
+    }
 };
 
 #endif
