@@ -112,7 +112,7 @@ public:
         return *this;
     }
     // Scalar division
-    PhysVector2<T> operator/(const T& scalar) { return this * 1 / scalar; }
+    PhysVector2<T> operator/(const T& scalar) { return this * (1 / scalar); }
 
     // Normalize a vector
     PhysVector2<T> normalize() { return this / mag(); }
