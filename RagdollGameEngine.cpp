@@ -1,5 +1,5 @@
 #include "RagdollGameEngine.h"
-// #include "SoftBody.h"
+#include "SoftBody.h"
 
 RagdollGameEngine::RagdollGameEngine(MenuScreen* menu) {
     menuPtr = menu;
