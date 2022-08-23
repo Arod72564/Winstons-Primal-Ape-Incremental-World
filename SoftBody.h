@@ -10,8 +10,18 @@ struct Spring;
 class SoftBody {
 
 public:
-    static constexpr float DELTA_T = 0.1;
-    static constexpr float G = 0.05;
+
+    std::vector< std::vector<Node*> > nodes;
+    std::vector<Spring*> springs;
+
+
+    // Node* buildNode(float x, float y, float R = 20.f);
+    SoftBody* buildSpring(Node* A, Node* B, float damping = 0.5f, float stiffness = 1.f);
+    SoftBody* buildRect(const float x, const float y, const int row, const int col, float node_dist = 15.f, float damping = 0.5f, float stiffness = 1.f);
+
+    void checkCollision(Node* node);
+
+    void update();
 
 
 };
@@ -23,32 +33,31 @@ struct Node {
     float mass = 1.f;
     sf::CircleShape image;
 
-    std::vector<Spring*> springs;
-
-    Node(float R = 20.f);
+    Node(float x = 0.f, float y = 0.f, float R = 5.f);
 
     Node* setPosition(float x, float y);
 
     float dist(Node B);
 
-    void applyForce();
+    // void applyForce();
 
     void update();
 };
 
 
 struct Spring {
-    Node* A;
-    Node* B;
-    float stiffness = 1.f;
+    Node* nodes[2];
+    float stiffness;
     float rest_length;
-    float damping = 0.f;
+    float damping;
 
     sf::Vertex line[2];
 
-    Spring(Node* A, Node* B, float stiffness = 1.f);
+    Spring(Node* A, Node* B, float damping = 0.5f, float stiffness = 1.f);
 
-    float force();
+    void applyForce(int node);
+
+    void update();
 };
 
 #endif
