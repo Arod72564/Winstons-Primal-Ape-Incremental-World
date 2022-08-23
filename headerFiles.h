@@ -13,6 +13,9 @@
 #define CENTIPEDE_SPEED 2
 #define BEAM_SPEED 12
 
+#define DELTA_T             0.05
+#define GRAV                0.05
+
 #define _USE_MATH_DEFINES
 
 enum BeamCollisionType {centipede, mushroom, boundary, nan_};

@@ -202,8 +202,8 @@ float Node::dist(Node B) {
 
 
 void Node::update() {
-    velocity += force / mass * RagdollGameEngine::DELTA_T;
-    position += velocity * RagdollGameEngine::DELTA_T;
+    velocity += force / mass * DELTA_T;
+    position += velocity * DELTA_T;
     image.setPosition(position.toSF());
     force(0.f, 0.f);
 }
