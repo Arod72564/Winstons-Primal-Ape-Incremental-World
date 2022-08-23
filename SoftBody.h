@@ -17,11 +17,11 @@ public:
 
     // Node* buildNode(float x, float y, float R = 20.f);
     SoftBody* buildSpring(Node* A, Node* B, float damping = 0.5f, float stiffness = 1.f);
-    SoftBody* buildRect(const float x, const float y, const int row, const int col, float node_dist = 15.f, float damping = 0.5f, float stiffness = 1.f);
+    SoftBody* buildRect(const float x, const float y, const int row, const int col, float node_dist = 15.f, float radius = 5.f, float damping = 0.5f, float stiffness = 1.f);
 
     void checkCollision(Node* node);
 
-    void update();
+    void update(float elapsed, PhysVector2<float>& f_ext);
 
 
 };
@@ -41,7 +41,7 @@ struct Node {
 
     // void applyForce();
 
-    void update();
+    void update(float elapsed, PhysVector2<float>& f_ext);
 };
 
 

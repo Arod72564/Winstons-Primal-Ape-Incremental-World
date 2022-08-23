@@ -18,11 +18,11 @@ SoftBody* SoftBody::buildSpring(Node* A, Node* B, float damping, float stiffness
     return this;
 }
 
-SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const int col, float node_dist, float damping, float stiffness) {
+SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const int col, float node_dist, float radius, float damping, float stiffness) {
     for (int i = 0; i < row; ++i) {
         nodes.push_back(std::vector<Node*>());
         for (int j = 0; j < col; ++j) {
-            nodes.at(i).push_back(new Node(x + j * node_dist, y + i * node_dist));
+            nodes.at(i).push_back( new Node(x + j * node_dist, y + i * node_dist, radius) );
         }
     }
     for (int i = 0; i < row; ++i) {
@@ -89,8 +89,8 @@ void SoftBody::checkCollision(Node* node) {
                 for (Node* another_node : vector) {
                     if (node->dist(*another_node) == 0.f) continue;
                     else if (node->dist(*another_node) < node->image.getRadius() * 2.f) {
-                        node->image.setFillColor(sf::Color::Blue);
-                        another_node->image.setFillColor(sf::Color::Red);
+                        // node->image.setFillColor(sf::Color::Blue);
+                        // another_node->image.setFillColor(sf::Color::Red);
                         PhysVector2<float> normal_vector = (node->position - another_node->position).normalize();
 
                         float offset_dist = (2.f * node->image.getRadius() - node->dist(*another_node)) / 2.f;
@@ -139,7 +139,7 @@ void SoftBody::checkCollision(Node* node) {
     // }
 }
 
-void SoftBody::update() {
+void SoftBody::update(float elapsed, PhysVector2<float>& f_ext) {
 
     if (!nodes.empty()) {
         for(std::vector<Node*> node_vector : nodes) {
@@ -147,7 +147,7 @@ void SoftBody::update() {
                 for(Node* node : node_vector) {
                     checkCollision(node);
                     // std::cout << "After checkCollision: " << node->velocity << std::endl;
-                    node->update();
+                    node->update(elapsed, f_ext);
                 }
             }
         }
@@ -201,9 +201,10 @@ float Node::dist(Node B) {
 // }
 
 
-void Node::update() {
-    velocity += force / mass * DELTA_T;
-    position += velocity * DELTA_T;
+void Node::update(float elapsed, PhysVector2<float>& f_ext) {
+    force += f_ext;
+    velocity += force / mass * elapsed;
+    position += velocity * elapsed;
     image.setPosition(position.toSF());
     force(0.f, 0.f);
 }

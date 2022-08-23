@@ -8,8 +8,13 @@
 class RagdollGameEngine {
 
 public:
-    // static constexpr float DELTA_T = 0.1f;
+    static constexpr float DT = 0.01f;
     // static constexpr float G = 0.05;
+
+    PhysVector2<float> f_ext;
+    PhysVector2<float> drag;
+
+    sf::Clock clock;
 
     MenuScreen* menuPtr;
     // std::vector<Node*> node_vector;
