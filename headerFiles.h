@@ -18,7 +18,7 @@
 enum BeamCollisionType {centipede, mushroom, boundary, nan_};
 enum ArrowCollisionType {archer_head, archer_torso, archer_legs, platform, background, none};
 enum GameDifficulty { EASY, NORMAL, HARD, IMPOSSIBLE };
-enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame, music, games, upgrades};
+enum GameTypes {NULL_GAME, centipedeGame, dungeonGame, archeryGame, ragdollGame, music, games, upgrades};
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -59,6 +59,11 @@ public:
     T x;
     T y;
 
+    PhysVector2() {
+        x = 0;
+        y = 0;
+    }
+
     PhysVector2(const T& x_, const T& y_) {
         x = x_;
         y = y_;
@@ -75,7 +80,7 @@ public:
     }
 
     // Builds a PhysVector2 with magnitude r that points in the direction of v
-    PhysVector2(const T& r, const PhysVector2<T>& v) {
+    PhysVector2(const T& r, PhysVector2<T> v) {
         v = v.normalize() * r;
         x = v.x;
         y = v.y;
@@ -88,6 +93,13 @@ public:
 
     float mag() { return std::abs(std::complex<T>(x, y)); }
     float dir() { return std::arg(std::complex<T>(x, y)); }
+
+    // Overloading ()
+    PhysVector2<T>& operator()(const T& x_, const T& y_) {
+        this->x = x_;
+        this->y = y_;
+        return *this;
+    }
 
     // Componentwise addition and subtraction
     PhysVector2<T> operator+(const PhysVector2<T>& rhs) { return PhysVector2(x + rhs.x, y + rhs.y); }
@@ -113,14 +125,25 @@ public:
         return *this;
     }
     // Scalar division
-    PhysVector2<T> operator/(const T& scalar) { return this * (1 / scalar); }
+    PhysVector2<T> operator/(const T& scalar) { return *this * (1 / scalar); }
 
     // Normalize a vector
-    PhysVector2<T> normalize() { return this / mag(); }
+    PhysVector2<T> normalize() {
+        if (mag() == 0.f) {
+            return *this;
+        } else {
+            return *this / mag();
+        }
+        // return *this / mag();
+    }
 
     sf::Vector2<T> toSF() { return sf::Vector2<T>(x, y); }
 
-    friend ostream& operator<<(ostream& os, const PhysVector2<T>& v) {
+    T dist(PhysVector2<T>& v) {
+        return (*this - v).mag();
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const PhysVector2<T>& v) {
         os << v.x << ", " << v.y;
         return os;
     }

@@ -11,11 +11,13 @@ class GameMenu {
         sf::Texture centipedeGameTexture;
         sf::Texture dungeonGameTexture;
         sf::Texture ArcheryGameTexture;
+        sf::Texture ragdollGameTexture;
         sf::Texture centipedeGameMult_Texture;
 
         sf::Sprite centipedeGameSprite;
         sf::Sprite dungeonGameSprite;
         sf::Sprite archerygameSprite;
+        sf::Sprite ragdollGameSprite;
         sf::Sprite centipedeGameMult_Sprite;
 
 

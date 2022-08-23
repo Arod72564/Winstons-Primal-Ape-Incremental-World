@@ -2,7 +2,7 @@
 
 GameMenu::GameMenu(MenuScreen* menu){
     top = 400; //middle of screen
-    bottom = 800; //bottom of last game 
+    bottom = 1200; //bottom of last game
     menuPtr = menu;
     gameView = new sf::View(sf::Vector2f(menu->menuScreen->getSize().x/2,menu->menuScreen->getSize().y/2) , sf::Vector2f(menu->menuScreen->getSize().x,menu->menuScreen->getSize().y));
     initMenu();
@@ -20,7 +20,7 @@ void GameMenu::initMenu() {
         std::cout << "Error loading dungeon game texture.\n";
         menuPtr->menuScreen->close();
     }
-  
+
     if (!ArcheryGameTexture.loadFromFile("images/GameMenu/ArcheryGame.png")) {
         std::cout << "Error loading archery game texture.\n";
         menuPtr->menuScreen->close();
@@ -28,6 +28,11 @@ void GameMenu::initMenu() {
 
     if (!centipedeGameTexture.loadFromFile("images/GameMenu/CentipedeGame.png")) {
         std::cout << "Error loading centipede game texture.\n";
+        menuPtr->menuScreen->close();
+    }
+
+    if (!ragdollGameTexture.loadFromFile("images/GameMenu/bg.png")) {
+        std::cout << "Error loading background game texture.\n";
         menuPtr->menuScreen->close();
     }
 
@@ -44,6 +49,10 @@ void GameMenu::initMenu() {
     //Archery Game
     archerygameSprite.setTexture(ArcheryGameTexture);
     archerygameSprite.setPosition(dungeonGameSprite.getPosition().x, dungeonGameSprite.getPosition().y + dungeonGameSprite.getGlobalBounds().height);
+
+    //Ragdoll Game
+    ragdollGameSprite.setTexture(ragdollGameTexture);
+    ragdollGameSprite.setPosition(archerygameSprite.getPosition().x, archerygameSprite.getPosition().y + archerygameSprite.getGlobalBounds().height);
 
 
 
@@ -78,21 +87,24 @@ void GameMenu::update(){
                     } else if (archerygameSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //Archery Game Prompt
                         gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
                         menuPtr->currentGameType = archeryGame;
+                    } else if (ragdollGameSprite.getGlobalBounds().contains(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)))) { //Ragdoll Game Prompt
+                        gameView->setCenter(menuPtr->menuScreen->getSize().x/2, menuPtr->menuScreen->getSize().y/2);
+                        menuPtr->currentGameType = ragdollGame;
                     }
                 }
                 break;
 
-            case sf::Event::MouseWheelScrolled:   
+            case sf::Event::MouseWheelScrolled:
 
                 if ( ev.mouseWheelScroll.delta < 0) {
                     gameView->move(0, 20);
-                    
+
                     if(gameView->getCenter().y > bottom) { gameView->setCenter(gameView->getCenter().x, bottom); }
 
                 } else if (ev.mouseWheelScroll.delta > 0) {
                     gameView->move(0, -20);
                     if(gameView->getCenter().y < top) { gameView->setCenter(gameView->getCenter().x, top); }
-                    
+
                 }
 
             default:
@@ -114,6 +126,7 @@ void GameMenu::render(){
         menuPtr->menuScreen->draw(centipedeGameSprite);
         menuPtr->menuScreen->draw(dungeonGameSprite);
         menuPtr->menuScreen->draw(archerygameSprite);
+        menuPtr->menuScreen->draw(ragdollGameSprite);
 
         menuPtr->menuScreen->display();
     }

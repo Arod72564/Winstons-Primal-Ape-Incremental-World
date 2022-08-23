@@ -9,6 +9,8 @@
 #include "MenuScreen.cpp"
 #include "DungeonGameEngine.cpp"
 #include "ArcheryGameEngine.cpp"
+#include "RagdollGameEngine.cpp"
+#include "SoftBody.cpp"
 #include "SplashScreen.cpp"
 #include "MusicMenu.cpp"
 #include "GameMenu.cpp"
@@ -57,7 +59,7 @@ int main() {
                 }
 
                 delete upgradeMenu;
-            }    
+            }
 
             if (menu->currentGameType == games) { //GAME SELECTION
                 GameMenu* gameMenu = new GameMenu(menu);
@@ -70,7 +72,7 @@ int main() {
                 }
 
                 delete gameMenu;
-            }    
+            }
 
             if (menu->currentGameType == centipedeGame) { //CENTIPEDE GAME
                 //Initialize centipede game driver class
@@ -121,6 +123,23 @@ int main() {
                 }
 
                 delete archeryGameEngine;
+            }
+
+            if (menu->currentGameType == ragdollGame) { //RAGDOLL GAME
+                //Initialize RagdollGameEngine game driver class
+                RagdollGameEngine* ragdollGameEngine = new RagdollGameEngine(menu);
+
+                //Main game loop
+                while(menu->currentGameType == ragdollGame) {
+
+                    //Update game data
+                    ragdollGameEngine->update();
+
+                    //Render game graphics
+                    ragdollGameEngine->render();
+                }
+
+                delete ragdollGameEngine;
             }
 
             if (menu->currentGameType == music) { // MUSIC MENU
