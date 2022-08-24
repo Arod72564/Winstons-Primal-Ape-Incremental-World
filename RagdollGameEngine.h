@@ -8,7 +8,7 @@
 class RagdollGameEngine {
 
 public:
-    static constexpr float DT = 0.01f;
+    static constexpr float DT = 0.025f;
     // static constexpr float G = 0.05;
 
     PhysVector2<float> f_ext;

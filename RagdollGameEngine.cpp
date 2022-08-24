@@ -13,20 +13,20 @@ void RagdollGameEngine::initGame() {
     float min = 195.f;
     float max = 255.f;
     SoftBody* temp = new SoftBody();
-    temp->buildRect(100.f, 100.f, 5, 5, 15.f, 5.f, 1.4f, 3.5);
+    temp->buildRect(200.f, 200.f, 4, 4, 15.f, 5.f, 1.5f, 3.5f);
     // temp->nodes.at(0).at(0)->setPosition(min, min);
     // temp->nodes.at(0).at(9)->setPosition(max, min);
     // temp->nodes.at(9).at(0)->setPosition(min, max);
     // temp->nodes.at(9).at(9)->setPosition(max, max);
-    temp->nodes.at(4).at(4)->image.move(100.f, 100.f);
-    temp->nodes.at(4).at(4)->setPosition(temp->nodes.at(4).at(4)->image.getPosition().x, temp->nodes.at(4).at(4)->image.getPosition().y);
+    temp->nodes.at(0).at(0)->image.move(-240.f, -240.f);
+    temp->nodes.at(0).at(0)->setPosition(temp->nodes.at(0).at(0)->image.getPosition().x, temp->nodes.at(0).at(0)->image.getPosition().y);
     temp->showSolid = true;
     softbody_vector.push_back(temp);
 
     SoftBody* bar = new SoftBody();
-    bar->buildRect(400.f, 400.f, 5, 5, 15.f, 5.f, 1.4f, 3.5f);
-    bar->nodes.at(4).at(4)->image.move(100.f, 100.f);
-    bar->nodes.at(4).at(4)->setPosition(bar->nodes.at(4).at(4)->image.getPosition().x, bar->nodes.at(4).at(4)->image.getPosition().y);
+    bar->buildRect(400.f, 200.f, 4, 4, 15.f, 5.f, 1.5f, 3.5f);
+    bar->nodes.at(0).at(0)->image.move(-240.f, -240.f);
+    bar->nodes.at(0).at(0)->setPosition(bar->nodes.at(0).at(0)->image.getPosition().x, bar->nodes.at(0).at(0)->image.getPosition().y);
 
     softbody_vector.push_back(bar);
 
@@ -42,8 +42,11 @@ void RagdollGameEngine::update() {
             // else softbody->update(temp_time, f_ext, GRAV);
 
             // For testing
-            if (temp_time < DT) softbody->update(DT, f_ext, 0.f);
-            else softbody->update(temp_time, f_ext, 0.f);
+            // if (temp_time < DT) softbody->update(DT, f_ext, 0.f);
+            // else softbody->update(temp_time, f_ext, 0.f);
+
+            softbody->update(DT, f_ext, GRAV);
+            // std::cout << temp_time << std::endl;
         }
     }
 

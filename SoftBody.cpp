@@ -126,7 +126,8 @@ void SoftBody::checkCollision(Node* node) {
         for (std::vector<Node*> vector : nodes) {
             if (!vector.empty()) {
                 for (Node* another_node : vector) {
-                    if (node->dist(*another_node) == 0.f) continue;
+                    if (node == another_node) continue;
+                    else if (node->dist(*another_node) == 0.f) continue;
                     else if (node->dist(*another_node) < node->image.getRadius() * 2.f) {
                         node->image.setFillColor(sf::Color::Blue);
                         another_node->image.setFillColor(sf::Color::Red);
