@@ -22,8 +22,8 @@ public:
 
 
     // Node* buildNode(float x, float y, float R = 20.f);
-    SoftBody* buildSpring(Node* A, Node* B, float damping = 0.5f, float stiffness = 1.f);
-    SoftBody* buildRect(const float x, const float y, const int row, const int col, float node_dist = 15.f, float radius = 5.f, float damping = 0.5f, float stiffness = 1.f);
+    SoftBody* buildSpring(Node* A, Node* B, float damping = 1.4f, float stiffness = 3.5f);
+    SoftBody* buildRect(const float x, const float y, const int row, const int col, float node_dist = 15.f, float radius = 5.f, float damping = 1.4f, float stiffness = 3.5f);
 
     void checkCollision(Node* node);
 
@@ -36,7 +36,7 @@ struct Node {
     PhysVector2<float> position;
     PhysVector2<float> velocity;
     PhysVector2<float> force; // Almost equivalent to acceleration
-    float mass = 1.f;
+    float mass = 0.5f;
     sf::CircleShape image;
 
     Node(float x = 0.f, float y = 0.f, float R = 5.f);
@@ -59,7 +59,7 @@ struct Spring {
 
     sf::Vertex line[2];
 
-    Spring(Node* A, Node* B, float damping = 0.5f, float stiffness = 1.f);
+    Spring(Node* A, Node* B, float damping = 1.4f, float stiffness = 3.5f);
 
     void applyForce(int node);
 
