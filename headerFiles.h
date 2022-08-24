@@ -89,6 +89,11 @@ public:
         y = v.y;
     }
 
+    PhysVector2(sf::Vector2f v) {
+        x = v.x;
+        y = v.y;
+    }
+
     static PhysVector2<T> polar(const T& r, const T& theta) {
         std::complex<T> temp = std::polar(r, theta);
         return PhysVector2<T>(temp.real(), temp.imag());
@@ -104,6 +109,13 @@ public:
         return *this;
     }
 
+    void operator()(sf::Vector2f v) {
+        x =  v.x;
+        y = v.y;
+        //return *this;
+    }
+    
+ 
     // Componentwise addition and subtraction
     PhysVector2<T> operator+(const PhysVector2<T>& rhs) { return PhysVector2(x + rhs.x, y + rhs.y); }
     PhysVector2<T> operator-(const PhysVector2<T>& rhs) { return PhysVector2(x - rhs.x, y - rhs.y); }
