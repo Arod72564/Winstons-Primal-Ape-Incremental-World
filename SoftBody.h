@@ -19,6 +19,7 @@ public:
     sf::ConvexShape* solidSoftBody;
 
     bool showSolid;
+    bool isClicked;
 
 
     // Node* buildNode(float x, float y, float R = 20.f);
@@ -27,7 +28,7 @@ public:
 
     void checkCollision(Node* node);
 
-    void update(float elapsed, PhysVector2<float>& f_ext, const float& grav);
+    void update(float elapsed, PhysVector2<float> f_ext, const float& grav);
 
 
 };

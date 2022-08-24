@@ -20,6 +20,7 @@ SoftBody* SoftBody::buildSpring(Node* A, Node* B, float damping, float stiffness
 
 SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const int col, float node_dist, float radius, float damping, float stiffness) {
 
+
     for (int i = 0; i < row; ++i) {
         nodes.push_back(std::vector<Node*>());
         for (int j = 0; j < col; ++j) {
@@ -81,6 +82,7 @@ SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const
         solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
     }
 
+    solidSoftBody->setOrigin((row * node_dist / 2), (col * node_dist / 2));
 
     return this;
 }
@@ -179,7 +181,7 @@ void SoftBody::checkCollision(Node* node) {
     // }
 }
 
-void SoftBody::update(float elapsed, PhysVector2<float>& f_ext, const float& grav) {
+void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav) {
 
     if (!nodes.empty()) {
         for(std::vector<Node*> node_vector : nodes) {
