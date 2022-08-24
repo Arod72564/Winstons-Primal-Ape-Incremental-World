@@ -13,7 +13,7 @@ void RagdollGameEngine::initGame() {
     float min = 195.f;
     float max = 255.f;
     SoftBody* temp = new SoftBody();
-    temp->buildRect(100.f, 100.f, 5, 5, 15.f, 5.f, 0.5f, 30.f);
+    temp->buildRect(100.f, 100.f, 5, 6, 15.f, 5.f, 0.5f, 30.f);
     // temp->nodes.at(0).at(0)->setPosition(min, min);
     // temp->nodes.at(0).at(9)->setPosition(max, min);
     // temp->nodes.at(9).at(0)->setPosition(min, max);
@@ -24,7 +24,7 @@ void RagdollGameEngine::initGame() {
     softbody_vector.push_back(temp);
 
     SoftBody* bar = new SoftBody();
-    bar->buildRect(400.f, 400.f, 5, 5, 15.f, 5.f, 0.5f, 30.f);
+    bar->buildRect(400.f, 400.f, 5, 6, 15.f, 5.f, 0.5f, 30.f);
     bar->nodes.at(4).at(4)->image.move(100.f, 100.f);
     bar->nodes.at(4).at(4)->setPosition(bar->nodes.at(4).at(4)->image.getPosition().x, bar->nodes.at(4).at(4)->image.getPosition().y);
 
@@ -34,12 +34,13 @@ void RagdollGameEngine::initGame() {
 }
 
 void RagdollGameEngine::update() {
-    f_ext = drag; // Need to change gravity acceleration vector to weight force vector
+    f_ext = drag;
     if(!softbody_vector.empty()) {
         float temp_time = clock.restart().asSeconds();
         for(SoftBody* softbody : softbody_vector) {
             // if (temp_time < DT) softbody->update(DT, f_ext, GRAV);
             // else softbody->update(temp_time, f_ext, GRAV);
+
             // For testing
             if (temp_time < DT) softbody->update(DT, f_ext, 0.f);
             else softbody->update(temp_time, f_ext, 0.f);
