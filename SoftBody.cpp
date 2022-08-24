@@ -19,10 +19,14 @@ SoftBody* SoftBody::buildSpring(Node* A, Node* B, float damping, float stiffness
 }
 
 SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const int col, float node_dist, float radius, float damping, float stiffness) {
+
     for (int i = 0; i < row; ++i) {
         nodes.push_back(std::vector<Node*>());
         for (int j = 0; j < col; ++j) {
             nodes.at(i).push_back( new Node(x + j * node_dist, y + i * node_dist, radius) );
+            // if (i == 0 || j == 0 || i == row - 1 || j == col - 1) {
+            //     border.push_back(nodes.at(i).at(j));
+            // }
         }
     }
     for (int i = 0; i < row; ++i) {
@@ -40,6 +44,41 @@ SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const
                 buildSpring( nodes.at(i).at(j), nodes.at(i+1).at(j-1), damping, stiffness );
             }
         }
+    }
+
+    // solidSoftBody = new sf::VertexArray(sf::LineStrip);
+
+    if (row <= 1) {
+        for (int j = 0; j < col; ++j) {
+            border.push_back(nodes.at(0).at(j));
+            // solidSoftBody->append(nodes.at(0).at(j)->image.getPosition());
+        }
+    } else if (col <= 1) {
+        for (int i = 0; i < row; ++i) {
+            border.push_back(nodes.at(i).at(0));
+            // solidSoftBody->append(nodes.at(i).at(0)->image.getPosition());
+        }
+    } else {
+        for (int j = 0; j < col; ++j) { // Top of softbody
+            border.push_back(nodes.at(0).at(j));
+            // solidSoftBody->append(nodes.at(0).at(j)->image.getPosition());
+        }
+        for (int i = 1; i < row; ++i) { // Right side of softbody
+            border.push_back(nodes.at(i).at(col - 1));
+            // solidSoftBody->append(nodes.at(i).at(col - 1)->image.getPosition());
+        }
+        for (int j = col - 2; j >= 0; --j) { // Bottom of softbody
+            border.push_back(nodes.at(row - 1).at(j));
+            // solidSoftBody->append(nodes.at(row - 1).at(j)->image.getPosition());
+        }
+        for (int i = row - 2; i > 0; --i) { // Left side of softbody
+            border.push_back(nodes.at(i).at(0));
+            // solidSoftBody->append(nodes.at(i).at(0)->image.getPosition());
+        }
+    }
+    solidSoftBody = new sf::ConvexShape(border.size());
+    for (int i = 0; i < border.size(); ++i) {
+        solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
     }
 
 
@@ -139,7 +178,7 @@ void SoftBody::checkCollision(Node* node) {
     // }
 }
 
-void SoftBody::update(float elapsed, PhysVector2<float>& f_ext) {
+void SoftBody::update(float elapsed, PhysVector2<float>& f_ext, const float& grav) {
 
     if (!nodes.empty()) {
         for(std::vector<Node*> node_vector : nodes) {
@@ -147,7 +186,7 @@ void SoftBody::update(float elapsed, PhysVector2<float>& f_ext) {
                 for(Node* node : node_vector) {
                     checkCollision(node);
                     // std::cout << "After checkCollision: " << node->velocity << std::endl;
-                    node->update(elapsed, f_ext);
+                    node->update(elapsed, f_ext, grav);
                 }
             }
         }
@@ -159,6 +198,16 @@ void SoftBody::update(float elapsed, PhysVector2<float>& f_ext) {
             spring->applyForce(1);
             spring->update();
         }
+    }
+
+    // For sf::VertexArray
+    // for (int i = 0; i < solidSoftBody->getVertexCount(); ++i) {
+    //     (*solidSoftBody)[i] = border.at(i)->image.getPosition();
+    // }
+
+    // For sf::ConvexShape
+    for (int i = 0; i < solidSoftBody->getPointCount(); ++i) {
+        solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
     }
     // checkCollision();
 }
@@ -201,8 +250,8 @@ float Node::dist(Node B) {
 // }
 
 
-void Node::update(float elapsed, PhysVector2<float>& f_ext) {
-    force += f_ext;
+void Node::update(float elapsed, PhysVector2<float>& f_ext, const float& grav) {
+    force += f_ext + PhysVector2(0.f, grav) * mass;
     velocity += force / mass * elapsed;
     position += velocity * elapsed;
     image.setPosition(position.toSF());

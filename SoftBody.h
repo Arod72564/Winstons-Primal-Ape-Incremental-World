@@ -13,6 +13,12 @@ public:
 
     std::vector< std::vector<Node*> > nodes;
     std::vector<Spring*> springs;
+    std::vector<Node*> border;
+
+    // sf::VertexArray* solidSoftBody;
+    sf::ConvexShape* solidSoftBody;
+
+    bool showSolid;
 
 
     // Node* buildNode(float x, float y, float R = 20.f);
@@ -21,7 +27,7 @@ public:
 
     void checkCollision(Node* node);
 
-    void update(float elapsed, PhysVector2<float>& f_ext);
+    void update(float elapsed, PhysVector2<float>& f_ext, const float& grav);
 
 
 };
@@ -41,7 +47,7 @@ struct Node {
 
     // void applyForce();
 
-    void update(float elapsed, PhysVector2<float>& f_ext);
+    void update(float elapsed, PhysVector2<float>& f_ext, const float& grav);
 };
 
 

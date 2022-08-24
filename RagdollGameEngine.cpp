@@ -13,30 +13,20 @@ void RagdollGameEngine::initGame() {
     float min = 195.f;
     float max = 255.f;
     SoftBody* temp = new SoftBody();
-    temp->buildRect(200.f, 200.f, 10, 10, 5.f, 2.f, 0.5f, 30.f);
-    temp->nodes.at(0).at(0)->setPosition(min, min);
-    temp->nodes.at(0).at(9)->setPosition(max, min);
-    temp->nodes.at(9).at(0)->setPosition(min, max);
-    temp->nodes.at(9).at(9)->setPosition(max, max);
-
-    // for (Spring* spring : temp->springs) {
-    //     std::cout << spring->damping << " " << spring->stiffness << std::endl;
-    // }
-
-
+    temp->buildRect(100.f, 100.f, 5, 5, 15.f, 5.f, 0.5f, 30.f);
+    // temp->nodes.at(0).at(0)->setPosition(min, min);
+    // temp->nodes.at(0).at(9)->setPosition(max, min);
+    // temp->nodes.at(9).at(0)->setPosition(min, max);
+    // temp->nodes.at(9).at(9)->setPosition(max, max);
+    temp->nodes.at(4).at(4)->image.move(100.f, 100.f);
+    temp->nodes.at(4).at(4)->setPosition(temp->nodes.at(4).at(4)->image.getPosition().x, temp->nodes.at(4).at(4)->image.getPosition().y);
+    temp->showSolid = true;
     softbody_vector.push_back(temp);
 
     SoftBody* bar = new SoftBody();
-    Node* A = new Node(400.f, 200.f);
-    Node* B = new Node(400.f, 400.f);
-    Spring* spring = new Spring(A, B, 1.f, 10.f);
-    spring->rest_length = A->dist(*B) / 2;
-    // std::cout << spring->damping << " " << spring->stiffness << std::endl;
-
-    bar->nodes.push_back(std::vector<Node*>());
-    bar->nodes.at(0).push_back(A);
-    bar->nodes.at(0).push_back(B);
-    bar->springs.push_back(spring);
+    bar->buildRect(400.f, 400.f, 5, 5, 15.f, 5.f, 0.5f, 30.f);
+    bar->nodes.at(4).at(4)->image.move(100.f, 100.f);
+    bar->nodes.at(4).at(4)->setPosition(bar->nodes.at(4).at(4)->image.getPosition().x, bar->nodes.at(4).at(4)->image.getPosition().y);
 
     softbody_vector.push_back(bar);
 
@@ -44,12 +34,15 @@ void RagdollGameEngine::initGame() {
 }
 
 void RagdollGameEngine::update() {
-    f_ext = PhysVector2<float>(0.f, GRAV) + drag;
+    f_ext = drag; // Need to change gravity acceleration vector to weight force vector
     if(!softbody_vector.empty()) {
         float temp_time = clock.restart().asSeconds();
         for(SoftBody* softbody : softbody_vector) {
-            if (temp_time < DT) softbody->update(DT, f_ext);
-            else softbody->update(temp_time, f_ext);
+            // if (temp_time < DT) softbody->update(DT, f_ext, GRAV);
+            // else softbody->update(temp_time, f_ext, GRAV);
+            // For testing
+            if (temp_time < DT) softbody->update(DT, f_ext, 0.f);
+            else softbody->update(temp_time, f_ext, 0.f);
         }
     }
 
@@ -67,20 +60,25 @@ void RagdollGameEngine::render() {
 
     if(!softbody_vector.empty()) {
         for (SoftBody* softbody : softbody_vector) {
+            if (softbody->showSolid) {
+                menuPtr->menuScreen->draw(*(softbody->solidSoftBody));
+            } else {
+                if(!softbody->springs.empty()) {
+                    for (Spring* spring : softbody->springs) {
+                        menuPtr->menuScreen->draw(spring->line, 2, sf::Lines);
+                    }
+                }
 
-            // if(!softbody->springs.empty()) {
-            //     for (Spring* spring : softbody->springs) {
-            //         menuPtr->menuScreen->draw(spring->line, 2, sf::Lines);
-            //     }
-            // }
-
-            if (!softbody->nodes.empty()) {
-                for (std::vector<Node*> node_vector : softbody->nodes) {
-                    for (Node* node : node_vector) {
-                        menuPtr->menuScreen->draw(node->image);
+                if (!softbody->nodes.empty()) {
+                    for (std::vector<Node*> node_vector : softbody->nodes) {
+                        for (Node* node : node_vector) {
+                            menuPtr->menuScreen->draw(node->image);
+                        }
                     }
                 }
             }
+            // menuPtr->menuScreen->draw(*(softbody->solidSoftBody), softbody->solidSoftBody->getVertexCount(), sf::LineStrip);
+
         }
     }
 
