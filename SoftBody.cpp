@@ -251,7 +251,7 @@ float Node::dist(Node B) {
 
 
 void Node::update(float elapsed, PhysVector2<float>& f_ext, const float& grav) {
-    force += f_ext + PhysVector2(0.f, grav) * mass;
+    force += f_ext + PhysVector2<float>(0.f, grav) * mass;
     velocity += force / mass * elapsed;
     position += velocity * elapsed;
     image.setPosition(position.toSF());
