@@ -15,6 +15,12 @@ public:
     std::vector<Spring*> springs;
     std::vector<Node*> border;
 
+    float softBodyDamping = 0.4f;
+
+    int num_of_nodes;
+
+    Node* CoM;
+
     // sf::VertexArray* solidSoftBody;
     sf::ConvexShape* solidSoftBody;
 
@@ -29,6 +35,8 @@ public:
     void checkCollision(Node* node);
 
     void update(float elapsed, PhysVector2<float> f_ext, const float& grav);
+
+    virtual ~SoftBody();
 
 
 };

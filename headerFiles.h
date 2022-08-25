@@ -14,7 +14,7 @@
 #define BEAM_SPEED 12
 
 #define DELTA_T             0.05
-#define GRAV                9.8
+#define GRAV                100
 
 #define _USE_MATH_DEFINES
 
@@ -141,6 +141,11 @@ public:
     }
     // Scalar division
     PhysVector2<T> operator/(const T& scalar) { return *this * (1 / scalar); }
+    PhysVector2<T>& operator/=(const T &scalar) {
+        this->x /= scalar;
+        this->y /= scalar;
+        return *this;
+    }
 
     // Normalize a vector
     PhysVector2<T> normalize() {

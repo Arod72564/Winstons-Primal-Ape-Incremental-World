@@ -19,8 +19,9 @@ SoftBody* SoftBody::buildSpring(Node* A, Node* B, float damping, float stiffness
 }
 
 SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const int col, float node_dist, float radius, float damping, float stiffness) {
-
-
+    CoM = new Node;
+    CoM->position(x + (row * node_dist) / 2, y + (col * node_dist) / 2);
+    num_of_nodes = row * col;
     for (int i = 0; i < row; ++i) {
         nodes.push_back(std::vector<Node*>());
         for (int j = 0; j < col; ++j) {
@@ -77,12 +78,12 @@ SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const
             // solidSoftBody->append(nodes.at(i).at(0)->image.getPosition());
         }
     }
+
     solidSoftBody = new sf::ConvexShape(border.size());
+
     for (int i = 0; i < border.size(); ++i) {
         solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
     }
-
-    solidSoftBody->setOrigin((row * node_dist / 2), (col * node_dist / 2));
 
     return this;
 }
@@ -182,7 +183,12 @@ void SoftBody::checkCollision(Node* node) {
 }
 
 void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav) {
-
+    // int temp_x = 0,
+    //     temp_y = 0,
+    //     temp_vx = 0,
+    //     temp_vy = 0;
+    PhysVector2<float> temp_pos(0,0);
+    PhysVector2<float> temp_v(0,0);
     if (!nodes.empty()) {
         for(std::vector<Node*> node_vector : nodes) {
             if(!node_vector.empty()) {
@@ -190,10 +196,22 @@ void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav
                     checkCollision(node);
                     // std::cout << "After checkCollision: " << node->velocity << std::endl;
                     node->update(elapsed, f_ext, grav);
+                    // temp_x += node->position.x;
+                    // temp_y += node->position.y;
+                    // temp_vx += node->velocity.x;
+                    temp_pos += node->position;
+                    temp_v += node->velocity;
                 }
             }
         }
     }
+
+    temp_pos /= float(num_of_nodes);
+    temp_v /= float(num_of_nodes);
+
+    CoM->position = temp_pos;
+    CoM->velocity = temp_v;
+
 
     if(!springs.empty()) {
         for (Spring* spring : springs) {
@@ -213,6 +231,26 @@ void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav
         solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
     }
     // checkCollision();
+
+    
+}
+
+SoftBody::~SoftBody() {
+    delete CoM;
+    if (!nodes.empty()) {
+        for (std::vector<Node*> node_vector : nodes) {
+            if (!node_vector.empty()) {
+                for (Node* node : node_vector) {
+                    delete node;
+                }
+            }
+        }
+    }
+    if (!springs.empty()) {
+        for (Spring* spring : springs) {
+            delete spring;
+        }
+    }
 }
 
 /**********************************************************
@@ -276,7 +314,6 @@ Spring::Spring(Node* A, Node* B, float damping, float stiffness) {
     line[1] = sf::Vertex(B->position.toSF());
 
 }
-
 
 void Spring::applyForce(int node) {
     PhysVector2<float> temp = PhysVector2<float>(nodes[(node + 1) % 2]->position - nodes[node]->position);

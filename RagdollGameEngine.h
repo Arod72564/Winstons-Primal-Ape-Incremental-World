@@ -9,7 +9,7 @@ class RagdollGameEngine {
     public:
         static constexpr float DT = 0.01f;
         // static constexpr float G = 0.05;
-        const float maxDragForce = 50.0f;
+        const float maxDragForce = 100.f;
 
         PhysVector2<float> f_ext;
         PhysVector2<float> f_mouse;
@@ -32,6 +32,7 @@ class RagdollGameEngine {
         bool isLineDrawn;
 
         RagdollGameEngine(MenuScreen* menu);
+        virtual ~RagdollGameEngine();
 
 
         void initGame();

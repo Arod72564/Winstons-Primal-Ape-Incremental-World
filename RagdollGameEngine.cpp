@@ -6,6 +6,14 @@ RagdollGameEngine::RagdollGameEngine(MenuScreen* menu) {
     initGame();
 }
 
+RagdollGameEngine::~RagdollGameEngine() {
+    if (!softbody_vector.empty()) {
+        for (SoftBody* softbody : softbody_vector) {
+            delete softbody;
+        }
+    }
+}
+
 
 void RagdollGameEngine::initGame() {
     clock.restart();
@@ -21,6 +29,7 @@ void RagdollGameEngine::initGame() {
     // temp->nodes.at(4).at(4)->image.move(100.f, 100.f);
     // temp->nodes.at(4).at(4)->setPosition(temp->nodes.at(4).at(4)->image.getPosition().x, temp->nodes.at(4).at(4)->image.getPosition().y);
     temp->showSolid = true;
+    temp->solidSoftBody->setPosition(menuPtr->menuScreen->mapPixelToCoords( sf::Vector2i(temp->solidSoftBody->getPosition()) ));
     softbody_vector.push_back(temp);
 }
 
@@ -46,8 +55,8 @@ void RagdollGameEngine::update() {
                             clickedSoftbody = softBody;
                             softBody->isClicked = true;
 
-                            line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(softBody->solidSoftBody->getPosition())));
-                            line[1] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(softBody->solidSoftBody->getPosition())));
+                            line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->CoM->position.toSF())));
+                            line[1] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->CoM->position.toSF())));
                             //if true start spring line from center of softbody to 
                             //drag individual node/drag force affects all nodes the same
                             isLineDrawn = true;
@@ -91,7 +100,7 @@ void RagdollGameEngine::update() {
     }
 
     if (isLineDrawn && clickedSoftbody != nullptr) {
-        line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->solidSoftBody->getPosition().x, clickedSoftbody->solidSoftBody->getPosition().y)));
+        line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->CoM->position.toSF())));
         line[1] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)));
 
         PhysVector2<float> temp = PhysVector2<float>(line[1].position.x - line[0].position.x, line[1].position.y - line[0].position.y);
@@ -100,8 +109,8 @@ void RagdollGameEngine::update() {
             temp = temp.normalize() * maxDragForce;
         }
 
-        f_mouse = temp;
-        std::cout << "Line Updated, solid soft body at " << clickedSoftbody->solidSoftBody->getPosition().x << ", " << clickedSoftbody->solidSoftBody->getPosition().y << std::endl;
+        f_mouse = temp - clickedSoftbody->CoM->velocity * clickedSoftbody->softBodyDamping;
+        std::cout << "Line Updated, solid soft body at " << clickedSoftbody->CoM->position.x << ", " << clickedSoftbody->CoM->position.y << std::endl;
     }
 
 
@@ -115,9 +124,9 @@ void RagdollGameEngine::update() {
 
             // For testing
             if (softbody->isClicked) {
-                softbody->update(DT, f_ext + f_mouse, 0.f);
+                softbody->update(DT, f_ext + f_mouse, GRAV);
             } else {
-                softbody->update(DT, f_ext, 0.f);
+                softbody->update(DT, f_ext, GRAV);
             }
         }
     }
