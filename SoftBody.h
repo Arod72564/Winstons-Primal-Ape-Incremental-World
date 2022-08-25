@@ -35,6 +35,7 @@ public:
     void checkCollision(Node* node);
 
     void update(float elapsed, PhysVector2<float> f_ext, const float& grav);
+    void update(float elapsed, PhysVector2<float> f_ext, const float& grav, Node* clickedNode, PhysVector2<float> f_mouse);
 
     virtual ~SoftBody();
 
@@ -56,7 +57,7 @@ struct Node {
 
     // void applyForce();
 
-    void update(float elapsed, PhysVector2<float>& f_ext, const float& grav);
+    void update(float elapsed, PhysVector2<float> f_ext, const float& grav);
 };
 
 

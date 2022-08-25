@@ -9,7 +9,7 @@ class RagdollGameEngine {
     public:
         static constexpr float DT = 0.01f;
         // static constexpr float G = 0.05;
-        const float maxDragForce = 100.f;
+        const float maxDragForce = 1000.f;
 
         PhysVector2<float> f_ext;
         PhysVector2<float> f_mouse;
@@ -25,6 +25,7 @@ class RagdollGameEngine {
         // std::vector<Spring*> spring_vector;
         std::vector<SoftBody*> softbody_vector;
         SoftBody* clickedSoftbody = nullptr;
+        Node* clickedNode = nullptr;
 
         sf::Event ev;
 

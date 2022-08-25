@@ -89,42 +89,6 @@ SoftBody* SoftBody::buildRect(const float x, const float y, const int row, const
 }
 
 void SoftBody::checkCollision(Node* node) {
-    // if (!springs.empty()) {
-    //     for (Spring* spring : springs) {
-    //         if (spring->nodes[0]->dist( *(spring->nodes[1]) ) == 0.f) {
-    //             continue;
-    //         } else if (spring->nodes[0]->dist( *(spring->nodes[1]) ) < spring->nodes[0]->image.getRadius() * 2.f) {
-    //             spring->nodes[0]->image.setFillColor(sf::Color::Blue);
-    //             spring->nodes[1]->image.setFillColor(sf::Color::Red);
-    //             PhysVector2<float> normal_vector = (spring->nodes[0]->position - spring->nodes[1]->position).normalize();
-    //             spring->nodes[0]->velocity = spring->nodes[0]->velocity - normal_vector * ((spring->nodes[0]->velocity * normal_vector) * 2);
-    //             spring->nodes[1]->velocity = spring->nodes[1]->velocity + normal_vector * ((spring->nodes[1]->velocity * (normal_vector * -1.f)) * 2);
-    //         }
-    //     }
-    // }
-
-    // if (!nodes.empty()) {
-    //     for (std::vector<Node*> vector : nodes) {
-    //         if (!vector.empty()) {
-    //             for (Node* node : vector) {
-    //                 for (std::vector<Node*> another_vector : nodes) {
-    //                     for (Node* another_node : another_vector) {
-    //                         if (node->dist(*another_node) == 0.f) continue;
-    //                         else if (node->dist(*another_node) < node->image.getRadius() * 2.f) {
-    //                             node->image.setFillColor(sf::Color::Blue);
-    //                             another_node->image.setFillColor(sf::Color::Red);
-    //                             PhysVector2<float> normal_vector = (node->position - another_node->position).normalize();
-    //                             std::cout << "Before: " << node->velocity << std::endl;
-    //                             node->velocity = node->velocity - normal_vector * ((node->velocity * normal_vector) * 2);
-    //                             std::cout << "After: " << node->velocity << std::endl;
-    //                             another_node->velocity = another_node->velocity + normal_vector * ((another_node->velocity * (normal_vector * -1.f)) * 2);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
     if (!nodes.empty()) {
         for (std::vector<Node*> vector : nodes) {
             if (!vector.empty()) {
@@ -152,41 +116,10 @@ void SoftBody::checkCollision(Node* node) {
             }
         }
     }
-
-    // if (!nodes.empty()) {
-    //     for (int num1 = 0; num1 < nodes.size(); num1++) {
-    //
-    //         if (!nodes.at(num1).empty()) {
-    //
-    //             for (int num2 = 0; num2 < nodes.at(num1).size(); num2++) {
-    //
-    //                 for (int num1_prime = 0; num1_prime < nodes.size(); num1_prime++) {
-    //
-    //                     for (int num2_prime = 0; num2_prime < nodes.at(num1_prime).size(); num2_prime++) {
-    //
-    //                         if (nodes.at(num1).at(num2)->dist(*(nodes.at(num1_prime).at(num2_prime)) ) == 0.f) continue;
-    //
-    //                         else if ( nodes.at(num1).at(num2)->dist( *(nodes.at(num1_prime).at(num2_prime)) ) < nodes.at(num1).at(num2)->image.getRadius() * 2.f ) {
-    //                             nodes.at(num1).at(num2)->image.setFillColor(sf::Color::Blue);
-    //                             nodes.at(num1_prime).at(num2_prime)->image.setFillColor(sf::Color::Red);
-    //                             // nodes.at(num1).at(num2)->velocity(0.f, 100.f);
-    //                             PhysVector2<float> normal_vector = ( nodes.at(num1).at(num2)->position - nodes.at(num1_prime).at(num2_prime)->position ).normalize();
-    //                             nodes.at(num1).at(num2)->velocity = nodes.at(num1).at(num2)->velocity - normal_vector * ( (nodes.at(num1).at(num2)->velocity * normal_vector) * 2.f );
-    //                             nodes.at(num1_prime).at(num2_prime)->velocity = nodes.at(num1_prime).at(num2_prime)->velocity + normal_vector * (( nodes.at(num1_prime).at(num2_prime)->velocity * (normal_vector * -1.f) ) * 2.f );
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
 
 void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav) {
-    // int temp_x = 0,
-    //     temp_y = 0,
-    //     temp_vx = 0,
-    //     temp_vy = 0;
+
     PhysVector2<float> temp_pos(0,0);
     PhysVector2<float> temp_v(0,0);
     if (!nodes.empty()) {
@@ -194,11 +127,7 @@ void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav
             if(!node_vector.empty()) {
                 for(Node* node : node_vector) {
                     checkCollision(node);
-                    // std::cout << "After checkCollision: " << node->velocity << std::endl;
                     node->update(elapsed, f_ext, grav);
-                    // temp_x += node->position.x;
-                    // temp_y += node->position.y;
-                    // temp_vx += node->velocity.x;
                     temp_pos += node->position;
                     temp_v += node->velocity;
                 }
@@ -221,19 +150,51 @@ void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav
         }
     }
 
-    // For sf::VertexArray
-    // for (int i = 0; i < solidSoftBody->getVertexCount(); ++i) {
-    //     (*solidSoftBody)[i] = border.at(i)->image.getPosition();
-    // }
-
-    // For sf::ConvexShape
     for (int i = 0; i < solidSoftBody->getPointCount(); ++i) {
         solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
     }
-    // checkCollision();
-
-    
 }
+
+
+void SoftBody::update(float elapsed, PhysVector2<float> f_ext, const float& grav, Node* clickedNode, PhysVector2<float> f_mouse) {
+
+    PhysVector2<float> temp_pos(0,0);
+    PhysVector2<float> temp_v(0,0);
+    if (!nodes.empty()) {
+        for(std::vector<Node*> node_vector : nodes) {
+            if(!node_vector.empty()) {
+                for(Node* node : node_vector) {
+                    checkCollision(node);
+                    if (node == clickedNode) { node->update(elapsed, f_ext + f_mouse, grav); }
+                    else { node->update(elapsed, f_ext, grav); }
+                    
+                    temp_pos += node->position;
+                    temp_v += node->velocity;
+                }
+            }
+        }
+    }
+
+    temp_pos /= float(num_of_nodes);
+    temp_v /= float(num_of_nodes);
+
+    CoM->position = temp_pos;
+    CoM->velocity = temp_v;
+
+
+    if(!springs.empty()) {
+        for (Spring* spring : springs) {
+            spring->applyForce(0);
+            spring->applyForce(1);
+            spring->update();
+        }
+    }
+
+    for (int i = 0; i < solidSoftBody->getPointCount(); ++i) {
+        solidSoftBody->setPoint(i, border.at(i)->image.getPosition());
+    }
+}
+
 
 SoftBody::~SoftBody() {
     delete CoM;
@@ -291,7 +252,7 @@ float Node::dist(Node B) {
 // }
 
 
-void Node::update(float elapsed, PhysVector2<float>& f_ext, const float& grav) {
+void Node::update(float elapsed, PhysVector2<float> f_ext, const float& grav) {
     force += f_ext + PhysVector2<float>(0.f, grav) * mass;
     velocity += force / mass * elapsed;
     position += velocity * elapsed;

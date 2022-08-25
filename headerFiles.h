@@ -14,7 +14,7 @@
 #define BEAM_SPEED 12
 
 #define DELTA_T             0.05
-#define GRAV                100
+#define GRAV                25
 
 #define _USE_MATH_DEFINES
 
