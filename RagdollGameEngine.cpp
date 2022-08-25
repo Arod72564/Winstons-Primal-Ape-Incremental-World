@@ -21,15 +21,14 @@ void RagdollGameEngine::initGame() {
     float min = 195.f;
     float max = 255.f;
     SoftBody* temp = new SoftBody();
-    temp->buildRect(200.f, 200.f, 4, 4, 15.f, 5.f, 1.5f, 3.5f);
+    // temp->buildRect(200.f, 200.f, 5, 5, 14.f, 5.f, 2.5f, 170.5f);
+    temp->buildRect(200.f, 200.f, 5, 5, 14.f, 5.f, 2.5f, 170.5f);
     // temp->nodes.at(0).at(0)->setPosition(min, min);
     // temp->nodes.at(0).at(9)->setPosition(max, min);
     // temp->nodes.at(9).at(0)->setPosition(min, max);
     // temp->nodes.at(9).at(9)->setPosition(max, max);
-    // temp->nodes.at(4).at(4)->image.move(100.f, 100.f);
-    // temp->nodes.at(4).at(4)->setPosition(temp->nodes.at(4).at(4)->image.getPosition().x, temp->nodes.at(4).at(4)->image.getPosition().y);
-    temp->showSolid = true;
-    temp->solidSoftBody->setPosition(menuPtr->menuScreen->mapPixelToCoords( sf::Vector2i(temp->solidSoftBody->getPosition()) ));
+    temp->nodes.at(0).at(0)->image.move(-2400.f, -2400.f);
+    temp->nodes.at(0).at(0)->setPosition(temp->nodes.at(0).at(0)->image.getPosition().x, temp->nodes.at(0).at(0)->image.getPosition().y);
     softbody_vector.push_back(temp);
 }
 
@@ -124,9 +123,9 @@ void RagdollGameEngine::update() {
 
             // For testing
             if (softbody->isClicked) {
-                softbody->update(DT, f_ext + f_mouse, GRAV);
+                softbody->update(DT, f_ext, 0.f);
             } else {
-                softbody->update(DT, f_ext, GRAV);
+                softbody->update(DT, f_ext, 0.f);
             }
         }
     }

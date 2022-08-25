@@ -143,10 +143,14 @@ void SoftBody::checkCollision(Node* node) {
 
                         another_node->position += normal_vector * (offset_dist * -1.f);
                         another_node->image.move((normal_vector * (offset_dist * -1.f)).toSF());
-                        // std::cout << "Before: " << node->velocity << std::endl;
+                        // Using video
                         node->velocity = node->velocity - normal_vector * ((node->velocity * normal_vector) * 2);
-                        // std::cout << "After: " << node->velocity << std::endl;
                         another_node->velocity = another_node->velocity + normal_vector * ((another_node->velocity * (normal_vector * -1.f)) * 2);
+
+                        // Using physics of elastic collisions
+                        // PhysVector2<float> dv = node->velocity - another_node->velocity;
+                        // node->velocity = node->velocity - normal_vector * (dv * normal_vector);
+                        // another_node->velocity = another_node->velocity + normal_vector * (dv * normal_vector );
                     }
                 }
             }
