@@ -96,8 +96,8 @@ void SoftBody::checkCollision(Node* node) {
                     if (node == another_node) continue;
                     else if (node->dist(*another_node) == 0.f) continue;
                     else if (node->dist(*another_node) < node->image.getRadius() * 2.f) {
-                        node->image.setFillColor(sf::Color::Blue);
-                        another_node->image.setFillColor(sf::Color::Red);
+                        //node->image.setFillColor(generateColor());
+                        another_node->image.setFillColor(generateColor());
                         PhysVector2<float> normal_vector = (node->position - another_node->position).normalize();
 
                         float offset_dist = (2.f * node->image.getRadius() - node->dist(*another_node)) / 2.f;

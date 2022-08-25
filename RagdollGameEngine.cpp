@@ -21,14 +21,13 @@ void RagdollGameEngine::initGame() {
     float min = 195.f;
     float max = 255.f;
     SoftBody* temp = new SoftBody();
-    temp->buildRect(200.f, 200.f, 7, 4, 15.f, 5.f, 5.0f, 140.5f);
+    temp->buildRect(200.f, 200.f, 5, 5, 15.f, 5.f, 2.5f, 140.5f);
     // temp->nodes.at(0).at(0)->setPosition(min, min);
     // temp->nodes.at(0).at(9)->setPosition(max, min);
     // temp->nodes.at(9).at(0)->setPosition(min, max);
     // temp->nodes.at(9).at(9)->setPosition(max, max);
     // temp->nodes.at(4).at(4)->image.move(100.f, 100.f);
     // temp->nodes.at(4).at(4)->setPosition(temp->nodes.at(4).at(4)->image.getPosition().x, temp->nodes.at(4).at(4)->image.getPosition().y);
-    temp->showSolid = true;
     softbody_vector.push_back(temp);
 }
 
@@ -38,6 +37,14 @@ void RagdollGameEngine::update() {
         switch (ev.type) {
             case sf::Event::EventType::Closed:
                 menuPtr->currentGameType = NULL_GAME;
+                break;
+
+            case sf::Event::EventType::KeyPressed:
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+                    for (SoftBody* softBody : softbody_vector) {
+                        softBody->showSolid = !(softBody->showSolid);
+                    }
+                }
                 break;
 
             case sf::Event::MouseButtonPressed:
