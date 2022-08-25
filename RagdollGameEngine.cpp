@@ -12,8 +12,8 @@ RagdollGameEngine::~RagdollGameEngine() {
             delete softbody;
         }
     }
-}
 
+}
 
 void RagdollGameEngine::initGame() {
     clock.restart();
@@ -21,20 +21,20 @@ void RagdollGameEngine::initGame() {
     float min = 195.f;
     float max = 255.f;
     SoftBody* temp = new SoftBody();
-    // temp->buildRect(200.f, 200.f, 5, 5, 14.f, 5.f, 2.5f, 170.5f);
+
     temp->buildRect(200.f, 200.f, 5, 5, 14.f, 5.f, 2.5f, 170.5f);
     // temp->nodes.at(0).at(0)->setPosition(min, min);
     // temp->nodes.at(0).at(9)->setPosition(max, min);
     // temp->nodes.at(9).at(0)->setPosition(min, max);
     // temp->nodes.at(9).at(9)->setPosition(max, max);
+
     temp->nodes.at(0).at(0)->image.move(-2400.f, -2400.f);
     temp->nodes.at(0).at(0)->setPosition(temp->nodes.at(0).at(0)->image.getPosition().x, temp->nodes.at(0).at(0)->image.getPosition().y);
+
     softbody_vector.push_back(temp);
 }
 
 void RagdollGameEngine::update() {
-
-
 
     while(menuPtr->menuScreen->pollEvent(ev)) {
         switch (ev.type) {
@@ -42,24 +42,46 @@ void RagdollGameEngine::update() {
                 menuPtr->currentGameType = NULL_GAME;
                 break;
 
+            case sf::Event::EventType::KeyPressed:
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+                    for (SoftBody* softBody : softbody_vector) {
+                        softBody->showSolid = !(softBody->showSolid);
+                    }
+                }
+                break;
+
             case sf::Event::MouseButtonPressed:
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    std::cout << "LMB Pressed" << std::endl;
+                    //std::cout << "LMB Pressed" << std::endl;
                     
                     initialClickPoint(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)));
+                    sf::FloatRect clickArea(sf::Vector2f(initialClickPoint.x - 2.f, initialClickPoint.y - 2.f) , sf::Vector2f(2.f,2.f));
+
 
                     for (SoftBody* softBody : softbody_vector) {
                         if (softBody->solidSoftBody->getGlobalBounds().contains(initialClickPoint.toSF())) { //check if you are clicked on softbody
-                            isMouseFirstClicked = true;
                             clickedSoftbody = softBody;
-                            softBody->isClicked = true;
+                            for (std::vector<Node *> nodes :  clickedSoftbody->nodes) { 
+                                for (Node* node : nodes) {
+                                    if (node->image.getGlobalBounds().intersects(clickArea)) {
+                                        clickedNode = node;
+                                        continue;
+                                    }
+                                }
+                            }
+                        //check if you clicked on a node
+                        isMouseFirstClicked = true;
+                        softBody->isClicked = true;
 
-                            line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->CoM->position.toSF())));
-                            line[1] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->CoM->position.toSF())));
-                            //if true start spring line from center of softbody to 
-                            //drag individual node/drag force affects all nodes the same
+                        if(clickedNode != nullptr) {
+                            line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedNode->position.toSF())));
+                            line[1] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedNode->position.toSF())));
                             isLineDrawn = true;
-                            std::cout << "Line Started at softbody" << std::endl;
+                            //std::cout << "Line Started at node" << std::endl;
+                        }
+                        
+                        
+                        
                             
                         }
                     }
@@ -72,9 +94,10 @@ void RagdollGameEngine::update() {
                     //Stop dragging
                     isMouseFirstClicked = false;
                     clickedSoftbody->isClicked = false;
+                    clickedNode = nullptr;
                     clickedSoftbody = nullptr;
                     isLineDrawn = false;
-                    std::cout << "Mouse Released" << std::endl;
+                    //std::cout << "Mouse Released" << std::endl;
                 }
 
                 break;
@@ -98,8 +121,8 @@ void RagdollGameEngine::update() {
         }
     }
 
-    if (isLineDrawn && clickedSoftbody != nullptr) {
-        line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedSoftbody->CoM->position.toSF())));
+    if (isLineDrawn && clickedSoftbody != nullptr && clickedNode != nullptr) {
+        line[0] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Vector2i(clickedNode->position.toSF())));
         line[1] = sf::Vertex(menuPtr->menuScreen->mapPixelToCoords(sf::Mouse::getPosition(*menuPtr->menuScreen)));
 
         PhysVector2<float> temp = PhysVector2<float>(line[1].position.x - line[0].position.x, line[1].position.y - line[0].position.y);
@@ -109,7 +132,7 @@ void RagdollGameEngine::update() {
         }
 
         f_mouse = temp - clickedSoftbody->CoM->velocity * clickedSoftbody->softBodyDamping;
-        std::cout << "Line Updated, solid soft body at " << clickedSoftbody->CoM->position.x << ", " << clickedSoftbody->CoM->position.y << std::endl;
+        //std::cout << "Line Updated, solid soft body at " << clickedSoftbody->CoM->position.x << ", " << clickedSoftbody->CoM->position.y << std::endl;
     }
 
 
@@ -123,7 +146,7 @@ void RagdollGameEngine::update() {
 
             // For testing
             if (softbody->isClicked) {
-                softbody->update(DT, f_ext, 0.f);
+                softbody->update(DT, f_ext, GRAV, clickedNode, f_mouse);
             } else {
                 softbody->update(DT, f_ext, 0.f);
             }
